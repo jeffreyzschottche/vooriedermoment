@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="nl"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aanvraagformulier - Voor Ieder Moment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#444546",
+              "inverse-surface": "#e5e2e1",
+              "surface": "#131313",
+              "tertiary": "#cecece",
+              "surface-container": "#201f1f",
+              "secondary": "#c8c6c5",
+              "primary-fixed": "#ffe088",
+              "outline": "#99907c",
+              "error-container": "#93000a",
+              "tertiary-fixed-dim": "#c6c6c7",
+              "primary-container": "#d4af37",
+              "error": "#ffb4ab",
+              "surface-bright": "#393939",
+              "primary-fixed-dim": "#e9c349",
+              "on-surface": "#e5e2e1",
+              "on-tertiary-fixed": "#1a1c1c",
+              "on-secondary-fixed": "#1c1b1b",
+              "surface-dim": "#131313",
+              "outline-variant": "#4d4635",
+              "secondary-fixed-dim": "#c8c6c5",
+              "inverse-primary": "#735c00",
+              "surface-container-low": "#1c1b1b",
+              "on-primary-container": "#554300",
+              "on-secondary": "#313030",
+              "on-background": "#e5e2e1",
+              "on-primary": "#3c2f00",
+              "surface-container-high": "#2a2a2a",
+              "on-primary-fixed": "#241a00",
+              "secondary-fixed": "#e5e2e1",
+              "on-error": "#690005",
+              "on-error-container": "#ffdad6",
+              "primary": "#f2ca50",
+              "surface-container-lowest": "#0e0e0e",
+              "secondary-container": "#474746",
+              "surface-container-highest": "#353534",
+              "on-tertiary-fixed-variant": "#454747",
+              "tertiary-fixed": "#e2e2e2",
+              "on-secondary-container": "#b7b5b4",
+              "on-primary-fixed-variant": "#574500",
+              "on-surface-variant": "#d0c5af",
+              "surface-tint": "#e9c349",
+              "inverse-on-surface": "#313030",
+              "background": "#131313",
+              "tertiary-container": "#b2b3b3",
+              "on-secondary-fixed-variant": "#474746",
+              "surface-variant": "#353534",
+              "on-tertiary": "#2f3131"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        display: inline-block;
+        line-height: 1;
+      }
+      .glass-effect {
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      body {
+        background-color: #131313;
+        color: #e5e2e1;
+        font-family: 'Manrope', sans-serif;
+      }
+      h1, h2, h3 {
+        font-family: 'Noto Serif', serif;
+      }
+    </style>
+</head>
+<body class="bg-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/60 backdrop-blur-xl dark:bg-[#131313]/60 shadow-2xl dark:shadow-black/50 bg-gradient-to-b from-[#1C1B1B] to-transparent">
+<div class="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="font-serif text-2xl font-bold text-[#D4AF37] uppercase tracking-tighter">
+                Voor Ieder Moment
+            </div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-[#D0C5AF] hover:text-[#F2CA50] transition-colors duration-300 font-serif text-lg tracking-wide" href="#">Home</a>
+<a class="text-[#D0C5AF] hover:text-[#F2CA50] transition-colors duration-300 font-serif text-lg tracking-wide" href="#">Over Ons</a>
+<a class="text-[#F2CA50] border-b-2 border-[#D4AF37] pb-1 font-bold font-serif text-lg tracking-wide" href="#">Aanvraag</a>
+<a class="text-[#D0C5AF] hover:text-[#F2CA50] transition-colors duration-300 font-serif text-lg tracking-wide" href="#">FAQ</a>
+<a class="text-[#D0C5AF] hover:text-[#F2CA50] transition-colors duration-300 font-serif text-lg tracking-wide" href="#">Contact</a>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2 rounded-md font-bold hover:scale-105 transition-transform active:scale-95 duration-200">
+                    Aanvragen
+                </button>
+</div>
+<div class="md:hidden">
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="pt-32 pb-24 px-6 max-w-5xl mx-auto">
+<!-- Header Section -->
+<header class="mb-16 text-center">
+<span class="text-xs uppercase tracking-[0.2em] text-primary mb-4 block">Personaliseer jouw verhaal</span>
+<h1 class="text-4xl md:text-6xl font-bold text-on-surface mb-6 leading-tight">Vraag Jouw Unieke <br/><span class="text-primary italic">Compositie</span> Aan</h1>
+<p class="text-on-surface-variant max-w-2xl mx-auto text-lg">Wij vertalen uw kostbare herinneringen naar muziek. Vul het onderstaande formulier in en begin de reis.</p>
+</header>
+<form class="space-y-12">
+<!-- Bento Layout for Pricing & Recipient -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Recipient Card -->
+<div class="lg:col-span-2 bg-surface-container p-8 rounded-xl shadow-inner group transition-all duration-300 hover:bg-surface-container-high">
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary" data-icon="person">person</span>
+<h2 class="text-2xl font-semibold">Voor wie is het lied?</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">Ontvanger</label>
+<select class="w-full bg-surface-container-lowest border-none text-on-surface focus:ring-1 focus:ring-primary py-3 rounded-md">
+<option>Persoon</option>
+<option>Organisatie</option>
+<option>Evenement</option>
+<option>Huisdier</option>
+<option>Anders</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">Branche / Categorie</label>
+<input class="w-full bg-surface-container-lowest border-none text-on-surface focus:ring-1 focus:ring-primary py-3 rounded-md" placeholder="Bijv. Bruiloft, Afscheid, Jubileum" type="text"/>
+</div>
+</div>
+</div>
+<!-- Pricing Card -->
+<div class="bg-gradient-to-br from-surface-container-high to-surface-container-highest p-8 rounded-xl flex flex-col justify-between border border-primary-container/10">
+<div class="mb-6">
+<h3 class="text-xl font-bold mb-2">Onze Pakketten</h3>
+<p class="text-sm text-on-surface-variant">Selecteer uw gewenste kwaliteit en release optie.</p>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center p-4 rounded-lg bg-surface-container-lowest/50 border border-primary/20">
+<div>
+<span class="block font-bold">Digitaal Basis</span>
+<span class="text-xs text-on-surface-variant">MP3 via E-mail</span>
+</div>
+<span class="text-2xl font-serif text-primary">€5,99</span>
+</div>
+<div class="flex justify-between items-center p-4 rounded-lg bg-surface-container-lowest/50 border border-transparent hover:border-primary/20 transition-all cursor-pointer">
+<div>
+<span class="block font-bold">Premium Spotify</span>
+<span class="text-xs text-on-surface-variant">Officiële Release</span>
+</div>
+<span class="text-2xl font-serif text-primary">€9,99</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Genre Selection Section -->
+<section class="bg-surface-container p-8 rounded-xl shadow-inner">
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary" data-icon="library_music">library_music</span>
+<div>
+<h2 class="text-2xl font-semibold">Kies het Genre</h2>
+<p class="text-sm text-on-surface-variant">Selecteer minimaal 3 genres voor de perfecte blend.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+<!-- Genre Chips -->
+<label class="cursor-pointer group">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="p-4 text-center rounded-lg bg-surface-container-lowest peer-checked:bg-primary-container peer-checked:text-on-primary-container transition-all group-hover:scale-105">
+<span class="text-sm font-bold uppercase tracking-tight">Pop</span>
+</div>
+</label>
+<label class="cursor-pointer group">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="p-4 text-center rounded-lg bg-surface-container-lowest peer-checked:bg-primary-container peer-checked:text-on-primary-container transition-all group-hover:scale-105">
+<span class="text-sm font-bold uppercase tracking-tight">Jazz</span>
+</div>
+</label>
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="p-4 text-center rounded-lg bg-surface-container-lowest peer-checked:bg-primary-container peer-checked:text-on-primary-container transition-all group-hover:scale-105">
+<span class="text-sm font-bold uppercase tracking-tight">Klassiek</span>
+</div>
+</label>
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="p-4 text-center rounded-lg bg-surface-container-lowest peer-checked:bg-primary-container peer-checked:text-on-primary-container transition-all group-hover:scale-105">
+<span class="text-sm font-bold uppercase tracking-tight">Acoustic</span>
+</div>
+</label>
+<label class="cursor-pointer group">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="p-4 text-center rounded-lg bg-surface-container-lowest peer-checked:bg-primary-container peer-checked:text-on-primary-container transition-all group-hover:scale-105">
+<span class="text-sm font-bold uppercase tracking-tight">Blues</span>
+</div>
+</label>
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="p-4 text-center rounded-lg bg-surface-container-lowest peer-checked:bg-primary-container peer-checked:text-on-primary-container transition-all group-hover:scale-105">
+<span class="text-sm font-bold uppercase tracking-tight">Folk</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Language & Vocals -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container p-8 rounded-xl shadow-inner">
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary" data-icon="translate">translate</span>
+<h2 class="text-xl font-semibold">Taal &amp; Stem</h2>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<label class="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">Voorkeur Taal</label>
+<input class="w-full bg-surface-container-lowest border-none text-on-surface focus:ring-1 focus:ring-primary py-3 rounded-md" type="text" value="Nederlands"/>
+</div>
+<div class="space-y-4">
+<label class="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">Vocalen</label>
+<div class="flex gap-4">
+<label class="flex-1 cursor-pointer">
+<input checked="" class="hidden peer" name="vocals" type="radio"/>
+<div class="py-3 text-center border border-outline-variant/30 rounded-md peer-checked:bg-primary/10 peer-checked:border-primary transition-all">Man</div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="hidden peer" name="vocals" type="radio"/>
+<div class="py-3 text-center border border-outline-variant/30 rounded-md peer-checked:bg-primary/10 peer-checked:border-primary transition-all">Vrouw</div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container p-8 rounded-xl shadow-inner">
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary" data-icon="edit_note">edit_note</span>
+<h2 class="text-xl font-semibold">Stijl van Tekst</h2>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<label class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors">
+<input checked="" class="w-4 h-4 text-primary bg-surface-variant border-none focus:ring-primary" name="style" type="radio"/>
+<span class="font-medium uppercase text-sm tracking-wide">Grappig &amp; Lichtvoetig</span>
+</label>
+<label class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors">
+<input class="w-4 h-4 text-primary bg-surface-variant border-none focus:ring-primary" name="style" type="radio"/>
+<span class="font-medium uppercase text-sm tracking-wide">Serieus &amp; Emotioneel</span>
+</label>
+<label class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors">
+<input class="w-4 h-4 text-primary bg-surface-variant border-none focus:ring-primary" name="style" type="radio"/>
+<span class="font-medium uppercase text-sm tracking-wide">Lief &amp; Romantisch</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Deep Content Section -->
+<section class="bg-surface-container-high p-8 rounded-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-5">
+<span class="material-symbols-outlined text-9xl" data-icon="music_note">music_note</span>
+</div>
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+<h2 class="text-2xl font-semibold">De Kern van het Verhaal</h2>
+</div>
+<div class="space-y-8 relative z-10">
+<div class="space-y-4">
+<label class="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">3 Belangrijkste Onderwerpen / Herinneringen</label>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<input class="bg-surface-container-lowest border-none text-on-surface focus:ring-1 focus:ring-primary py-3 rounded-md" placeholder="1. De eerste ontmoeting" type="text"/>
+<input class="bg-surface-container-lowest border-none text-on-surface focus:ring-1 focus:ring-primary py-3 rounded-md" placeholder="2. Een gedeelde hobby" type="text"/>
+<input class="bg-surface-container-lowest border-none text-on-surface focus:ring-1 focus:ring-primary py-3 rounded-md" placeholder="3. Dat ene vakantiemoment" type="text"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">Grappige Feiten of 'Inside Jokes'</label>
+<textarea class="w-full bg-surface-container-lowest border-none text-on-surface focus:ring-1 focus:ring-primary py-4 rounded-md resize-none" placeholder="Vertel ons iets unieks wat alleen jullie begrijpen..." rows="4"></textarea>
+</div>
+</div>
+</section>
+<!-- Final Submission -->
+<footer class="flex flex-col md:flex-row items-center justify-between gap-8 pt-8 border-t border-outline-variant/20">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
+</div>
+<p class="text-sm text-on-surface-variant max-w-xs leading-relaxed">Uw gegevens worden veilig verwerkt en alleen gebruikt voor het componeren van uw unieke nummer.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+<button class="px-8 py-4 border border-outline-variant text-on-surface-variant rounded-md hover:bg-surface-container transition-colors uppercase tracking-widest text-xs font-bold" type="button">Opslaan als concept</button>
+<button class="px-12 py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-md font-bold text-lg hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-2" type="submit">
+                        Aanvraag Voltooien
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</footer>
+</form>
+<!-- Decorative Image Contextual -->
+<div class="mt-24 rounded-2xl overflow-hidden aspect-[21/9] relative group">
+<img alt="Studio Sfeer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="moody recording studio interior with vintage microphone warm glowing lamps and dark wood textures in high-end luxury aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBKge8EWu4KUUqAlq7Qihy4im49mDFagUxInEDAKR7EzTelQvVRplZYKrjfpgtjD7u1U0-GM5EbKkxCT9Snasbm-6wNasof3fH0P7puUjqtghszeB2AyNDfxlh_9HHQVPZ6Jk3k5Kj29rHriOrdRawIhRYk9FLBdhviI1v9U_GyUl5MutrDGIM3li4izSOw9Rbjg3ZwptwSWQS44baUFBgwalmupoZrOC8Ol1-qHusupwZhyLyvr90i2x3PnGsUoipdR0uNJ_Qn28"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent flex flex-col justify-end p-12">
+<p class="font-serif italic text-2xl text-on-surface max-w-xl">"Muziek geeft een ziel aan het universum, vleugels aan de geest en een vlucht aan de verbeelding."</p>
+<p class="text-primary mt-4 uppercase tracking-widest text-xs font-bold">— Plato</p>
+</div>
+</div>
+</main>
+<!-- Footer Component -->
+<footer class="bg-[#0E0E0E] dark:bg-[#0E0E0E] w-full py-12 px-8 border-t border-[#4D4635]/15">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-left max-w-7xl mx-auto">
+<div class="font-serif text-xl text-[#D4AF37]">
+                Voor Ieder Moment
+            </div>
+<div class="flex justify-center gap-6 font-sans text-sm tracking-tight text-[#D0C5AF]">
+<a class="hover:text-white transition-colors" href="#">Algemene Voorwaarden</a>
+<a class="hover:text-white transition-colors" href="#">Privacybeleid</a>
+<a class="hover:text-white transition-colors" href="#">Spotify Release</a>
+<a class="hover:text-white transition-colors" href="#">Contact</a>
+</div>
+<div class="font-sans text-sm tracking-tight text-[#D0C5AF] md:text-right opacity-80">
+                © 2024 Voor Ieder Moment. Uw verhaal, onze muziek.
+            </div>
+</div>
+</footer>
+</body></html>

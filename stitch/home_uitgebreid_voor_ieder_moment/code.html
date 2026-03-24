@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="nl"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Voor Ieder Moment | Een uniek nummer voor elk verhaal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#444546",
+              "inverse-surface": "#e5e2e1",
+              "surface": "#131313",
+              "tertiary": "#cecece",
+              "surface-container": "#201f1f",
+              "secondary": "#c8c6c5",
+              "primary-fixed": "#ffe088",
+              "outline": "#99907c",
+              "error-container": "#93000a",
+              "tertiary-fixed-dim": "#c6c6c7",
+              "primary-container": "#d4af37",
+              "error": "#ffb4ab",
+              "surface-bright": "#393939",
+              "primary-fixed-dim": "#e9c349",
+              "on-surface": "#e5e2e1",
+              "on-tertiary-fixed": "#1a1c1c",
+              "on-secondary-fixed": "#1c1b1b",
+              "surface-dim": "#131313",
+              "outline-variant": "#4d4635",
+              "secondary-fixed-dim": "#c8c6c5",
+              "inverse-primary": "#735c00",
+              "surface-container-low": "#1c1b1b",
+              "on-primary-container": "#554300",
+              "on-secondary": "#313030",
+              "on-background": "#e5e2e1",
+              "on-primary": "#3c2f00",
+              "surface-container-high": "#2a2a2a",
+              "on-primary-fixed": "#241a00",
+              "secondary-fixed": "#e5e2e1",
+              "on-error": "#690005",
+              "on-error-container": "#ffdad6",
+              "primary": "#f2ca50",
+              "surface-container-lowest": "#0e0e0e",
+              "secondary-container": "#474746",
+              "surface-container-highest": "#353534",
+              "on-tertiary-fixed-variant": "#454747",
+              "tertiary-fixed": "#e2e2e2",
+              "on-secondary-container": "#b7b5b4",
+              "on-primary-fixed-variant": "#574500",
+              "on-surface-variant": "#d0c5af",
+              "surface-tint": "#e9c349",
+              "inverse-on-surface": "#313030",
+              "background": "#131313",
+              "tertiary-container": "#b2b3b3",
+              "on-secondary-fixed-variant": "#474746",
+              "surface-variant": "#353534",
+              "on-tertiary": "#2f3131"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #131313;
+            color: #e5e2e1;
+            scroll-behavior: smooth;
+        }
+        .serif-text { font-family: 'Noto Serif', serif; }
+        .glass {
+            background: rgba(53, 53, 52, 0.6);
+            backdrop-filter: blur(20px);
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #f2ca50 0%, #d4af37 100%);
+        }
+        .text-glow-gold {
+            text-shadow: 0 0 15px rgba(242, 202, 80, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/60 backdrop-blur-xl dark:bg-[#131313]/60 shadow-2xl dark:shadow-black/50 bg-gradient-to-b from-[#1C1B1B] to-transparent">
+<div class="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-3">
+<img alt="Voor Ieder Moment Logo" class="h-10 w-auto" src="https://lh3.googleusercontent.com/aida/ADBb0ugwcvWhizZit7lYXZna1pry66rGZrMcKXAbEiM2ecDi1W1AlKziXjdXoKdZCAq1kpsz-3cJYX5gmvzLVEQmQc48W32gGWtyQLc3qvGsnDJ0a6FNHbQEi1fm2tSI6HXECK9rxdVStIrPJx2cuOLQnxi47DxLQAa6iNJk5SnFUcj6t03G61ODyS9_ll8bkwU8eBEYAROtLu20qAsjCvrs7Z1UbcOlln0yg98OoL4zLFDi3GJ1w_Q8nXzAEWEu0JEy-9q-cjgIYwZShw"/>
+<div class="font-serif text-2xl font-bold text-[#D4AF37] uppercase tracking-tighter hidden sm:block">
+                    Voor Ieder Moment
+                </div>
+</div>
+<div class="hidden md:flex gap-8 items-center font-serif text-lg tracking-wide">
+<a class="text-[#F2CA50] border-b-2 border-[#D4AF37] pb-1 font-bold" href="#">Home</a>
+<a class="text-[#D0C5AF] hover:text-[#F2CA50] transition-colors duration-300" href="#">Over Ons</a>
+<a class="text-[#D0C5AF] hover:text-[#F2CA50] transition-colors duration-300" href="#">Aanvraag</a>
+<a class="text-[#D0C5AF] hover:text-[#F2CA50] transition-colors duration-300" href="#">FAQ</a>
+<a class="text-[#D0C5AF] hover:text-[#F2CA50] transition-colors duration-300" href="#">Contact</a>
+</div>
+<button class="gold-gradient text-on-primary px-6 py-2.5 rounded-md font-bold hover:scale-105 active:scale-95 transition-all duration-200">
+                Aanvragen
+            </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+<div class="absolute inset-0 z-0">
+<img alt="Studio Background" class="w-full h-full object-cover opacity-40 mix-blend-luminosity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5lEiKRIzOvuhwZHgvUXPyLomyLVqE5dxO24SeLDWt4iRCh1_a3Wblr_-0EsPB2KL41eIvf2PdFZ4fHckJPJypppTuStXJzCp4_RP9AlTJzpVWQy9nxfG3TrBtWUgiotC4mj2ZxK7Ibn81nwAlgvu8BWsj1Fdv_3mEhugohprM0hIKcDVAZu_lnqTXN1c5cr_cvgQDBj2hh43rvlRAVclVqChjHpCZ9yblNj3uEsUuuGEdm60owk-Hr_t9ms9uKZ5GfR3aCHdQK4s"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/80 to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-8 w-full text-center">
+<span class="inline-block label-sm tracking-[0.2em] text-primary mb-6 uppercase font-medium">Personaliseer Je Herinnering</span>
+<h1 class="serif-text text-5xl md:text-8xl font-bold mb-8 leading-[1.1] text-white text-glow-gold">
+                Voor Ieder Moment <br/> <span class="italic text-primary-fixed-dim">een uniek nummer.</span>
+</h1>
+<p class="max-w-2xl mx-auto text-on-surface-variant text-lg md:text-xl mb-12 font-light leading-relaxed">
+                Wij vertalen uw meest kostbare verhalen naar professionele, op maat gemaakte muziek. Voor een bruiloft, afscheid of jubileum — wij vangen het gevoel.
+            </p>
+<div class="flex flex-col sm:flex-row gap-6 justify-center">
+<a class="gold-gradient text-on-primary px-10 py-4 rounded-md font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform duration-300" href="#aanvragen">
+                    Vraag een nummer aan
+                    <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+<a class="bg-surface-container-high/40 backdrop-blur-md border border-outline-variant/30 text-white px-10 py-4 rounded-md font-bold text-lg hover:bg-surface-container-highest transition-colors" href="#muziek">
+                    Beluister Voorbeelden
+                </a>
+</div>
+</div>
+</section>
+<!-- Recent Voltooide Nummers (Portfolio) -->
+<section class="py-24 px-8 bg-surface">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="serif-text text-4xl md:text-5xl font-bold mb-6">Recent Voltooide Nummers</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto">Bekijk een selectie van verhalen die we onlangs hebben omgezet in muziek.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Project 1 -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant/10 hover:border-primary/30 transition-all group">
+<div class="aspect-square relative overflow-hidden">
+<img alt="Album Art" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCofNHuuklQnnSvriN8xB2y7KFlrwf2bjHsIs9y-t0fYq_hXxDoFuqS-UEUGWux4MVnvo2CBrk5Sthq9hJ9zkKfPHR1irrnPozVQvkgvO-u0w_56dClO7x428evqStmAxTmk8lf4f_cbTULxl_fXtHNtnh5OgWzimDwTHmx1xnonOdajGj65kWJ1ZdU1WG18-G8UXhFMTnnATuJgAkYIaQKDv_mNqETs-FF2fd9xomdnnvW9aLWg6bRfAPhqOF4JpogT5ULXs-MYus"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-6xl">play_circle</span>
+</div>
+</div>
+<div class="p-6">
+<span class="text-primary text-xs font-bold uppercase tracking-widest mb-2 block">Huwelijk</span>
+<h3 class="serif-text text-xl font-bold mb-2 text-white">Sophie &amp; Mark</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2">Een romantische ballad die het verhaal vertelt van hun eerste ontmoeting in Parijs tot aan de grote dag.</p>
+</div>
+</div>
+<!-- Project 2 -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant/10 hover:border-primary/30 transition-all group">
+<div class="aspect-square relative overflow-hidden">
+<img alt="Album Art" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfg0pkcL_xqwyrGaEwWcMTz4VHVLWNtvHBQH4CrP7E_nFAC3oYre-0isPgl6SDDAk6ii34_-UqbErovad9OShLw_UNq0TlHTycnJECELZkSUWAed3zjWZBNJ3AX_zaCSczapa7RdbLNONJ7xW7g3ovLSCWMdn6CCHIwL3OgBcnYzR4QYmeJb1GEBRgTLUdhgYbeo70sKe-xr99upO-jrnbxAW6vVB9mFGN1GlyU7fxZ4MF2rmT9SI20UdM_Haew8s60rqabm4o3rI"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-6xl">play_circle</span>
+</div>
+</div>
+<div class="p-6">
+<span class="text-primary text-xs font-bold uppercase tracking-widest mb-2 block">Jubileum</span>
+<h3 class="serif-text text-xl font-bold mb-2 text-white">Gouden Jaren</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2">Een vrolijk, uptempo nummer voor Opa Jan die 50 jaar in het vak zit, vol inside jokes en herinneringen.</p>
+</div>
+</div>
+<!-- Project 3 -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant/10 hover:border-primary/30 transition-all group">
+<div class="aspect-square relative overflow-hidden">
+<img alt="Album Art" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 bg-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8I_k5hQWvH_5T9P5X6j6zL8m8n9n8P6v5X4W2Z1a0s9d8f7g6h5j4k3l2m1n0b9v8c7x6z5l4k3j2h1g0f9d8s7a6"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-6xl">play_circle</span>
+</div>
+</div>
+<div class="p-6">
+<span class="text-primary text-xs font-bold uppercase tracking-widest mb-2 block">Afscheid</span>
+<h3 class="serif-text text-xl font-bold mb-2 text-white">Lichtpuntje</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2">Een intiem akoestisch eerbetoon ter nagedachtenis aan een geliefde oma, gefocust op haar warmte en kracht.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Wat onze klanten zeggen (Testimonials) -->
+<section class="py-24 px-8 bg-surface-container-low relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[40rem] absolute -top-40 -left-40">format_quote</span>
+</div>
+<div class="max-w-7xl mx-auto relative z-10">
+<h2 class="serif-text text-4xl md:text-5xl font-bold mb-16 text-center">Wat onze klanten zeggen</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="text-center">
+<div class="text-primary mb-6">
+<span class="material-symbols-outlined text-5xl">format_quote</span>
+</div>
+<p class="serif-text text-xl italic text-white mb-6 leading-relaxed">
+                        "Ik wist niet wat ik moest verwachten, maar het resultaat was adembenemend. Het nummer op onze bruiloft zorgde voor geen enkel droog oog."
+                    </p>
+<div class="font-bold text-primary">— Annelies V.</div>
+</div>
+<div class="text-center">
+<div class="text-primary mb-6">
+<span class="material-symbols-outlined text-5xl">format_quote</span>
+</div>
+<p class="serif-text text-xl italic text-white mb-6 leading-relaxed">
+                        "Het perfecte cadeau voor mijn vaders 60e verjaardag. De tekst klopte tot in de kleinste details. Een herinnering voor het leven."
+                    </p>
+<div class="font-bold text-primary">— Thomas de B.</div>
+</div>
+<div class="text-center">
+<div class="text-primary mb-6">
+<span class="material-symbols-outlined text-5xl">format_quote</span>
+</div>
+<p class="serif-text text-xl italic text-white mb-6 leading-relaxed">
+                        "Snel geleverd en van professionele studiokwaliteit. De Spotify publicatie maakte het helemaal af om te delen met familie."
+                    </p>
+<div class="font-bold text-primary">— Sarah L.</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pakketten (Pricing) -->
+<section class="py-24 px-8" id="prijzen">
+<div class="max-w-5xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="serif-text text-4xl md:text-5xl font-bold mb-6">Kies jouw pakket</h2>
+<p class="text-on-surface-variant">Transparante prijzen, geen verborgen kosten.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Basis -->
+<div class="bg-surface-container p-10 rounded-2xl border border-outline-variant/20 flex flex-col h-full">
+<h3 class="serif-text text-2xl font-bold mb-2">Digitaal Basis</h3>
+<div class="text-4xl font-bold text-white mb-6">€5,99 <span class="text-sm font-normal text-on-surface-variant">/ per nummer</span></div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl">check</span>
+                            Hoogwaardige MP3/WAV file
+                        </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl">check</span>
+                            Levering binnen 48 uur
+                        </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl">check</span>
+                            Persoonlijk gecomponeerd
+                        </li>
+<li class="flex items-center gap-3 opacity-30 line-through">
+<span class="material-symbols-outlined text-xl">close</span>
+                            Publicatie op Spotify
+                        </li>
+</ul>
+<button class="w-full py-4 border border-outline text-white font-bold rounded-md hover:bg-surface-container-high transition-colors">
+                        Kies Basis
+                    </button>
+</div>
+<!-- Premium -->
+<div class="bg-surface-container-high p-10 rounded-2xl border-2 border-primary relative flex flex-col h-full shadow-2xl shadow-primary/5">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-on-primary text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest">Meest Gekozen</div>
+<h3 class="serif-text text-2xl font-bold mb-2">Premium Spotify</h3>
+<div class="text-4xl font-bold text-white mb-6">€9,99 <span class="text-sm font-normal text-on-surface-variant">/ per nummer</span></div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl">check</span>
+                            Alles uit het Basis pakket
+                        </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl">check</span>
+                            Publicatie op Spotify &amp; Apple Music
+                        </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl">check</span>
+                            Vermelding op officiële playlists
+                        </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl">check</span>
+                            Deelbare link voor social media
+                        </li>
+</ul>
+<button class="w-full py-4 gold-gradient text-on-primary font-bold rounded-md hover:scale-[1.02] transition-transform">
+                        Kies Premium
+                    </button>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Preview -->
+<section class="py-24 px-8 bg-surface-container-low">
+<div class="max-w-3xl mx-auto">
+<h2 class="serif-text text-3xl font-bold mb-10 text-center">Veelgestelde Vragen</h2>
+<div class="space-y-4">
+<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/10">
+<h4 class="font-bold mb-2 flex justify-between items-center">
+                        Hoe werkt het proces precies?
+                        <span class="material-symbols-outlined text-primary">expand_more</span>
+</h4>
+<p class="text-on-surface-variant text-sm">Na je aanvraag matchen we je verhaal met de juiste componist. Binnen 48 uur ontvang je het unieke nummer digitaal.</p>
+</div>
+<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/10">
+<h4 class="font-bold mb-2 flex justify-between items-center">
+                        Kan ik de tekst zelf aanleveren?
+                        <span class="material-symbols-outlined text-primary">expand_more</span>
+</h4>
+<p class="text-on-surface-variant text-sm">Zeker! Je kunt volledige teksten aanleveren of alleen steekwoorden en herinneringen. Wij zorgen voor het ritme en de rijm.</p>
+</div>
+<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/10">
+<h4 class="font-bold mb-2 flex justify-between items-center">
+                        Is de muziek echt voor mij?
+                        <span class="material-symbols-outlined text-primary">expand_more</span>
+</h4>
+<p class="text-on-surface-variant text-sm">Ja, het nummer is uniek voor jouw moment. Bij het basis pakket krijg je de gebruiksrechten voor eigen kring.</p>
+</div>
+</div>
+<div class="mt-8 text-center">
+<a class="text-primary hover:underline font-bold flex items-center justify-center gap-2" href="#">
+                    Bekijk alle vragen
+                    <span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-32 px-8 relative overflow-hidden bg-surface">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 opacity-30"></div>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+</div>
+<div class="max-w-4xl mx-auto text-center relative z-10">
+<h2 class="serif-text text-5xl md:text-7xl font-bold mb-8 leading-tight">Klaar voor jouw eigen <span class="italic text-primary">soundtrack?</span></h2>
+<p class="text-on-surface-variant text-xl mb-12 max-w-2xl mx-auto">Gun jezelf of een ander een herinnering die nooit vervaagt. Begin vandaag nog aan jouw nummer.</p>
+<div class="flex flex-col items-center gap-6">
+<button class="gold-gradient text-on-primary px-16 py-6 rounded-md font-bold text-2xl hover:scale-105 transition-all shadow-2xl shadow-primary/20">
+                    Nu Aanvragen
+                </button>
+<div class="flex items-center gap-8 text-sm text-on-surface-variant uppercase tracking-widest font-medium opacity-60">
+<span>48 UUR LEVERING</span>
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+<span>STUDIO KWALITEIT</span>
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+<span>100% UNIEK</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#0E0E0E] w-full py-12 px-8 border-t border-[#4D4635]/15">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-left max-w-7xl mx-auto font-sans text-sm tracking-tight text-[#D0C5AF]">
+<div class="space-y-4">
+<div class="flex items-center justify-center md:justify-start gap-3">
+<img alt="Logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida/ADBb0ugwcvWhizZit7lYXZna1pry66rGZrMcKXAbEiM2ecDi1W1AlKziXjdXoKdZCAq1kpsz-3cJYX5gmvzLVEQmQc48W32gGWtyQLc3qvGsnDJ0a6FNHbQEi1fm2tSI6HXECK9rxdVStIrPJx2cuOLQnxi47DxLQAa6iNJk5SnFUcj6t03G61ODyS9_ll8bkwU8eBEYAROtLu20qAsjCvrs7Z1UbcOlln0yg98OoL4zLFDi3GJ1w_Q8nXzAEWEu0JEy-9q-cjgIYwZShw"/>
+<div class="font-serif text-xl text-[#D4AF37]">Voor Ieder Moment</div>
+</div>
+<p class="max-w-xs mx-auto md:mx-0 opacity-80">
+                    Wij geloven dat elk bijzonder moment zijn eigen soundtrack verdient. Kwaliteit, emotie en snelheid.
+                </p>
+</div>
+<div class="flex flex-col gap-3">
+<a class="text-[#D0C5AF] hover:text-white transition-colors" href="#">Algemene Voorwaarden</a>
+<a class="text-[#D0C5AF] hover:text-white transition-colors" href="#">Privacybeleid</a>
+<a class="text-[#F2CA50] underline" href="#">Spotify Release</a>
+<a class="text-[#D0C5AF] hover:text-white transition-colors" href="#">Contact</a>
+</div>
+<div class="text-center md:text-right space-y-6">
+<div class="flex justify-center md:justify-end gap-6 opacity-80">
+<span class="material-symbols-outlined hover:text-[#F2CA50] cursor-pointer transition-all">brand_awareness</span>
+<span class="material-symbols-outlined hover:text-[#F2CA50] cursor-pointer transition-all">music_note</span>
+<span class="material-symbols-outlined hover:text-[#F2CA50] cursor-pointer transition-all">podcasts</span>
+</div>
+<p>© 2024 Voor Ieder Moment. Uw verhaal, onze muziek.</p>
+</div>
+</div>
+</footer>
+</body></html>
