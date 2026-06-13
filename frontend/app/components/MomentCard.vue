@@ -10,14 +10,15 @@ const t = computed(() => props.category.theme);
 <template>
   <NuxtLink
     :to="href"
-    class="group block rounded-3xl border bg-white p-6 transition duration-200 hover:-translate-y-1"
+    class="group block border bg-white p-6 transition duration-200 hover:-translate-y-1"
     :style="{
       borderColor: 'var(--color-line)',
-      boxShadow: '0 14px 40px rgba(39,31,24,0.07)',
+      borderRadius: '8px',
+      boxShadow: '0 14px 40px rgba(23,33,29,0.07)',
     }"
   >
     <span
-      class="flex h-12 w-12 items-center justify-center rounded-2xl text-2xl"
+      class="flex h-12 w-12 items-center justify-center rounded-lg text-2xl"
       :style="{ background: t.accentSoft }"
       aria-hidden="true"
     >{{ category.emoji }}</span>

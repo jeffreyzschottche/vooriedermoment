@@ -25,7 +25,7 @@ watch(
 <template>
   <header
     class="sticky top-0 z-50 border-b backdrop-blur-xl"
-    :style="{ borderColor: 'var(--color-line)', background: 'rgba(253,248,240,0.85)' }"
+    :style="{ borderColor: 'var(--color-line)', background: 'rgba(246,247,242,0.88)' }"
   >
     <div class="site-container flex min-h-16 items-center justify-between gap-4 py-3 lg:min-h-[4.5rem]">
       <NuxtLink to="/" class="flex min-w-0 items-center gap-2.5">
@@ -64,7 +64,7 @@ watch(
                 v-for="c in consumerCategories"
                 :key="c.slug"
                 :to="categoryPath(c)"
-                class="flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium transition hover:bg-[var(--color-surface-soft)]"
+                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-[var(--color-surface-soft)]"
                 :style="{ color: 'var(--color-ink)' }"
               >
                 <span aria-hidden="true">{{ c.emoji }}</span>{{ c.title }}
@@ -95,7 +95,7 @@ watch(
           v-for="link in links"
           :key="link.to"
           :to="link.to"
-          class="rounded-2xl border px-4 py-3.5 font-display text-base"
+          class="rounded-lg border px-4 py-3.5 font-display text-base"
           :style="{ borderColor: 'var(--color-line)', color: 'var(--color-ink)' }"
         >
           {{ link.label }}

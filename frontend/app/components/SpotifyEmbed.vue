@@ -18,7 +18,7 @@ withDefaults(
 </script>
 
 <template>
-  <div class="overflow-hidden rounded-2xl">
+  <div class="overflow-hidden rounded-lg">
     <iframe
       v-if="src"
       :src="src"
@@ -32,7 +32,7 @@ withDefaults(
     />
     <div
       v-else
-      class="flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 text-center"
+      class="flex flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed px-6 text-center"
       :style="{ height: height + 'px', borderColor: 'var(--color-line-strong)', background: 'var(--color-surface-soft)' }"
     >
       <span

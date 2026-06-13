@@ -4,6 +4,15 @@ export default defineNuxtConfig({
 
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
 
+  // Laad onze eigen Tailwind-entry (met tokens + component-classes). De module
+  // vond dit bestand niet meer op het Nuxt 4 app/-pad, dus registreren we het
+  // expliciet en zetten de default-injectie van de module uit.
+  css: ['~/assets/css/tailwind.css'],
+  tailwindcss: {
+    cssPath: false,
+    configPath: '~~/tailwind.config.cjs',
+  },
+
   app: {
     head: {
       title: 'Voor Ieder Moment',

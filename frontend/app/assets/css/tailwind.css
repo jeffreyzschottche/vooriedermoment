@@ -4,24 +4,27 @@
 
 @layer base {
   :root {
-    /* Warme, lichte basis-huisstijl */
-    --color-bg: #fdf8f0;
-    --color-bg-soft: #f6eede;
-    --color-bg-contrast: #211c17;
+    /* Frisse, lichte basis-huisstijl */
+    --color-bg: #f6f7f2;
+    --color-bg-soft: #edf3ea;
+    --color-bg-contrast: #17211d;
     --color-surface: #ffffff;
-    --color-surface-soft: #fbf5ea;
-    --color-line: #ece0cd;
-    --color-line-strong: #ddcdb2;
+    --color-surface-soft: #f0f5ef;
+    --color-line: #dce5dc;
+    --color-line-strong: #c5d4c8;
 
-    --color-ink: #271f18;
-    --color-ink-soft: #6c6055;
-    --color-ink-faint: #9a8e7f;
+    --color-ink: #17211d;
+    --color-ink-soft: #58665f;
+    --color-ink-faint: #8a968f;
 
     /* Merk-accent (default). Wordt per categorie overschreven via .moment-theme */
-    --accent: #e07a2c;
-    --accent-strong: #b85f17;
-    --accent-soft: #fcecd9;
+    --accent: #ea6848;
+    --accent-strong: #b63d26;
+    --accent-soft: #ffe4dc;
     --accent-ink: #ffffff;
+    --accent-alt: #2f8f83;
+    --accent-alt-soft: #dcefeb;
+    --accent-gold: #f3b64a;
 
     /* Backwards-compat aliassen voor nog niet herschreven views (bv. auth-layout) */
     --color-primary: var(--accent);
@@ -42,7 +45,8 @@
   body {
     min-height: 100vh;
     background:
-      radial-gradient(1200px 600px at 50% -10%, var(--accent-soft), transparent 60%),
+      linear-gradient(135deg, color-mix(in srgb, var(--accent-soft) 52%, transparent) 0%, transparent 34%),
+      linear-gradient(225deg, color-mix(in srgb, var(--accent-alt-soft) 62%, transparent) 0%, transparent 38%),
       var(--color-bg);
     color: var(--color-ink);
   }
@@ -65,30 +69,43 @@
   }
 
   .site-container {
-    @apply mx-auto w-full max-w-screen-xl px-5 sm:px-8 lg:px-10;
+    @apply mx-auto w-full max-w-[1180px] px-5 sm:px-8 lg:px-10;
+  }
+
+  .wide-container {
+    @apply mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .site-frame {
+    @apply border bg-white/70 shadow-[0_26px_80px_rgba(23,33,29,0.09)] backdrop-blur;
+    border-color: var(--color-line);
+    border-radius: 8px;
   }
 
   /* Per-categorie thema-wrapper: zet accent-variabelen via inline style */
   .moment-theme {
     background:
-      radial-gradient(1100px 520px at 50% -8%, var(--accent-soft), transparent 60%),
+      linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 70%, transparent) 0%, transparent 42%),
       var(--color-bg);
   }
 
   .panel {
-    @apply rounded-3xl border bg-white shadow-[0_18px_50px_rgba(39,31,24,0.08)];
+    @apply border bg-white shadow-[0_18px_50px_rgba(23,33,29,0.08)];
     border-color: var(--color-line);
+    border-radius: 8px;
   }
 
   .rich-card {
-    @apply rounded-3xl border bg-white shadow-[0_14px_40px_rgba(39,31,24,0.07)];
+    @apply border bg-white shadow-[0_14px_40px_rgba(23,33,29,0.07)];
     border-color: var(--color-line);
+    border-radius: 8px;
   }
 
   .soft-card {
-    @apply rounded-3xl border;
+    @apply border;
     background: var(--color-surface-soft);
     border-color: var(--color-line);
+    border-radius: 8px;
   }
 
   .accent-gradient {
@@ -96,14 +113,14 @@
   }
 
   .section-kicker {
-    @apply mb-4 inline-flex items-center rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em];
+    @apply mb-4 inline-flex items-center rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em];
     color: var(--accent-strong);
     border-color: color-mix(in srgb, var(--accent) 28%, transparent);
     background: var(--accent-soft);
   }
 
   .section-heading {
-    @apply font-display font-semibold tracking-[-0.01em];
+    @apply font-display font-semibold;
     color: var(--color-ink);
   }
 
@@ -121,13 +138,13 @@
   }
 
   .logo-card {
-    @apply inline-flex items-center justify-center rounded-xl px-2.5 py-1.5;
+    @apply inline-flex items-center justify-center rounded-md px-2.5 py-1.5;
     background: var(--color-ink);
   }
 
   /* Knoppen */
   .stitch-button {
-    @apply accent-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-bold transition duration-200;
+    @apply accent-gradient inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-bold transition duration-200;
     color: var(--accent-ink);
     box-shadow: 0 12px 26px color-mix(in srgb, var(--accent) 35%, transparent);
   }
@@ -141,7 +158,7 @@
   }
 
   .stitch-outline-button {
-    @apply inline-flex items-center justify-center rounded-full border-2 bg-white px-6 py-3 text-sm font-bold transition duration-200;
+    @apply inline-flex items-center justify-center rounded-lg border-2 bg-white px-6 py-3 text-sm font-bold transition duration-200;
     color: var(--color-ink);
     border-color: var(--color-line-strong);
   }
@@ -161,13 +178,19 @@
     color: var(--color-ink-soft);
   }
 
+  .metric-tile {
+    @apply border bg-white/75 px-4 py-3 text-left shadow-[0_10px_28px_rgba(23,33,29,0.06)];
+    border-color: var(--color-line);
+    border-radius: 8px;
+  }
+
   .field-label {
     @apply mb-2 block text-xs font-bold uppercase tracking-[0.16em];
     color: var(--color-ink-soft);
   }
 
   .field-input {
-    @apply w-full rounded-2xl border bg-white px-4 py-3.5 text-sm outline-none transition;
+    @apply w-full rounded-lg border bg-white px-4 py-3.5 text-sm outline-none transition;
     border-color: var(--color-line-strong);
     color: var(--color-ink);
   }

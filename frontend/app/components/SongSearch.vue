@@ -34,7 +34,7 @@ function search() {
 
     <div
       v-if="searched"
-      class="mt-5 rounded-2xl border p-4 text-sm"
+      class="mt-5 rounded-lg border p-4 text-sm"
       :style="{ borderColor: 'var(--color-line)', background: 'var(--color-surface-soft)' }"
     >
       <p :style="{ color: 'var(--color-ink)' }">
