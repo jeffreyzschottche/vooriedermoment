@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warme, lichte basis-huisstijl */
+    --color-bg: #fdf8f0;
+    --color-bg-soft: #f6eede;
+    --color-bg-contrast: #211c17;
+    --color-surface: #ffffff;
+    --color-surface-soft: #fbf5ea;
+    --color-line: #ece0cd;
+    --color-line-strong: #ddcdb2;
+
+    --color-ink: #271f18;
+    --color-ink-soft: #6c6055;
+    --color-ink-faint: #9a8e7f;
+
+    /* Merk-accent (default). Wordt per categorie overschreven via .moment-theme */
+    --accent: #e07a2c;
+    --accent-strong: #b85f17;
+    --accent-soft: #fcecd9;
+    --accent-ink: #ffffff;
+
+    /* Backwards-compat aliassen voor nog niet herschreven views (bv. auth-layout) */
+    --color-primary: var(--accent);
+    --color-primary-deep: var(--accent-strong);
+    --color-on-surface: var(--color-ink);
+    --color-on-surface-muted: var(--color-ink-soft);
+    --color-on-primary: var(--accent-ink);
+  }
+
+  html {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, var(--accent-soft), transparent 60%),
+      var(--color-bg);
+    color: var(--color-ink);
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: 'Fraunces', Georgia, serif;
+  }
+
+  .site-container {
+    @apply mx-auto w-full max-w-screen-xl px-5 sm:px-8 lg:px-10;
+  }
+
+  /* Per-categorie thema-wrapper: zet accent-variabelen via inline style */
+  .moment-theme {
+    background:
+      radial-gradient(1100px 520px at 50% -8%, var(--accent-soft), transparent 60%),
+      var(--color-bg);
+  }
+
+  .panel {
+    @apply rounded-3xl border bg-white shadow-[0_18px_50px_rgba(39,31,24,0.08)];
+    border-color: var(--color-line);
+  }
+
+  .rich-card {
+    @apply rounded-3xl border bg-white shadow-[0_14px_40px_rgba(39,31,24,0.07)];
+    border-color: var(--color-line);
+  }
+
+  .soft-card {
+    @apply rounded-3xl border;
+    background: var(--color-surface-soft);
+    border-color: var(--color-line);
+  }
+
+  .accent-gradient {
+    background-image: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+  }
+
+  .section-kicker {
+    @apply mb-4 inline-flex items-center rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em];
+    color: var(--accent-strong);
+    border-color: color-mix(in srgb, var(--accent) 28%, transparent);
+    background: var(--accent-soft);
+  }
+
+  .section-heading {
+    @apply font-display font-semibold tracking-[-0.01em];
+    color: var(--color-ink);
+  }
+
+  .section-subtext {
+    @apply text-base leading-7;
+    color: var(--color-ink-soft);
+  }
+
+  .nav-link {
+    @apply text-sm font-semibold transition;
+    color: var(--color-ink-soft);
+  }
+  .nav-link:hover {
+    color: var(--color-ink);
+  }
+
+  .logo-card {
+    @apply inline-flex items-center justify-center rounded-xl px-2.5 py-1.5;
+    background: var(--color-ink);
+  }
+
+  /* Knoppen */
+  .stitch-button {
+    @apply accent-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-bold transition duration-200;
+    color: var(--accent-ink);
+    box-shadow: 0 12px 26px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .stitch-button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+  }
+  .stitch-button:focus-visible {
+    outline: 3px solid var(--accent-strong);
+    outline-offset: 2px;
+  }
+
+  .stitch-outline-button {
+    @apply inline-flex items-center justify-center rounded-full border-2 bg-white px-6 py-3 text-sm font-bold transition duration-200;
+    color: var(--color-ink);
+    border-color: var(--color-line-strong);
+  }
+  .stitch-outline-button:hover {
+    border-color: var(--accent);
+    color: var(--accent-strong);
+  }
+  .stitch-outline-button:focus-visible {
+    outline: 3px solid var(--accent-strong);
+    outline-offset: 2px;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold;
+    border-color: var(--color-line);
+    background: var(--color-surface-soft);
+    color: var(--color-ink-soft);
+  }
+
+  .field-label {
+    @apply mb-2 block text-xs font-bold uppercase tracking-[0.16em];
+    color: var(--color-ink-soft);
+  }
+
+  .field-input {
+    @apply w-full rounded-2xl border bg-white px-4 py-3.5 text-sm outline-none transition;
+    border-color: var(--color-line-strong);
+    color: var(--color-ink);
+  }
+  .field-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .field-input::placeholder {
+    color: var(--color-ink-faint);
+  }
+
+  .soft-divider {
+    @apply h-px w-full;
+    background: linear-gradient(90deg, transparent, var(--color-line-strong), transparent);
+  }
+
+  .price-strike {
+    @apply text-base font-semibold line-through;
+    color: var(--color-ink-faint);
+  }
+}
+
+/* Scroll-reveal (GSAP zet .is-revealed; zonder JS blijft alles zichtbaar) */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  .reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}

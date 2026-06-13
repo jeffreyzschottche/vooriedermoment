@@ -1,15 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './app/**/*.{vue,ts}',
-    './components/**/*.{vue,ts}',
-    './layouts/**/*.{vue,ts}',
-    './pages/**/*.{vue,ts}',
-    './plugins/**/*.{js,ts}',
-    './composables/**/*.{js,ts}',
+    './app/**/*.{vue,ts,js}',
+    './app.vue',
+    './error.vue',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        display: ['Fraunces', 'Georgia', 'serif'],
+        sans: ['Manrope', 'system-ui', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };
