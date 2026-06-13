@@ -71,21 +71,34 @@ const themes: Record<string, AccentTheme> = {
 // Veelgebruikte intake-velden (hergebruikt over categorieën)
 function baseFields(extra: IntakeField[] = []): IntakeField[] {
   return [
-    { name: 'recipientName', label: 'Voor wie is het nummer?', type: 'text', placeholder: 'Bijv. Sven', required: true, span: 'half' },
-    { name: 'fromName', label: 'Van wie is het?', type: 'text', placeholder: 'Bijv. Familie de Vries', span: 'half' },
+    { name: 'recipientName', label: 'Naam of namen in het nummer', type: 'text', placeholder: 'Bijv. Sven, papa, team JO17-1', required: true, span: 'half' },
+    { name: 'fromName', label: 'Van wie komt het nummer?', type: 'text', placeholder: 'Bijv. Familie de Vries, het team, de kinderen', span: 'half' },
     ...extra,
     {
       name: 'tone', label: 'Sfeer / toon', type: 'select', required: true, span: 'half',
-      options: ['Vrolijk & uptempo', 'Emotioneel & ontroerend', 'Grappig & ad rem', 'Stoer & energiek'],
+      options: ['Vrolijk & uptempo', 'Emotioneel maar niet zwaar', 'Grappig & ad rem', 'Stoer & energiek', 'Warm & persoonlijk'],
     },
     {
-      name: 'vocals', label: 'Stem', type: 'select', span: 'half',
+      name: 'vocals', label: 'Stem / uitvoering', type: 'select', span: 'half',
       options: ['Mannenstem', 'Vrouwenstem', 'Duet', 'Maakt niet uit'],
     },
     {
+      name: 'musicStyle', label: 'Muzikale richting', type: 'select', span: 'half',
+      options: ['Nederlandstalige pop', 'Feest / meezinger', 'Akoestisch en klein', 'Rock / anthem', 'Urban pop', 'Laat ons kiezen'],
+      help: 'Dit gebruiken we later ook voor de muziekprompt.',
+    },
+    {
       name: 'anecdotes', label: 'Verhaal, anekdotes & inside jokes', type: 'textarea', required: true, span: 'full',
-      placeholder: 'Vertel wat dit moment of deze persoon uniek maakt — namen, plaatsen, grapjes, gewoontes...',
+      placeholder: 'Vertel concreet: namen, plaatsen, typische uitspraken, herinneringen, grapjes, gewoontes, wat er absoluut in moet...',
       help: 'Hoe concreter, hoe persoonlijker het nummer. Deze details worden in de tekst verwerkt.',
+    },
+    {
+      name: 'mustMention', label: 'Wat moet er absoluut in?', type: 'textarea', span: 'full',
+      placeholder: 'Bijv. “altijd te laat”, “opa’s schuur”, “de goal in de laatste minuut”, “bouwen op vertrouwen”...',
+    },
+    {
+      name: 'avoid', label: 'Wat moeten we vermijden?', type: 'text', span: 'full',
+      placeholder: 'Bijv. te sentimenteel, scheldwoorden, privégrappen die niet geschikt zijn voor familie...',
     },
     { name: 'email', label: 'Jouw e-mailadres', type: 'email', placeholder: 'naam@voorbeeld.nl', required: true, span: 'full', help: 'Hier leveren we het nummer af.' },
   ];
@@ -119,6 +132,8 @@ export const categories: Category[] = [
     intakeFields: baseFields([
       { name: 'instructor', label: 'Naam rijschool of instructeur (optioneel)', type: 'text', placeholder: 'Bijv. Rijschool Jansen', span: 'half' },
       { name: 'attempts', label: 'Aantal pogingen', type: 'text', placeholder: 'Bijv. in 1x!', span: 'half' },
+      { name: 'firstDrive', label: 'Eerste rit of droomauto', type: 'text', placeholder: 'Bijv. meteen naar oma, rondje McDrive, Golf GTI', span: 'half' },
+      { name: 'drivingMoment', label: 'Moment van slagen', type: 'text', placeholder: 'Bijv. regen, zenuwen, examinator grapte...', span: 'half' },
     ]),
     faq: [
       { question: 'Het rijbewijs-nummer bestaat toch al?', answer: 'Klopt — er staat een versie op Spotify met heel veel namen. Zit jouw naam er niet bij, of wil je een eigen variant met je eigen verhaal? Dan maken we die op aanvraag.' },
@@ -153,6 +168,8 @@ export const categories: Category[] = [
     intakeFields: baseFields([
       { name: 'school', label: 'School / opleiding', type: 'text', placeholder: 'Bijv. Stedelijk Gymnasium', span: 'half' },
       { name: 'studyLevel', label: 'Diploma / niveau', type: 'text', placeholder: 'Bijv. VWO, MBO, HBO', span: 'half' },
+      { name: 'nextStep', label: 'Wat komt hierna?', type: 'text', placeholder: 'Bijv. tussenjaar, studie rechten, werken', span: 'half' },
+      { name: 'examStory', label: 'Examenmoment of stressverhaal', type: 'text', placeholder: 'Bijv. herexamen, nachten blokken, champagne bij de vlag', span: 'half' },
     ]),
     faq: [
       { question: 'Hoe weet ik of mijn naam er al in zit?', answer: 'Gebruik de zoekbalk op deze pagina. Vind je je naam niet, dan vraag je in een paar klikken een eigen versie aan.' },
@@ -187,6 +204,8 @@ export const categories: Category[] = [
     intakeFields: baseFields([
       { name: 'place', label: 'Plaats / buurt', type: 'text', placeholder: 'Bijv. Utrecht-Oost', span: 'half' },
       { name: 'firstHome', label: 'Eerste eigen huis?', type: 'select', options: ['Ja, de eerste!', 'Nee, een volgende stap'], span: 'half' },
+      { name: 'homeType', label: 'Wat voor plek is het?', type: 'text', placeholder: 'Bijv. jaren 30 woning, appartement, kluswoning', span: 'half' },
+      { name: 'favoriteRoom', label: 'Favoriete plek in huis', type: 'text', placeholder: 'Bijv. tuin, keuken, dakterras, mancave', span: 'half' },
     ]),
     faq: [
       { question: 'Is dit voor een housewarming?', answer: 'Perfect daarvoor. We verwerken jullie namen en het verhaal van de nieuwe plek, zodat je hem op het feestje kunt draaien.' },
@@ -212,6 +231,8 @@ export const categories: Category[] = [
     intakeFields: baseFields([
       { name: 'nickname', label: 'Hoe noem je hem?', type: 'text', placeholder: 'Bijv. pap, papa, opa', span: 'half' },
       { name: 'hobby', label: 'Zijn hobby of typische dingen', type: 'text', placeholder: 'Bijv. BBQ, voetbal, klussen', span: 'half' },
+      { name: 'dadQuote', label: 'Typische uitspraak', type: 'text', placeholder: 'Bijv. “komt goed”, “niet lullen maar poetsen”', span: 'half' },
+      { name: 'thanksFor', label: 'Waar wil je hem voor bedanken?', type: 'text', placeholder: 'Bijv. altijd klaarstaan, ritjes, advies', span: 'half' },
     ]),
     faq: [
       { question: 'Op tijd voor Vaderdag?', answer: 'Vraag je nummer een paar dagen van tevoren aan, dan staat het ruim op tijd klaar.' },
@@ -234,6 +255,8 @@ export const categories: Category[] = [
     intakeFields: baseFields([
       { name: 'nickname', label: 'Hoe noem je haar?', type: 'text', placeholder: 'Bijv. mam, mama, oma', span: 'half' },
       { name: 'memory', label: 'Een dierbare herinnering', type: 'text', placeholder: 'Bijv. zondagse pannenkoeken', span: 'half' },
+      { name: 'momTrait', label: 'Wat maakt haar typisch haar?', type: 'text', placeholder: 'Bijv. zorgzaam, chaotisch gezellig, altijd appen', span: 'half' },
+      { name: 'thanksFor', label: 'Waar wil je haar voor bedanken?', type: 'text', placeholder: 'Bijv. steun, humor, alles regelen', span: 'half' },
     ]),
     faq: [
       { question: 'Kan het emotioneel én licht?', answer: 'Zeker — kies de sfeer in het formulier. We kunnen ontroerend of juist vrolijk werken.' },
@@ -256,6 +279,8 @@ export const categories: Category[] = [
     intakeFields: baseFields([
       { name: 'babyName', label: 'Naam van het kindje', type: 'text', placeholder: 'Bijv. Liv', required: true, span: 'half' },
       { name: 'birthDate', label: 'Geboortedatum', type: 'date', span: 'half' },
+      { name: 'parents', label: 'Naam ouder(s)', type: 'text', placeholder: 'Bijv. Sam en Noor', span: 'half' },
+      { name: 'birthDetails', label: 'Bijzondere details', type: 'text', placeholder: 'Bijv. sterrenbeeld, gewicht, grote broer/zus', span: 'half' },
     ]),
     faq: [
       { question: 'Geschikt als kraamcadeau?', answer: 'Heel geschikt. Vul de naam van het kindje en de ouders in, dan maken we er een persoonlijk welkomstlied van.' },
@@ -278,6 +303,8 @@ export const categories: Category[] = [
     intakeFields: baseFields([
       { name: 'age', label: 'Welke leeftijd?', type: 'text', placeholder: 'Bijv. 50', span: 'half' },
       { name: 'party', label: 'Soort feest', type: 'text', placeholder: 'Bijv. surprise, kroegavond', span: 'half' },
+      { name: 'personality', label: 'Karakter van de jarige', type: 'text', placeholder: 'Bijv. druktemaker, familiemens, levensgenieter', span: 'half' },
+      { name: 'partyMoment', label: 'Moment waarop het nummer draait', type: 'text', placeholder: 'Bijv. binnenkomst, speech, dansvloer', span: 'half' },
     ]),
     faq: [
       { question: 'Kan het grappig?', answer: 'Absoluut. Kies "Grappig & ad rem" als sfeer en stop je inside jokes in het verhaal-veld.' },
@@ -287,25 +314,30 @@ export const categories: Category[] = [
   },
   {
     slug: 'voetbalclubs',
-    title: 'Voetbalclubs',
-    navLabel: 'Voetbalclubs',
+    title: 'Team- of clublied',
+    navLabel: 'Teamlied',
     emoji: '⚽',
     variant: 'standard',
     theme: themes.grass,
-    kicker: 'Voor de fans',
-    heroTitle: 'Een clublied voor jouw team',
-    heroLead: 'Van kampioenslied tot spreekkoor: een eigen nummer voor je club, je team of je favoriete speler.',
-    intro: 'Vertel ons over de club, de kleuren, de aartsrivaal en de helden van het veld. Wij maken er een meezinger van.',
-    whatYouGet: ['Eén persoonlijk clublied', 'Clubnaam, kleuren en spelers erin', 'Klaar voor de tribune of de kantine'],
+    kicker: 'Voor teams, kantines en kampioenen',
+    heroTitle: 'Een meezinger voor je team of club',
+    heroLead: 'Niet per se voor één specifieke naam, maar voor de hele ploeg: kampioenschap, seizoensafsluiting, sponsoravond of gewoon een eigen kantinehit.',
+    intro: 'Vertel ons over het team, de clubcultuur, de kleuren en de momenten die iedereen herkent. Wij maken er een meezingbaar teamlied van.',
+    whatYouGet: ['Eén persoonlijk team- of clublied', 'Teamnaam, clubcultuur, spelers en momenten erin', 'Klaar voor de kantine, kleedkamer of socials'],
     intakeFields: baseFields([
-      { name: 'clubName', label: 'Naam van de club / team', type: 'text', placeholder: 'Bijv. VV De Spartaan', required: true, span: 'half' },
+      { name: 'teamType', label: 'Waar gaat het over?', type: 'select', options: ['Hele club', 'Eén team', 'Kampioenswedstrijd', 'Seizoensafsluiting', 'Sponsor / businessclub', 'Supportersgroep'], required: true, span: 'half' },
+      { name: 'clubName', label: 'Club- of teamnaam', type: 'text', placeholder: 'Bijv. VV De Spartaan JO17-1', required: true, span: 'half' },
       { name: 'colors', label: 'Clubkleuren', type: 'text', placeholder: 'Bijv. rood-wit', span: 'half' },
+      { name: 'players', label: 'Namen die erin mogen', type: 'text', placeholder: 'Bijv. aanvoerder, keeper, trainer, topscorer', span: 'half' },
+      { name: 'clubCulture', label: 'Wat typeert de ploeg?', type: 'textarea', placeholder: 'Bijv. derde helft, altijd strijd, slechte warming-up, trainer met vaste uitspraak...', span: 'full' },
+      { name: 'chant', label: 'Bestaande yell of leus', type: 'text', placeholder: 'Bijv. “Groen-wit vooruit!”', span: 'full' },
     ]),
     faq: [
-      { question: 'Voor een amateurclub?', answer: 'Juist leuk. Geef de teamnaam en wat namen door, dan maken we een meezinger voor in de kantine.' },
+      { question: 'Moet het voor één persoon zijn?', answer: 'Nee. Dit formulier is juist bedoeld voor een team, club of supportersgroep. Namen zijn optioneel en alleen handig als ze in het refrein of couplet mogen terugkomen.' },
+      { question: 'Voor een amateurclub?', answer: 'Juist leuk. Geef teamnaam, clubcultuur en herkenbare momenten door, dan maken we een meezinger voor in de kantine.' },
     ],
-    seoTitle: 'Persoonlijk clublied voor je voetbalclub',
-    seoDescription: 'Een uniek voetballied voor je club of team, met clubnaam, kleuren en spelers erin. Klaar voor de tribune.',
+    seoTitle: 'Persoonlijk teamlied of clublied laten maken',
+    seoDescription: 'Een uniek voetballied voor je club, team of supportersgroep, met clubnaam, kleuren en herkenbare momenten erin.',
   },
 
   // ── B2B ──────────────────────────────────────────────────────────────────
@@ -366,3 +398,6 @@ export function categoryPath(c: Pick<Category, 'slug' | 'route'>): string {
 
 // Categorieën die in het /momenten-overzicht en de nav verschijnen.
 export const consumerCategories = categories.filter((c) => c.variant !== 'b2b');
+
+// Categorieën die bezoekers als aanvraagkeuze moeten zien, inclusief zakelijk.
+export const requestCategories = categories;

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreSongRequest;
 use App\Models\SongRequest;
 use App\Services\Lyrics\LyricsGenerator;
 use App\Services\Payment\PaymentProvider;
+use App\Services\Production\SongProductionPipeline;
 use Illuminate\Http\JsonResponse;
 
 class SongRequestController extends Controller
@@ -43,7 +44,7 @@ class SongRequestController extends Controller
      * Reken (gestubd) af. Daarna STOPT het proces bewust: het daadwerkelijk
      * produceren van het nummer (bv. via Suno) is nog niet ingebouwd.
      */
-    public function checkout(SongRequest $songRequest, PaymentProvider $payment): JsonResponse
+    public function checkout(SongRequest $songRequest, PaymentProvider $payment, SongProductionPipeline $production): JsonResponse
     {
         if ($songRequest->status !== 'paid') {
             $result = $payment->charge($songRequest);
@@ -51,9 +52,10 @@ class SongRequestController extends Controller
                 'status' => $result['status'],
                 'payment_reference' => $result['reference'],
             ]);
+        }
 
-            // TODO: trigger song-generatie (Suno) zodra dat is gekozen/ingebouwd.
-            // Voor nu stopt de flow hier na een succesvolle (stub-)betaling.
+        if (in_array($songRequest->status, ['paid', 'production_failed'], true)) {
+            $songRequest = $production->run($songRequest->refresh());
         }
 
         return response()->json(['data' => $this->present($songRequest)]);
@@ -74,6 +76,8 @@ class SongRequestController extends Controller
             'status' => $song->status,
             'price_cents' => $song->price_cents,
             'lyrics_preview' => $song->lyrics_preview,
+            'production_steps' => $song->production_steps,
+            'music_reference' => $song->music_reference,
         ];
     }
 }

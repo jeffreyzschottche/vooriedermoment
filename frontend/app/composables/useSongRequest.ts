@@ -16,6 +16,8 @@ export interface SongRequestResult {
   status: string;
   price_cents: number;
   lyrics_preview?: string | null;
+  production_steps?: Record<string, unknown> | null;
+  music_reference?: string | null;
 }
 
 export function useSongRequest() {

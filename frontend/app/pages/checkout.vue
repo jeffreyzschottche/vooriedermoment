@@ -10,6 +10,18 @@ const { current, lastPayload, checkout } = useSongRequest();
 const processing = ref(false);
 
 const hasRequest = computed(() => Boolean(lastPayload.value));
+const fieldLabels: Record<string, string> = {
+  recipientName: 'Naam/namen',
+  fromName: 'Afzender',
+  tone: 'Sfeer',
+  vocals: 'Stem',
+  musicStyle: 'Muziekstijl',
+  anecdotes: 'Verhaal',
+  mustMention: 'Moet erin',
+  avoid: 'Vermijden',
+  companyName: 'Bedrijfsnaam',
+  clubName: 'Club/team',
+};
 
 async function pay() {
   processing.value = true;
@@ -42,7 +54,7 @@ async function pay() {
           </p>
           <dl class="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
             <div v-for="(val, key) in lastPayload?.intake" :key="key">
-              <dt class="text-xs uppercase tracking-[0.12em]" :style="{ color: 'var(--color-ink-faint)' }">{{ key }}</dt>
+              <dt class="text-xs uppercase tracking-[0.12em]" :style="{ color: 'var(--color-ink-faint)' }">{{ fieldLabels[String(key)] ?? key }}</dt>
               <dd class="text-sm" :style="{ color: 'var(--color-ink)' }">{{ val || '—' }}</dd>
             </div>
           </dl>
@@ -55,7 +67,18 @@ async function pay() {
 
         <section class="soft-card p-6 text-sm" :style="{ color: 'var(--color-ink-soft)' }">
           <p class="font-semibold" :style="{ color: 'var(--color-ink)' }">Wat gebeurt er na betaling?</p>
-          <p class="mt-2">Je ontvangt een bevestiging. Daarna gaan wij je nummer afmaken en leveren we het af via e-mail. Je krijgt één vaste versie die je overal kunt delen.</p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <div class="rich-card p-4">
+              <p class="text-xs font-bold uppercase tracking-[0.16em]" :style="{ color: 'var(--accent-strong)' }">Stap 1</p>
+              <p class="mt-2 font-semibold" :style="{ color: 'var(--color-ink)' }">Lyrics finaliseren</p>
+              <p class="mt-1 text-xs leading-5">We vullen templates en rijmende bouwstenen met jouw context, en maken de definitieve tekst.</p>
+            </div>
+            <div class="rich-card p-4">
+              <p class="text-xs font-bold uppercase tracking-[0.16em]" :style="{ color: 'var(--accent-strong)' }">Stap 2</p>
+              <p class="mt-2 font-semibold" :style="{ color: 'var(--color-ink)' }">Muziek genereren</p>
+              <p class="mt-1 text-xs leading-5">De tekst, sfeer, stem en muziekstijl gaan door naar de muziekprompt/provider.</p>
+            </div>
+          </div>
         </section>
       </div>
 
@@ -77,10 +100,10 @@ async function pay() {
           </div>
 
           <button class="stitch-button mt-6 w-full py-4 text-base" :disabled="processing" @click="pay">
-            {{ processing ? 'Bezig…' : 'Betalen (test) →' }}
+            {{ processing ? 'Betaling en productie starten…' : 'Betalen en nummer maken →' }}
           </button>
-          <p class="mt-3 rounded-xl px-3 py-2 text-center text-[11px]" :style="{ background: 'var(--color-surface-soft)', color: 'var(--color-ink-faint)' }">
-            Demo: betaling is nog gestubd. Er wordt nu niets afgeschreven en het nummer wordt nog niet automatisch geproduceerd.
+          <p class="mt-3 rounded-lg px-3 py-2 text-center text-[11px]" :style="{ background: 'var(--color-surface-soft)', color: 'var(--color-ink-faint)' }">
+            Demo: betaling en muziekprovider zijn nog gestubd. De backend draait wel de twee productiestappen en slaat lyrics + muziekprompt op.
           </p>
         </div>
       </aside>

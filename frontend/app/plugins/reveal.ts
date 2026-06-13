@@ -19,7 +19,18 @@ export default defineNuxtPlugin((nuxtApp) => {
       Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
         .then(([{ gsap }, { ScrollTrigger }]) => {
           gsap.registerPlugin(ScrollTrigger);
-          gsap.to(el, {
+          const delay = Number(el.dataset.revealDelay ?? 0);
+          gsap.fromTo(el, {
+            opacity: 0,
+            y: 24,
+            filter: 'blur(10px)',
+          }, {
+            opacity: 1,
+            y: 0,
+            filter: 'blur(0px)',
+            duration: 0.8,
+            delay,
+            ease: 'power3.out',
             scrollTrigger: { trigger: el, start: 'top 88%', once: true },
             onStart: () => el.classList.add('is-revealed'),
           });

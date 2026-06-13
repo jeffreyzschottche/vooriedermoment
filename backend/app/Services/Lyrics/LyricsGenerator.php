@@ -97,9 +97,13 @@ class LyricsGenerator
         // Bouw de prompt: placeholders + intake-detailvelden zoals {anecdotes}, {tone}.
         $promptVars = $placeholders + [
             'anecdotes' => trim((string) ($intake['anecdotes'] ?? '')),
+            'mustMention' => trim((string) ($intake['mustMention'] ?? '')),
+            'avoid' => trim((string) ($intake['avoid'] ?? '')),
+            'musicStyle' => trim((string) ($intake['musicStyle'] ?? 'Nederlandstalige pop')),
             'tone' => trim((string) ($intake['tone'] ?? 'passend bij het moment')),
         ];
         $prompt = $this->substitute($ai['instruction'], $promptVars);
+        $prompt .= $this->promptContext($promptVars);
 
         $result = $this->ai->for($category)->complete($prompt);
 
@@ -109,6 +113,24 @@ class LyricsGenerator
         }
 
         return [$fallback, false];
+    }
+
+    private function promptContext(array $promptVars): string
+    {
+        $lines = [];
+
+        foreach ([
+            'mustMention' => 'Moet absoluut terugkomen',
+            'avoid' => 'Vermijd',
+            'musicStyle' => 'Muzikale richting',
+        ] as $key => $label) {
+            $value = trim((string) ($promptVars[$key] ?? ''));
+            if ($value !== '') {
+                $lines[] = $label.': '.$value;
+            }
+        }
+
+        return $lines ? "\n\nExtra context:\n".implode("\n", $lines) : '';
     }
 
     /** Maak AI-output schoon tot losse tekstregels. */

@@ -1,59 +1,114 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Voor Ieder Moment Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Laravel 12 API voor aanvragen, concept-lyrics, checkout-status en auth.
 
-## About Laravel
+## Status
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+De backend is technisch lokaal werkend en kan als API live gezet worden. De huidige betaalflow gebruikt nog `PAYMENT_PROVIDER=stub`: een checkout wordt direct als betaald gemarkeerd zonder echte Mollie/Stripe betaling. Ook de daadwerkelijke productie van het nummer is nog niet gekoppeld; na checkout staat daarvoor een TODO in `SongRequestController`.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Lokale Setup
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
+```
 
-## Learning Laravel
+De frontend verwacht lokaal:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```env
+NUXT_PUBLIC_API_BASE_URL=http://localhost:8000/api/v1
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Live Setup
 
-## Laravel Sponsors
+Zet de backend op een PHP-host met PHP 8.2+, Composer en een database. De webroot moet naar `backend/public` wijzen.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Minimale productie-omgeving:
 
-### Premium Partners
+```env
+APP_NAME="Voor Ieder Moment"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://api.vooriedermoment.nl
+FRONTEND_URL=https://vooriedermoment.nl
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+DB_CONNECTION=mysql
+DB_HOST=...
+DB_PORT=3306
+DB_DATABASE=...
+DB_USERNAME=...
+DB_PASSWORD=...
 
-## Contributing
+SESSION_DRIVER=database
+QUEUE_CONNECTION=database
+CACHE_STORE=database
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+MAIL_MAILER=smtp
+MAIL_HOST=...
+MAIL_PORT=587
+MAIL_USERNAME=...
+MAIL_PASSWORD=...
+MAIL_FROM_ADDRESS=info@vooriedermoment.nl
+MAIL_FROM_NAME="Voor Ieder Moment"
 
-## Code of Conduct
+saleOn=1
+AI_PROVIDER=null
+PAYMENT_PROVIDER=stub
+MUSIC_PROVIDER=stub
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Na deploy:
 
-## Security Vulnerabilities
+```bash
+composer install --no-dev --optimize-autoloader
+php artisan key:generate --force
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Als de frontend live staat, zet daar:
 
-## License
+```env
+NUXT_PUBLIC_API_BASE_URL=https://api.vooriedermoment.nl/api/v1
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## API Endpoints
+
+Alle endpoints staan onder `/api/v1`.
+
+| Methode | Endpoint | Beschrijving |
+| --- | --- | --- |
+| POST | `/song-requests` | Maakt een aanvraag aan en genereert een concept-preview |
+| POST | `/song-requests/{songRequest}/checkout` | Stub-checkout en statusupdate |
+| POST | `/register` | Registratie |
+| POST | `/login` | Login |
+| POST | `/forgot-password` | Wachtwoord reset aanvragen |
+| POST | `/reset-password` | Wachtwoord reset uitvoeren |
+| GET | `/email/verify/{id}/{hash}` | E-mail verificatie |
+| POST | `/logout` | Logout, Sanctum token vereist |
+| GET | `/me` | Huidige gebruiker, Sanctum token vereist |
+| POST | `/email/resend` | Verificatiemail opnieuw sturen |
+
+## Tests
+
+```bash
+php artisan test
+```
+
+## Productie Na Betaling
+
+Na een succesvolle checkout draait de backend twee stappen:
+
+1. Definitieve lyrics genereren met `LyricsGenerator`, op basis van categorie-templates, herbruikbare rijmregels en intakevelden zoals `anecdotes`, `mustMention`, `avoid`, `tone` en `musicStyle`.
+2. Muziek genereren via `MusicProvider`. Met `MUSIC_PROVIDER=stub` wordt nog geen externe API aangeroepen, maar wel een volledige muziekprompt en `music_reference` opgeslagen.
+
+Handmatig opnieuw draaien:
+
+```bash
+php artisan songs:produce {songRequestId}
+```

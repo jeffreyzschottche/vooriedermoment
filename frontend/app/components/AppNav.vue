@@ -24,10 +24,10 @@ watch(
 
 <template>
   <header
-    class="sticky top-0 z-50 border-b backdrop-blur-xl"
-    :style="{ borderColor: 'var(--color-line)', background: 'rgba(246,247,242,0.88)' }"
+    class="sticky top-0 z-50 border-b backdrop-blur-2xl"
+    :style="{ borderColor: 'rgba(16,26,22,0.08)', background: 'rgba(244,246,239,0.78)' }"
   >
-    <div class="site-container flex min-h-16 items-center justify-between gap-4 py-3 lg:min-h-[4.5rem]">
+    <div class="wide-container flex min-h-16 items-center justify-between gap-4 py-3 lg:min-h-[4.75rem]">
       <NuxtLink to="/" class="flex min-w-0 items-center gap-2.5">
         <span class="logo-card">
           <img src="/logowit.png" alt="" class="h-4 w-auto sm:h-5" />
@@ -47,7 +47,7 @@ watch(
         >
           <NuxtLink
             :to="link.to"
-            class="rounded-full px-4 py-2 text-sm font-semibold transition"
+            class="rounded-lg px-4 py-2.5 text-sm font-semibold transition duration-200"
             :style="route.path === link.to || (link.to !== '/' && route.path.startsWith(link.to))
               ? { color: 'var(--accent-strong)', background: 'var(--accent-soft)' }
               : { color: 'var(--color-ink-soft)' }"
@@ -75,7 +75,7 @@ watch(
       </nav>
 
       <div class="hidden lg:block">
-        <NuxtLink to="/aanvraag" class="stitch-button">Vraag een nummer aan</NuxtLink>
+        <NuxtLink to="/aanvraag" class="stitch-button">Start aanvraag</NuxtLink>
       </div>
 
       <button
@@ -90,7 +90,7 @@ watch(
     </div>
 
     <div v-if="isOpen" class="border-t lg:hidden" :style="{ borderColor: 'var(--color-line)', background: 'var(--color-bg)' }">
-      <div class="site-container flex flex-col gap-2 py-5">
+      <div class="wide-container flex flex-col gap-2 py-5">
         <NuxtLink
           v-for="link in links"
           :key="link.to"
@@ -100,7 +100,7 @@ watch(
         >
           {{ link.label }}
         </NuxtLink>
-        <NuxtLink to="/aanvraag" class="stitch-button mt-2 w-full">Vraag een nummer aan</NuxtLink>
+        <NuxtLink to="/aanvraag" class="stitch-button mt-2 w-full">Start aanvraag</NuxtLink>
       </div>
     </div>
   </header>

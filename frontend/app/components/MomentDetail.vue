@@ -16,6 +16,12 @@ const themeStyle = computed(() => ({
 const requestHref = computed(() => `${categoryPath(props.category)}#aanvraag`);
 const isExisting = computed(() => props.category.variant === 'existing');
 const isB2b = computed(() => props.category.variant === 'b2b');
+
+const productionHighlights = [
+  { title: 'Context ophalen', text: 'Het formulier vraagt per categorie naar namen, momenten, sfeer en details die in de tekst moeten.' },
+  { title: 'Lyrics bouwen', text: 'We combineren herbruikbare rijmblokken met persoonlijke regels uit jouw verhaal.' },
+  { title: 'Muziekprompt maken', text: 'Na betaling gaat de definitieve tekst samen met stijl, stem en tempo door naar de muziekstap.' },
+];
 </script>
 
 <template>
@@ -78,11 +84,25 @@ const isB2b = computed(() => props.category.variant === 'b2b');
     </section>
 
     <!-- AANVRAAG -->
-    <section id="aanvraag" class="site-container py-16 sm:py-20">
-      <div class="mx-auto max-w-3xl">
+    <section class="site-container py-16 sm:py-20">
+      <div class="grid gap-5 md:grid-cols-3">
+        <article v-for="item in productionHighlights" :key="item.title" v-reveal class="rich-card p-6">
+          <div class="mb-5 h-1.5 w-14 accent-gradient" style="border-radius: 999px;" />
+          <h2 class="font-display text-xl font-semibold" :style="{ color: 'var(--color-ink)' }">{{ item.title }}</h2>
+          <p class="mt-3 text-sm leading-7" :style="{ color: 'var(--color-ink-soft)' }">{{ item.text }}</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="aanvraag" class="site-container pb-16 sm:pb-20">
+      <div class="mx-auto max-w-5xl">
         <div v-reveal class="mb-8 text-center">
           <span class="section-kicker">Aanvragen</span>
           <h2 class="section-heading text-3xl md:text-4xl">{{ isB2b ? 'Vraag jullie bedrijfsnummer aan' : 'Vraag jouw nummer aan' }}</h2>
+          <p class="section-subtext mx-auto mt-3 max-w-2xl">
+            Dit formulier is afgestemd op {{ category.title.toLowerCase() }}. De antwoorden worden gebruikt
+            voor de lyrics én voor de muziekprompt na betaling.
+          </p>
         </div>
         <div v-reveal>
           <IntakeForm :category="category" />

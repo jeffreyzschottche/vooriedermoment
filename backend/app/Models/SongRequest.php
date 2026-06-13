@@ -13,6 +13,12 @@ class SongRequest extends Model
         'intake',
         'lyrics',
         'lyrics_preview',
+        'final_lyrics',
+        'music_prompt',
+        'music_reference',
+        'production_steps',
+        'production_started_at',
+        'production_finished_at',
         'status',
         'price_cents',
         'payment_reference',
@@ -20,6 +26,9 @@ class SongRequest extends Model
 
     protected $casts = [
         'intake' => 'array',
+        'production_steps' => 'array',
+        'production_started_at' => 'datetime',
+        'production_finished_at' => 'datetime',
         'price_cents' => 'integer',
     ];
 }
