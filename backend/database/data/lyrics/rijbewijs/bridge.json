@@ -1,0 +1,19 @@
+{
+  "section": "bridge",
+  "category": "rijbewijs",
+  "description": "Brug - trots/vrijheid moment. DETAIL2=eerste rit/droomauto",
+  "couplets": [
+    { "id": 1, "lines": ["Al die lessen, al die zenuwen, al dat oefenen lang", "{{NAME}}, kijk waar je nu rijdt, zonder bang", "Wat zijn we trots, wat ben je gegroeid", "Voor jou, bestuurder, de vrijheid volop gebloeid"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Even stilstaan bij wat je hebt bereikt", "{{NAME}}, want jouw doorzettingsvermogen blijkt", "Niets ging vanzelf, jij zette stug door", "En daarom juichen we vandaag, met z'n allen in koor"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Op naar {{DETAIL2}}, de open weg wacht", "{{NAME}}, jij hebt het gehaald met al je kracht", "Waar je ook heen rijdt, het komt goed", "Want jij hebt het in de vingers, jij hebt moed"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["We wisten het altijd al, diep in ons hart", "{{NAME}}, dat jij dit zou halen, knap en apart", "En kijk nu eens, het is gelukt", "Voor jou een vrijheid die niemand meer drukt"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["Een rijbewijs is meer dan een pasje alleen", "{{NAME}}, het is jouw vrijheid, je eigen weg, om je heen", "Van eerste les tot dat verlossende woord", "Voor jou, bestuurder, een applaus zoals het hoort"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["De wereld ligt open, rij hem maar in", "{{NAME}}, met dit rijbewijs maak je een vliegende begin", "Wat de weg ook brengt, jij kunt het aan", "Voor jou zijn we trots, dat blijven we staan"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Geniet van dit moment, het is helemaal van jou", "{{NAME}}, jij verdient het, oprecht en trouw", "Geen examen kan dit nog afnemen", "Voor jou, bestuurder, geen reden tot vrezen"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Van leerling tot bestuurder van de dag", "{{NAME}}, wat een reis, met de breedste lach", "Je deed het zelf, met eigen kracht en verstand", "Voor jou een applaus, uit het hele land"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Maar rij wel veilig, dat vragen we jou", "{{NAME}}, gordel om, en blijf altijd trouw", "De vrijheid is mooi, maar wees voorzichtig en wijs", "Voor jou, bestuurder, een veilige reis"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Hoeveel keer dacht je: ik haal het toch niet", "{{NAME}}, maar kijk nu, met dit geslaagde lied", "Je hebt jezelf bewezen, achter het stuur", "Voor jou, bestuurder, een gloednieuw uur"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Dank aan je instructeur en aan ieders geduld", "{{NAME}}, maar bovenal: jij hebt het zelf vervuld", "Het is jouw overwinning, jouw mooie moment", "Voor jou, bestuurder, geen betere vent of vent"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Dus kop omhoog en de handen aan het stuur", "{{NAME}}, jij bent geslaagd, en de weg is puur", "Een nieuw begin, een open baan", "Voor jou de vrijheid, ga er maar op aan"], "rhyme_scheme": "AABB" }
+  ]
+}

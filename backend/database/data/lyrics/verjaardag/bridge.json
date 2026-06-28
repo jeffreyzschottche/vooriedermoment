@@ -1,0 +1,19 @@
+{
+  "section": "bridge",
+  "category": "verjaardag",
+  "description": "Brug - emotioneel moment. DETAIL2=karakter",
+  "couplets": [
+    { "id": 1, "lines": ["Weer een jaar vol herinneringen", "Vol momenten om te bezingen", "{{NAME}}, wij houden van jou", "Vandaag en morgen, altijd trouw"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Blaas de kaarsjes uit en wens", "Alles wat je wilt, er is geen grens", "Van {{FROM}} voor jou met liefde", "{{NAME}}, jij bent het mooiste dat ons ooit beliefde"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Een nieuw jaar ligt voor je klaar", "Vol avontuur en zonder gevaar", "Geniet ervan, pak alles aan", "{{NAME}}, laat de feestmuziek maar gaan"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Even stil nu, even zacht", "Voor wat jij voor ons betekent en bracht", "{{NAME}}, je bent goud zoveel waard", "Een mens als jij is een schat op deze aard'"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["Door alle jaren, door dik en dun", "Bleef jij altijd staan, sterk en kun", "{{NAME}}, wat zijn we trots op jou", "Vandaag vooral, en altijd, oprecht en trouw"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["De tijd gaat snel, dat is een feit", "Maar liefde voor jou raakt nooit kwijt", "{{NAME}}, blijf nog lang bij ons", "Want jij bent voor ons een bijzonder mens"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Een echte {{DETAIL2}}, dat ben jij gebleven", "{{NAME}}, blijf zo, een heel leven", "We koesteren elk moment met jou", "Vandaag, op je dag, en altijd trouw"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Dus hef het glas en kijk eens om je heen", "Iedereen die je liefheeft, niemand laat je alleen", "{{NAME}}, dit is jouw moment, jouw lied", "Geniet ervan, want vaker komt het niet"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Of de jaren nou tellen of niet", "{{NAME}}, jij blijft jong in dit lied", "Een hart zo warm, een lach zo licht", "Voor jou is dit feest, met dit lied opgericht"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Wens iets moois voor het komende jaar", "{{NAME}}, wij maken het samen waar", "Hand in hand gaan we vooruit", "Voor jou klinkt vandaag dit liefdevolle geluid"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Dank je wel dat jij er bent", "{{NAME}}, een mens die iedereen kent", "Vandaag staan wij voor jou klaar", "Gefeliciteerd, en op naar het volgende jaar"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Even een traantje, van geluk, niet van pijn", "{{NAME}}, wat fijn dat je er bent, fijn dat we samen zijn", "Vier het leven, vier deze dag", "Voor jou de grootste glimlach en lach"], "rhyme_scheme": "AABB" }
+  ]
+}

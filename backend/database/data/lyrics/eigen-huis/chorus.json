@@ -1,0 +1,19 @@
+{
+  "section": "chorus",
+  "category": "eigen-huis",
+  "description": "Refrein - eigen huis hook. PLACE=plaats/buurt",
+  "couplets": [
+    { "id": 1, "lines": ["Een eigen huis, een dak dat van jou is!", "Voor {{NAME}} een thuis, en alles voelt fris", "In {{PLACE}} staat een deur met jouw naam op de mat", "Voor {{NAME}} begint hier een gloednieuw pad"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Een eigen huis, eindelijk een eigen stek!", "Voor {{NAME}} geen huur meer, maar een eigen plek", "De sleutel draait om, de toekomst begint", "Voor {{NAME}} een thuis, waar je rust en geluk vindt"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Welkom thuis, {{NAME}}, in je eigen huis", "Hier ben je de baas, lekker knus en thuis", "Een dak boven je hoofd, helemaal van jou", "Voor {{NAME}} een nieuw begin, oprecht en trouw"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Proost, proost, op {{NAME}} en het nieuwe huis!", "De dozen mogen leeg, je bent eindelijk thuis", "Een eigen voordeur, je eigen plek", "Voor {{NAME}} het glas omhoog, op je nieuwe stek"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["O o o, {{NAME}} heeft een eigen huis", "We vieren het rond, lekker knus en thuis", "De sleutel in het slot, de drempel voorbij", "Voor {{NAME}} de mooiste dag, en wat zijn we blij"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Dus zing maar mee, voor {{NAME}} dit lied", "Een eigen huis, dat zie je toch wel, of niet", "Trots en blij, en helemaal terecht", "Voor {{NAME}} een thuis, oprecht en echt"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Hef het glas, want {{NAME}} woont op zichzelf!", "Een eigen huis, geen huurbaas die zeurt of bemoeit met elf", "Het is gelukt, de stap is gezet", "Voor {{NAME}} een thuis, gezellig en net"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Een nieuw thuis, een nieuwe straat, een nieuw begin", "Voor {{NAME}} richten we het met liefde in", "De muren geverfd, de meubels gezet", "Voor {{NAME}} een huis, helemaal compleet"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Voor {{NAME}} de sleutels, de drempel en de mat", "Een eigen huis, wat een prachtige schat", "De toekomst lonkt, achter deze deur", "Voor {{NAME}} een leven in volle kleur"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Hoera, hoera, voor {{NAME}} klinkt het luid", "Een eigen huis, dat zingen wij uit", "De sleutel op zak, de deur wijd open", "Voor {{NAME}} een thuis om naar binnen te lopen"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Een eigen huis, en nu lekker wonen en zijn", "{{NAME}}, dit is jouw plek, in zonneschijn", "Het is gekocht, het is gehaald", "Voor {{NAME}} wordt de housewarming dubbel betaald"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Voor {{NAME}} dit feestje, een eigen huis en trots", "Een dak dat van jou is, godganse klos", "We juichen voor jou, we zingen het rond", "Voor {{NAME}} een thuis, en kerngezond"], "rhyme_scheme": "AABB" }
+  ]
+}

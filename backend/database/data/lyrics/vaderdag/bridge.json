@@ -1,0 +1,19 @@
+{
+  "section": "bridge",
+  "category": "vaderdag",
+  "description": "Brug - emotioneel moment. DETAIL2=waarvoor bedanken",
+  "couplets": [
+    { "id": 1, "lines": ["Door alle jaren stond jij voor ons klaar", "Sterk als een eik, jaar na jaar", "{{NAME}}, wat zijn we dankbaar en trots", "Op jou, ons baken, ons stevige rots"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Even stil nu, even een traan", "Voor alles wat jij voor ons hebt gedaan", "{{NAME}}, je bent goud zoveel waard", "Een vader als jij is een schat op aard'"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Bedankt voor {{DETAIL2}}, keer op keer", "{{NAME}}, jij gaf het ons telkens weer", "Zonder jou waren wij niet wie we zijn", "Jij maakte ons sterk, door dik en door fijn"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Je hebt ons gedragen toen wij klein nog waren", "En losgelaten toen we moesten varen", "{{NAME}}, dat is liefde, dat is een kunst", "En jij beheerst hem, met de grootste gunst"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["De wijste woorden kwamen van jou", "{{NAME}}, ze dragen ons nog, oprecht en trouw", "Waar we ook gaan, wat we ook doen", "Jouw stem klinkt mee, als een warme zoen"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Blijf nog lang bij ons, dat is onze wens", "{{NAME}}, jij bent voor ons een bijzonder mens", "Vandaag, op je dag, zeggen we het hardop", "We houden van je, van teen tot top"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Stoere {{NAME}} met dat gouden hart", "Jij verbergt je gevoel, maar wij kennen elk part", "Vandaag mag het, vandaag is het oké", "We zeggen het gewoon: jij hoort erbij, altijd mee"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Hand in hand zijn we zover gekomen", "{{NAME}}, dankzij jou en je dromen", "Je gaf ons alles, je deelde je tijd", "En daar zijn wij dankbaar voor, voor altijd"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Een vader die luistert, die altijd klaarstaat", "{{NAME}}, dat is goud waard, en nooit een loze daad", "We zeggen het te weinig, dus nu hardop", "Bedankt voor alles, van onder tot top"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["De cirkel is rond, jij gaf ons het leven", "{{NAME}}, en zoveel liefde daarbij gegeven", "Vandaag staan wij voor jou paraat", "Fijne Vaderdag, het komt recht uit de daad"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Dank je wel, gewoon van hart tot hart", "{{NAME}}, voor wie je bent, voor elk mooi part", "Geen woorden genoeg, geen dag te groot", "Voor jou, lieve {{NAME}}, tot aan de dood"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Vier het leven, vier deze dag", "{{NAME}}, met een glas en een brede lach", "Wij zijn er voor jou, zoals jij voor ons", "Voor altijd verbonden, voor altijd één, gons na gons"], "rhyme_scheme": "AABB" }
+  ]
+}

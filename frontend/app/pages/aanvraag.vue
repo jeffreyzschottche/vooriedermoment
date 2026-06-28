@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { requestCategories, type Category } from '~/data/categories';
+import {
+  musicStyleOptions,
+  requestCategories,
+  tempoOptions,
+  toneOptions,
+  vocalOptions,
+  type Category,
+} from '~/data/categories';
 
 useSeoMeta({
   title: 'Vraag een nummer aan',
@@ -21,11 +28,12 @@ const otherCategory: Category = {
   whatYouGet: [],
   intakeFields: [
     { name: 'occasion', label: 'Voor welke gelegenheid?', type: 'text', placeholder: 'Bijv. pensioen, jubileum, afscheid', required: true, span: 'half' },
-    { name: 'recipientName', label: 'Voor wie is het?', type: 'text', placeholder: 'Naam', required: true, span: 'half' },
-    { name: 'fromName', label: 'Van wie is het?', type: 'text', placeholder: 'Bijv. het hele team', span: 'half' },
-    { name: 'tone', label: 'Sfeer / toon', type: 'select', required: true, span: 'half', options: ['Vrolijk & uptempo', 'Emotioneel maar niet zwaar', 'Grappig & ad rem', 'Stoer & energiek', 'Warm & persoonlijk'] },
-    { name: 'vocals', label: 'Stem', type: 'select', span: 'half', options: ['Mannenstem', 'Vrouwenstem', 'Duet', 'Maakt niet uit'] },
-    { name: 'musicStyle', label: 'Muzikale richting', type: 'select', span: 'half', options: ['Nederlandstalige pop', 'Feest / meezinger', 'Akoestisch en klein', 'Rock / anthem', 'Urban pop', 'Laat ons kiezen'] },
+    { name: 'recipientName', label: 'Voor wie is het nummer?', type: 'text', placeholder: 'Naam', required: true, span: 'half', help: 'Vul hier één hoofdnaam in. Extra namen kun je met het plusje toevoegen.' },
+    { name: 'fromName', label: 'Van wie komt het nummer?', type: 'text', placeholder: 'Bijv. het hele team', span: 'half' },
+    { name: 'tone', label: 'Sfeer / toon', type: 'select', required: true, span: 'half', options: toneOptions },
+    { name: 'vocals', label: 'Stem', type: 'select', span: 'half', options: vocalOptions },
+    { name: 'musicStyle', label: 'Genre kiezen', type: 'select', span: 'half', options: musicStyleOptions },
+    { name: 'tempo', label: 'Snelheid / tempo', type: 'select', span: 'half', options: tempoOptions },
     { name: 'anecdotes', label: 'Verhaal, anekdotes & inside jokes', type: 'textarea', required: true, span: 'full', placeholder: 'Vertel wat dit moment uniek maakt — namen, plaatsen, grapjes...', help: 'Hoe concreter, hoe persoonlijker het nummer.' },
     { name: 'mustMention', label: 'Wat moet er absoluut in?', type: 'textarea', span: 'full', placeholder: 'Namen, zinnen, plekken of gebeurtenissen die niet mogen ontbreken.' },
     { name: 'avoid', label: 'Wat moeten we vermijden?', type: 'text', span: 'full', placeholder: 'Bijv. te sentimenteel, bepaalde namen, grove grappen...' },

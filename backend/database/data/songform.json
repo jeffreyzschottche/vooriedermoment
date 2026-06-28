@@ -1,0 +1,85 @@
+{
+  "name": "VIM Standard Song Form",
+  "version": "2.0",
+  "description": "Universele songstructuur voor Voor Ieder Moment nummers - geoptimaliseerd voor Nederlandstalige pop",
+  "duration_target": "2:30 - 3:00 minuten",
+  "structure": [
+    {
+      "section": "verse1",
+      "lines": 4,
+      "description": "Eerste couplet - introduceert de persoon en het moment, zet de toon",
+      "required": true,
+      "tips": "Begin met de naam, maak het persoonlijk vanaf regel 1"
+    },
+    {
+      "section": "prechorus",
+      "lines": 2,
+      "description": "Opbouw naar refrein - spanning opbouwen",
+      "required": false,
+      "tips": "Korte transitie die naar het refrein leidt"
+    },
+    {
+      "section": "chorus",
+      "lines": 4,
+      "description": "Refrein - de hook, meezingbaar en memorabel",
+      "required": true,
+      "tips": "Naam prominent, herhalende structuur, emotionele kern"
+    },
+    {
+      "section": "verse2",
+      "lines": 4,
+      "description": "Tweede couplet - verdieping met anekdotes en specifieke details",
+      "required": true,
+      "source": "ai",
+      "tips": "Hier komen de inside jokes en persoonlijke verhalen"
+    },
+    {
+      "section": "chorus",
+      "lines": 4,
+      "description": "Refrein herhaling",
+      "required": true
+    },
+    {
+      "section": "bridge",
+      "lines": 4,
+      "description": "Brug - emotioneel hoogtepunt, andere melodie/energie",
+      "required": true,
+      "source": "ai",
+      "tips": "Hier komt het gevoel: dankbaarheid, trots, liefde"
+    },
+    {
+      "section": "chorus_final",
+      "lines": 4,
+      "description": "Laatste refrein - met extra energie of kleine variatie",
+      "required": true
+    },
+    {
+      "section": "outro",
+      "lines": 2,
+      "description": "Afsluiting - laatste woorden, fade out",
+      "required": false,
+      "tips": "Herhaling van naam of kernboodschap"
+    }
+  ],
+  "rhyme_schemes": {
+    "AABB": "Elke twee regels rijmen (meest gebruikt)",
+    "ABAB": "Regels 1+3 en 2+4 rijmen",
+    "ABCB": "Alleen regels 2+4 rijmen"
+  },
+  "placeholders": {
+    "{{NAME}}": "Naam van de ontvanger (verplicht)",
+    "{{FROM}}": "Naam van de afzender/opdrachtgever",
+    "{{DETAIL1}}": "Eerste specifiek detail (leeftijd, datum, bedrijfsnaam, etc.)",
+    "{{DETAIL2}}": "Tweede specifiek detail (hobby, eigenschap, etc.)",
+    "{{QUOTE}}": "Typische uitspraak of slogan",
+    "{{PLACE}}": "Relevante plek of locatie",
+    "{{MOMENT}}": "Specifiek moment of gebeurtenis"
+  },
+  "quality_rules": [
+    "Elke regel moet natuurlijk klinken als gesproken Nederlands",
+    "Vermijd geforceerde rijm - liever geen rijm dan slecht rijm",
+    "Naam moet minstens 3x voorkomen in het nummer",
+    "Refrein moet meezingbaar zijn zonder tekst te kennen",
+    "Concrete details > vage beschrijvingen"
+  ]
+}

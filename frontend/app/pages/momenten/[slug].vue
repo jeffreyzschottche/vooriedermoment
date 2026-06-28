@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { getCategory } from '~/data/categories';
+import { getCategory, categoryImage } from '~/data/categories';
+import { absoluteUrl } from '~/composables/useStructuredData';
 
 const route = useRoute();
 const slug = computed(() => String(route.params.slug));
@@ -12,16 +13,27 @@ if (!category.value || category.value.variant === 'b2b') {
 
 const offer = useOffer();
 const c = category.value!;
+const cover = absoluteUrl(categoryImage(c));
+const pageUrl = absoluteUrl(`/momenten/${c.slug}`);
 
 useSeoMeta({
   title: c.seoTitle,
   ogTitle: c.seoTitle,
   description: c.seoDescription,
   ogDescription: c.seoDescription,
+  ogType: 'website',
+  ogUrl: pageUrl,
+  ogImage: cover,
+  twitterCard: 'summary_large_image',
+  twitterTitle: c.seoTitle,
+  twitterDescription: c.seoDescription,
+  twitterImage: cover,
 });
 
+useHead({ link: [{ rel: 'canonical', href: pageUrl }] });
+
 useJsonLd([
-  productSchema({ name: `${c.title} — persoonlijk nummer`, description: c.seoDescription, price: offer.currentPrice.value, url: `/momenten/${c.slug}` }),
+  productSchema({ name: `${c.title} — persoonlijk nummer`, description: c.seoDescription, price: offer.currentPrice.value, url: `/momenten/${c.slug}`, image: categoryImage(c) }),
   faqSchema(c.faq),
   breadcrumbSchema([
     { name: 'Home', path: '/' },

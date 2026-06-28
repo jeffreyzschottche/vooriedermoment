@@ -1,0 +1,19 @@
+{
+  "section": "chorus",
+  "category": "kind-geboren",
+  "description": "Refrein - geboorte hook.",
+  "couplets": [
+    { "id": 1, "lines": ["Welkom {{NAME}}, ons kleine geluk", "De wereld is mooier, geen enkel stuk druk", "Een sterretje straalt sinds de dag dat je kwam", "Voor {{NAME}} dit lied, zo zacht als een lam"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Hallo {{NAME}}, wat zijn we blij", "Eindelijk ben je er, eindelijk erbij", "Klein wondertje, welkom op aarde, lief kind", "Voor jou onze liefde, voor altijd gezind"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Slaap zacht, {{NAME}}, droom maar mooi", "Wij waken bij jou, in je warme kooi", "Een liedje, een knuffel, een kus op je hoofd", "Voor {{NAME}} ons hart, dat hebben we beloofd"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Welkom klein {{NAME}}, in onze kring", "Jij bent vanaf nu het allermooiste ding", "We houden van je, meer dan je weet", "Voor jou dit lied, oprecht en breed"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["{{NAME}}, {{NAME}}, ons kleine wonder", "Sinds jij er bent staat de wereld in donder en blonder", "Tien vingers, tien teentjes, een hartje dat klopt", "Voor jou onze liefde, die nooit meer stopt"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Een ster is geboren, en die heet {{NAME}}", "We zingen het rond, vol vreugde, samen", "Welkom op de wereld, klein lief geluk", "Voor jou doen wij alles, en niets is te druk"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Lief klein {{NAME}}, zo teer en zo klein", "Vanaf vandaag zul je altijd geliefd zijn", "We dragen je, we houden je, we laten niet los", "Voor jou klopt ons hart, in het diepste bos"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Hoera, hoera, daar is {{NAME}}", "Het hele huis straalt, we vieren het samen", "Beschuit met een muisje, een kus en een lach", "Voor {{NAME}} de mooiste, allermooiste dag"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Welkom {{NAME}}, je hoort er nu bij", "Voorgoed in ons hart, jij en wij", "Een nieuw begin, een klein nieuw leven", "Voor jou willen wij alles geven"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Klein {{NAME}}, ons grootste cadeau", "We houden van je, gewoon zo", "Geen schat ter wereld zo kostbaar als jij", "Voor altijd ons kindje, jij hoort erbij"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Dag lief {{NAME}}, de wereld zegt hoi", "Wat ben je klein, en wat ben je mooi", "We zingen je toe, zacht en oprecht", "Voor jou dit lied, met liefde gelegd"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Voor {{NAME}} dit liedje, dit kleine geluk", "Jij maakt ons leven compleet, niet één stuk druk", "Welkom, welkom, lief klein wonder van ons", "Voor altijd verbonden, voor altijd één, gons"], "rhyme_scheme": "AABB" }
+  ]
+}

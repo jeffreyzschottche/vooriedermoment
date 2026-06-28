@@ -26,6 +26,7 @@ class AiManager
 
         return match ($config['driver'] ?? 'null') {
             'anthropic' => filled($config['key'] ?? null) ? new AnthropicProvider($config) : new NullProvider(),
+            'deepseek' => filled($config['key'] ?? null) ? new DeepSeekProvider($config) : new NullProvider(),
             'openai' => filled($config['key'] ?? null) ? new OpenAiProvider($config) : new NullProvider(),
             default => new NullProvider(),
         };

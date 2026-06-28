@@ -1,0 +1,19 @@
+{
+  "section": "bridge",
+  "category": "eigen-huis",
+  "description": "Brug - emotioneel/trots moment. DETAIL2=favoriete plek in huis",
+  "couplets": [
+    { "id": 1, "lines": ["Van een droom op papier tot een sleutel in de hand", "{{NAME}}, jij maakte het waar, met verstand en met verband", "Wat zijn we trots, wat een grote stap", "Voor jou, in je eigen huis, geen enkele grap"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Even stilstaan op de drempel, kijk eens rond", "{{NAME}}, dit is van jou, van plafond tot de grond", "Een eigen plek, een veilige haven", "Voor jou een thuis om in te wonen en te laven"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Hier ga je lachen, hier ga je leven", "{{NAME}}, hier worden herinneringen geweven", "Elke kamer vult zich straks met verhaal", "Voor jou een thuis, warm en speciaal"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["We wisten het altijd al, diep in ons hart", "{{NAME}}, dat jij dit zou bereiken, knap en apart", "En kijk nu eens, de sleutel is van jou", "Voor jou een thuis, oprecht en trouw"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["In je {{DETAIL2}} kom je straks tot rust", "{{NAME}}, daar zit je heerlijk, met heel veel lust", "Een plekje voor jezelf, helemaal van jou", "Voor jou een thuis, gezellig en trouw"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["De toekomst begint hier, achter deze deur", "{{NAME}}, een nieuw hoofdstuk, in volle kleur", "Wat het leven ook brengt, dit is je basis", "Voor jou een thuis, waar het altijd fris is"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Geniet van dit moment, het is helemaal van jou", "{{NAME}}, jij verdient het, oprecht en trouw", "Geen huurbaas, geen contract, alleen jouw stek", "Voor jou een thuis, je eigen veilige plek"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Van zoeken en dromen tot een eigen voordeur", "{{NAME}}, wat een reis, in volle geur en kleur", "Je deed het zelf, met eigen kracht en geld", "Voor jou een applaus, dat hebben we besteld"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Hier mag je zijn wie je wilt zijn, helemaal vrij", "{{NAME}}, dit huis is van jou, sta er maar trots bij", "Verf de muren, hang je foto's, maak het mooi", "Voor jou een thuis, gezellig en tooi"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Hoeveel keer dacht je: vind ik ooit een plek", "{{NAME}}, maar kijk nu, je woont op je eigen stek", "Je hebt het bereikt, met geduld en met moed", "Voor jou een thuis, en alles komt goed"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Dank aan iedereen die hielp met sjouwen en gaan", "{{NAME}}, maar bovenal: jij hebt het zelf gedaan", "Het is jouw mijlpaal, jouw mooie moment", "Voor jou een thuis, helemaal present"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Dus doe de deur maar dicht en kijk eens rond", "{{NAME}}, hier ben je veilig, hier sta je op vaste grond", "Een nieuw begin, een eigen stek", "Voor jou alle geluk op deze fijne plek"], "rhyme_scheme": "AABB" }
+  ]
+}

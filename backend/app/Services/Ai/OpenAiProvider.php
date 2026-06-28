@@ -21,7 +21,9 @@ class OpenAiProvider implements AiProvider
                 ->timeout(30)
                 ->post(rtrim($this->config['base_url'], '/') . '/chat/completions', [
                     'model' => $options['model'] ?? $this->config['model'],
-                    'max_tokens' => $this->config['max_tokens'] ?? 1024,
+                    // Nieuwere OpenAI-modellen (gpt-5.x e.d.) vereisen
+                    // 'max_completion_tokens' i.p.v. het oude 'max_tokens'.
+                    'max_completion_tokens' => $this->config['max_tokens'] ?? 1024,
                     'messages' => [
                         ['role' => 'user', 'content' => $prompt],
                     ],

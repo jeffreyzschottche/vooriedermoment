@@ -1,0 +1,17 @@
+{
+  "section": "chorus",
+  "category": "verjaardag",
+  "description": "Refrein - feestelijke verjaardag hook. DETAIL1=leeftijd",
+  "couplets": [
+    { "id": 1, "lines": ["Happy birthday {{NAME}}, dit is jouw moment", "Iedereen die van je houdt, die is present", "Happy birthday {{NAME}}, geniet er maar van", "Vier het leven vandaag, zoveel als je maar kan"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Lang zal {{NAME}} leven, lang zal {{NAME}} zijn", "In de gloria, in de gloria, zo fijn", "Hiep hiep hoera, voor jou vandaag", "{{NAME}} is jarig en dat vieren we graag"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["{{NAME}}, {{NAME}}, gefeliciteerd", "Jij wordt vandaag zo enorm gevierd", "Een jaar ouder, een jaar wijzer ook", "Proost op jou, met confetti en rook"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Dus zing maar mee, voor {{NAME}} dit lied", "Een dag vol feest, dat zie je toch wel, of niet", "Het glas omhoog, de muziek staat hard", "Voor {{NAME}}, recht vanuit ons hart"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["Feest, feest, want {{NAME}} is jarig vandaag", "Geen enkele reden voor een chagrijnige vraag", "Dans maar mee, kom op, sta op", "Voor {{NAME}} gaat het dak er vanavond af, van top tot top"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Hoera, hoera, voor {{NAME}} klinkt het luid", "Vandaag is het feest, dat zingen wij uit", "Een dag vol liefde, een dag vol lol", "Voor {{NAME}} is de feestbeker helemaal vol"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["{{NAME}} wordt {{DETAIL1}}, en wat geeft het, kom op", "We vieren het feestje van onder tot top", "Blaas de kaarsjes uit, doe maar een wens", "Voor {{NAME}} is er vandaag echt geen enkele grens"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["O, o, o, {{NAME}} is jarig vandaag", "We zingen het rond, zonder enige vraag", "Pak je glas en hef het omhoog", "Voor {{NAME}} schijnt vandaag een feestelijke boog"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Voor {{NAME}} dit feestje, kom maar lekker meegaan", "De muziek staat hard, dus blijf niet alleen staan", "Lang zal je leven, in de gloria, joh", "Voor {{NAME}} is het feest, en wij houden van zo"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Toeter en bel, het is feest in de tent", "Voor {{NAME}} de mooiste dag, present na present", "Zing maar mee, van harte, kom op", "Voor {{NAME}} draait het feestje op volle kop"], "rhyme_scheme": "AABB" }
+  ]
+}

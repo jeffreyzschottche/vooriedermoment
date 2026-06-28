@@ -1,0 +1,19 @@
+{
+  "section": "bridge",
+  "category": "voetbalclubs",
+  "description": "Brug - clubtrots/saamhorigheid. NAME=club/team, DETAIL2=namen",
+  "couplets": [
+    { "id": 1, "lines": ["Door de jaren heen, in lief en in leed", "Voor {{NAME}} stond iedereen klaar, present en gereed", "Een club is familie, een thuis, een clan", "Voor {{NAME}} geven wij alles wat een mens maar kan"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Even stil voor de aftrap, de spanning loopt op", "Voor {{NAME}} klopt elk hart, van top tot top", "Dan klinkt het fluitje en barst het los", "Voor {{NAME}} gaan we los, het hele bos"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Of het nou regent of de zon fel brandt", "Voor {{NAME}} staan wij pal, langs de hele rand", "Door overwinning en door nederlaag heen", "Voor {{NAME}} blijven wij trouw, nooit alleen"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["{{DETAIL2}} dragen het shirt met eer", "Voor {{NAME}} knokken zij, telkens weer", "Zij zijn de helden van het groene veld", "Voor hen klinkt dit lied, met trots verteld"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["De jeugd van vandaag is het eerste van morgen", "Voor {{NAME}} hoeven we ons nooit zorgen te bezorgen", "Generatie na generatie, hetzelfde vuur", "Voor {{NAME}} brandt de liefde, uur na uur"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Schouder aan schouder, samen sterk en één", "Voor {{NAME}} laat niemand de ander alleen", "In de kleedkamer, op het veld, in de kroeg", "Voor {{NAME}} is geen offer ooit te vroeg"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Het clubgevoel zit diep in ons bloed", "Voor {{NAME}} geven wij alles, met hart en met moed", "Geen woorden genoeg voor wat deze club betekent", "Voor {{NAME}} staat alles wat ons leven tekent"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Hef de sjaal, hef het glas, en zing maar mee", "Voor {{NAME}} klinkt het luid, over land en zee", "Wij zijn de twaalfde man, we juichen en we schreeuwen", "Voor {{NAME}} zingen wij door, door alle seizoenen en eeuwen"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Als de beker omhoog gaat, breekt de hel los", "Voor {{NAME}} springen we op, het hele bos", "Kampioen, kampioen, dat zingen wij rond", "Voor {{NAME}} is dit moment kerngezond"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Een naam, een shirt, een kleur, een lied", "Voor {{NAME}} betekent dat alles, en kleins is het niet", "Wij dragen de club met trots in ons hart", "Voor {{NAME}} blijven wij staan, van start tot start"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Dank aan de vrijwilligers, de trainer, de mensen", "Voor {{NAME}} vervullen zij samen alle wensen", "Achter de schermen, langs de lijn, in de kantine", "Voor {{NAME}} draait iedereen mee in de machine"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Dus kom op, sta op, en geef alles vandaag", "Voor {{NAME}} zingen wij luid, zonder enige vraag", "Wij zijn één, wij zijn trots, wij zijn samen sterk", "Voor {{NAME}} klopt ons hart, in dit clubwerk"], "rhyme_scheme": "AABB" }
+  ]
+}

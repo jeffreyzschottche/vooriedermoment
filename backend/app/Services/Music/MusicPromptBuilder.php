@@ -10,6 +10,7 @@ class MusicPromptBuilder
     {
         $style = $this->value($intake, 'musicStyle', 'Nederlandstalige pop');
         $tone = $this->value($intake, 'tone', 'persoonlijk en herkenbaar');
+        $tempo = $this->value($intake, 'tempo');
         $vocals = $this->value($intake, 'vocals', 'passende stem');
         $mustMention = $this->value($intake, 'mustMention');
         $avoid = $this->value($intake, 'avoid');
@@ -18,6 +19,7 @@ class MusicPromptBuilder
             'Categorie: '.$songRequest->category_title,
             'Sfeer: '.$tone,
             'Muzikale richting: '.$style,
+            $tempo ? 'Snelheid/tempo: '.$tempo : null,
             'Stem: '.$vocals,
             $mustMention ? 'Belangrijk om te behouden: '.$mustMention : null,
             $avoid ? 'Vermijd: '.$avoid : null,
@@ -40,4 +42,3 @@ class MusicPromptBuilder
         return $value !== '' ? $value : $default;
     }
 }
-

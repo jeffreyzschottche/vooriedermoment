@@ -56,6 +56,11 @@ return [
 
     'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
 
+    'admin_token' => env('ADMIN_TOKEN'),
+
+    // Payout control - when false, no actual payouts are processed
+    'payout_enabled' => env('PAYOUT_ENABLED', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

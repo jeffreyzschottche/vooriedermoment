@@ -1,12 +1,19 @@
 // JSON-LD structured data helpers. Injecteren via useHead als <script type="application/ld+json">.
 
-const SITE_URL = 'https://vooriedermoment.nl';
+export const SITE_URL = 'https://vooriedermoment.nl';
+
+// Absolute URL voor og:image en JSON-LD-images.
+export function absoluteUrl(path: string): string {
+  if (/^https?:\/\//.test(path)) return path;
+  return SITE_URL + (path.startsWith('/') ? path : `/${path}`);
+}
 
 export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Voor Ieder Moment',
   url: SITE_URL,
+  logo: `${SITE_URL}/faviconzwart.png`,
   email: 'info@vooriedermoment.nl',
   description:
     'Persoonlijke, AI-gegenereerde nummers voor elk moment — overal te beluisteren op Spotify en Apple Music.',
@@ -32,12 +39,14 @@ export function productSchema(opts: {
   description: string;
   price: number;
   url?: string;
+  image?: string;
 }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: opts.name,
     description: opts.description,
+    ...(opts.image ? { image: absoluteUrl(opts.image) } : {}),
     brand: { '@type': 'Brand', name: 'Voor Ieder Moment' },
     offers: {
       '@type': 'Offer',

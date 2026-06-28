@@ -3,151 +3,780 @@
 namespace App\Services\Lyrics;
 
 use App\Services\Ai\AiManager;
+use App\Services\Ai\NullProvider;
+use Illuminate\Support\Facades\File;
 
-/**
- * Bouwt een complete songtekst op uit:
- *   - kant-en-klare, al rijmende bouwstenen (config/lyrics.php), en
- *   - één gepersonaliseerd, rijmend AI-couplet (of een rijmende fallback
- *     uit de batch wanneer er geen AI-provider/key is).
- *
- * Structuur: [Couplet 1] -> [Refrein] -> [Couplet 2 (AI)] -> [Refrein]
- */
 class LyricsGenerator
 {
-    public function __construct(private AiManager $ai)
+    protected string $dataPath;
+    protected array $songform;
+    protected AiManager $ai;
+    protected RhymeChecker $rhyme;
+
+    /**
+     * Slug => menselijk leesbaar onderwerp, voor de AI-prompt.
+     */
+    private const CATEGORY_TOPICS = [
+        'verjaardag' => 'een verjaardag',
+        'vaderdag' => 'Vaderdag (een lied voor een vader/opa)',
+        'moederdag' => 'Moederdag (een lied voor een moeder/oma)',
+        'kind-geboren' => 'de geboorte van een kindje',
+        'geslaagd' => 'geslaagd zijn voor een examen of diploma',
+        'rijbewijs' => 'het halen van het rijbewijs',
+        'eigen-huis' => 'een nieuw, eigen gekocht huis',
+        'voetbalclubs' => 'een voetbalclub of team (meezinger)',
+        'bouwbedrijven' => 'een bouwbedrijf (bedrijfslied)',
+    ];
+
+    /**
+     * Sectienaam => menselijk leesbaar label voor de AI-prompt.
+     */
+    private const SECTION_LABELS = [
+        'verse1' => 'het eerste couplet',
+        'verse2' => 'het tweede couplet',
+        'bridge' => 'de brug (emotioneel hoogtepunt)',
+        'chorus' => 'het refrein',
+    ];
+
+    /**
+     * Placeholder => contextsleutel. Wordt gebruikt om (a) placeholders te
+     * vervangen en (b) te bepalen welke velden een couplet nodig heeft.
+     */
+    private const PLACEHOLDER_KEYS = [
+        '{{NAME}}' => 'name',
+        '{{FROM}}' => 'from',
+        '{{DETAIL1}}' => 'detail1',
+        '{{DETAIL2}}' => 'detail2',
+        '{{QUOTE}}' => 'quote',
+        '{{PLACE}}' => 'place',
+        '{{MOMENT}}' => 'moment',
+    ];
+
+    /**
+     * Per categorie: welk intake-veld (uit het frontend-formulier) vult welke
+     * placeholder-contextsleutel. Eerste niet-lege bron wint. Onbekende
+     * categorieën vallen terug op 'default'.
+     */
+    private const FIELD_MAP = [
+        'default' => [
+            'name' => ['recipientName', 'babyName', 'companyName', 'clubName'],
+            'from' => ['fromName', 'contactName'],
+        ],
+        'verjaardag' => [
+            'name' => 'recipientName',
+            'from' => 'fromName',
+            'detail1' => 'age',
+            'detail2' => 'personality',
+            'place' => 'party',
+            'moment' => 'partyMoment',
+        ],
+        'vaderdag' => [
+            'name' => ['nickname', 'recipientName'],
+            'from' => 'fromName',
+            'detail1' => 'hobby',
+            'detail2' => 'thanksFor',
+            'quote' => 'dadQuote',
+        ],
+        'moederdag' => [
+            'name' => ['nickname', 'recipientName'],
+            'from' => 'fromName',
+            'detail1' => 'momTrait',
+            'detail2' => 'thanksFor',
+            'moment' => 'memory',
+        ],
+        'kind-geboren' => [
+            'name' => 'babyName',
+            'from' => ['parents', 'fromName'],
+            'detail1' => 'birthDetails',
+            'moment' => 'birthDate',
+        ],
+        'geslaagd' => [
+            'name' => 'recipientName',
+            'from' => 'fromName',
+            'detail1' => 'studyLevel',
+            'detail2' => 'nextStep',
+            'place' => 'school',
+            'moment' => 'examStory',
+        ],
+        'rijbewijs' => [
+            'name' => 'recipientName',
+            'from' => 'fromName',
+            'detail1' => 'attempts',
+            'detail2' => 'firstDrive',
+            'place' => 'instructor',
+            'moment' => 'drivingMoment',
+        ],
+        'eigen-huis' => [
+            'name' => 'recipientName',
+            'from' => 'fromName',
+            'detail1' => 'homeType',
+            'detail2' => 'favoriteRoom',
+            'place' => 'place',
+        ],
+        'voetbalclubs' => [
+            'name' => ['clubName', 'recipientName'],
+            'from' => 'fromName',
+            'detail1' => 'colors',
+            'detail2' => 'players',
+            'quote' => 'chant',
+            'place' => 'teamType',
+        ],
+        'bouwbedrijven' => [
+            'name' => 'companyName',
+            'from' => 'contactName',
+            'detail1' => 'discipline',
+            'detail2' => 'foundingYear',
+            'quote' => 'slogan',
+        ],
+    ];
+
+    public function __construct(?AiManager $ai = null, ?RhymeChecker $rhyme = null)
     {
+        $this->dataPath = database_path('data');
+        $this->ai = $ai ?? new AiManager();
+        $this->rhyme = $rhyme ?? new RhymeChecker();
+        $this->loadSongform();
+    }
+
+    protected function loadSongform(): void
+    {
+        $path = $this->dataPath . '/songform.json';
+        if (File::exists($path)) {
+            $this->songform = json_decode(File::get($path), true);
+        } else {
+            $this->songform = $this->getDefaultSongform();
+        }
+    }
+
+    protected function getDefaultSongform(): array
+    {
+        return [
+            'structure' => [
+                ['section' => 'verse1', 'lines' => 4, 'required' => true],
+                ['section' => 'chorus', 'lines' => 4, 'required' => true],
+                ['section' => 'verse2', 'lines' => 4, 'required' => true],
+                ['section' => 'chorus', 'lines' => 4, 'required' => true],
+                ['section' => 'bridge', 'lines' => 4, 'required' => false],
+                ['section' => 'chorus_final', 'lines' => 4, 'required' => true],
+            ],
+        ];
+    }
+
+    public function getCategories(): array
+    {
+        $lyricsPath = $this->dataPath . '/lyrics';
+        if (!File::isDirectory($lyricsPath)) {
+            return [];
+        }
+
+        return collect(File::directories($lyricsPath))
+            ->map(fn($dir) => basename($dir))
+            ->values()
+            ->toArray();
+    }
+
+    public function loadSectionLyrics(string $category, string $section): array
+    {
+        $path = $this->dataPath . "/lyrics/{$category}/{$section}.json";
+
+        if (!File::exists($path)) {
+            return [];
+        }
+
+        $data = json_decode(File::get($path), true);
+        return $data['couplets'] ?? [];
     }
 
     /**
-     * @return array{lyrics: string, preview: string, used_ai: bool}
+     * Kies een willekeurig couplet, maar alleen uit de coupletten waarvan álle
+     * placeholders gevuld kunnen worden met de aangeleverde context. Zo komt een
+     * couplet met {{DETAIL1}} alleen voorbij als dat veld is ingevuld. Vangnet:
+     * coupletten die hooguit {{NAME}} gebruiken (altijd aanwezig).
+     */
+    public function getRandomCouplet(string $category, string $section, array $context = []): ?array
+    {
+        $couplets = $this->loadSectionLyrics($category, $section);
+
+        if (empty($couplets)) {
+            return null;
+        }
+
+        $pool = array_values(array_filter(
+            $couplets,
+            fn($couplet) => $this->coupletSatisfied($couplet, $context)
+        ));
+
+        if (empty($pool)) {
+            $pool = array_values(array_filter(
+                $couplets,
+                fn($couplet) => empty(array_diff($this->coupletPlaceholders($couplet), ['{{NAME}}']))
+            ));
+        }
+
+        if (empty($pool)) {
+            $pool = $couplets;
+        }
+
+        return $pool[array_rand($pool)];
+    }
+
+    /** Unieke placeholders ({{...}}) die in een couplet voorkomen. */
+    protected function coupletPlaceholders(array $couplet): array
+    {
+        preg_match_all('/\{\{[A-Z0-9_]+\}\}/', implode("\n", $couplet['lines'] ?? []), $matches);
+
+        return array_values(array_unique($matches[0]));
+    }
+
+    /** True als elke placeholder in het couplet een niet-lege contextwaarde heeft. */
+    protected function coupletSatisfied(array $couplet, array $context): bool
+    {
+        foreach ($this->coupletPlaceholders($couplet) as $placeholder) {
+            $key = self::PLACEHOLDER_KEYS[$placeholder] ?? null;
+            if ($key === null) {
+                continue;
+            }
+            if (trim((string)($context[$key] ?? '')) === '') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Vertaal ruwe intake (formulierveldnamen) naar de placeholder-context.
+     * Als de intake de genormaliseerde sleutel al bevat (bv. via de losse
+     * /lyrics/generate endpoint) wordt die direct gebruikt.
+     */
+    public function buildContext(string $category, array $intake): array
+    {
+        $map = self::FIELD_MAP[$category] ?? self::FIELD_MAP['default'];
+        $context = [];
+
+        foreach (array_values(self::PLACEHOLDER_KEYS) as $key) {
+            if (isset($intake[$key]) && trim((string)$intake[$key]) !== '') {
+                $context[$key] = (string)$intake[$key];
+                continue;
+            }
+
+            $value = '';
+            foreach ((array)($map[$key] ?? []) as $source) {
+                if (isset($intake[$source]) && trim((string)$intake[$source]) !== '') {
+                    $value = (string)$intake[$source];
+                    break;
+                }
+            }
+            $context[$key] = $value;
+        }
+
+        return $context;
+    }
+
+    public function replacePlaceholders(array $lines, array $context): array
+    {
+        $replacements = [
+            '{{NAME}}' => $context['name'] ?: 'jij',
+            '{{FROM}}' => $context['from'] ?? '',
+            '{{DETAIL1}}' => $context['detail1'] ?? '',
+            '{{DETAIL2}}' => $context['detail2'] ?? '',
+            '{{QUOTE}}' => $context['quote'] ?? '',
+            '{{PLACE}}' => $context['place'] ?? '',
+            '{{MOMENT}}' => $context['moment'] ?? '',
+        ];
+
+        return array_map(function ($line) use ($replacements) {
+            return str_replace(
+                array_keys($replacements),
+                array_values($replacements),
+                $line
+            );
+        }, $lines);
+    }
+
+    /**
+     * Bouw de complete songtekst op uit de seed-coupletten en vul de
+     * placeholders met de (gemapte) intake.
+     *
+     * @param array $intake Ruwe formulier-intake óf reeds genormaliseerde context.
      */
     public function generate(string $category, array $intake): array
     {
-        $cfg = config("lyrics.categories.$category", config('lyrics.default'));
+        $context = $this->buildContext($category, $intake);
+        $sections = $this->songform['structure'] ?? [];
+        $usedCouplets = [];
+        $resolved = [];   // index => definitieve sectie
+        $aiSlots = [];    // index => ['name' => ..., 'fallback' => couplet]
 
-        $placeholders = $this->resolvePlaceholders($cfg, $intake);
+        // Pass 1: template-secties direct invullen; AI-slots reserveren (incl. fallback-couplet).
+        foreach ($sections as $i => $sectionConfig) {
+            $sectionName = $sectionConfig['section'];
+            $required = $sectionConfig['required'] ?? true;
+            $source = $sectionConfig['source'] ?? 'template';
 
-        $verse1 = $this->fillLines($cfg['verse'] ?? [], $placeholders);
-        $chorus = $this->fillLines($cfg['chorus'] ?? [], $placeholders);
-        $intro = $this->fillLines($cfg['intro'] ?? [], $placeholders);
+            // Refrein wordt één keer gekozen en daarna hergebruikt.
+            $cacheKey = $sectionName === 'chorus_final' ? 'chorus' : $sectionName;
 
-        [$verse2, $usedAi] = $this->personalisedVerse($category, $cfg, $intake, $placeholders);
+            if (isset($usedCouplets[$cacheKey])) {
+                $couplet = $usedCouplets[$cacheKey];
+            } else {
+                $couplet = $this->getRandomCouplet($category, $cacheKey, $context);
+                if ($couplet) {
+                    $usedCouplets[$cacheKey] = $couplet;
+                }
+            }
 
-        $blocks = [];
-        if ($intro) {
-            $blocks[] = "[Intro]\n" . implode("\n", $intro);
+            if (!$couplet) {
+                if ($required) {
+                    $resolved[$i] = ['section' => $sectionName, 'lines' => ["[{$sectionName}]"]];
+                }
+                continue;
+            }
+
+            if ($source === 'ai') {
+                // Pas in pass 2 invullen, zodat de AI de rest van het lied als context heeft.
+                $aiSlots[$i] = ['name' => $sectionName, 'fallback' => $couplet];
+                continue;
+            }
+
+            $resolved[$i] = [
+                'section' => $sectionName,
+                'lines' => $this->replacePlaceholders($couplet['lines'], $context),
+                'couplet_id' => $couplet['id'] ?? null,
+            ];
         }
-        $blocks[] = "[Couplet 1]\n" . implode("\n", $verse1);
-        $blocks[] = "[Refrein]\n" . implode("\n", $chorus);
-        $blocks[] = "[Couplet 2]\n" . implode("\n", $verse2);
-        $blocks[] = "[Refrein]\n" . implode("\n", $chorus);
 
-        $lyrics = implode("\n\n", $blocks);
+        // Context voor de AI: de reeds ingevulde template-secties (sfeer + rijmwereld).
+        ksort($resolved);
+        $contextLyrics = $this->formatLyrics(array_values($resolved));
+
+        // Pass 2: AI-slots vullen, met fallback naar het JSON-couplet.
+        $usedAi = false;
+        foreach ($aiSlots as $i => $slot) {
+            $fallback = $slot['fallback'];
+            $aiLines = $this->generateAiLines($category, $slot['name'], $context, $intake, $fallback, $contextLyrics);
+
+            if ($aiLines) {
+                $usedAi = true;
+                $resolved[$i] = [
+                    'section' => $slot['name'],
+                    'lines' => $this->replacePlaceholders($aiLines, $context),
+                    'ai' => true,
+                ];
+            } else {
+                $resolved[$i] = [
+                    'section' => $slot['name'],
+                    'lines' => $this->replacePlaceholders($fallback['lines'], $context),
+                    'couplet_id' => $fallback['id'] ?? null,
+                ];
+            }
+        }
+
+        ksort($resolved);
+        $lyrics = array_values($resolved);
+        $formatted = $this->formatLyrics($lyrics);
 
         return [
-            'lyrics' => $lyrics,
-            'preview' => $this->preview($lyrics),
+            'category' => $category,
+            'context' => $context,
+            'sections' => $lyrics,
+            'formatted' => $formatted,
+            'lyrics' => $formatted,
+            'preview' => $this->buildPreview($lyrics),
             'used_ai' => $usedAi,
         ];
     }
 
-    /** Map placeholder-namen op concrete waarden uit de intake (met defaults). */
-    private function resolvePlaceholders(array $cfg, array $intake): array
+    /**
+     * Genereer de regels van een AI-slot. Geeft null terug als er geen
+     * (bruikbaar) AI-resultaat is, zodat de aanroeper terugvalt op het couplet.
+     */
+    protected function generateAiLines(string $category, string $section, array $context, array $intake, array $fallback, string $contextLyrics): ?array
     {
-        $out = [];
-        foreach (($cfg['placeholders'] ?? []) as $key => $field) {
-            $value = trim((string) ($intake[$field] ?? ''));
-            if ($value === '') {
-                $value = $cfg['defaults'][$key] ?? '';
+        $provider = $this->ai->for($category);
+
+        // Geen geldige key/provider -> overslaan, fallback wordt gebruikt.
+        if ($provider instanceof NullProvider) {
+            return null;
+        }
+
+        $lineCount = count($fallback['lines'] ?? []);
+        if ($lineCount < 1) {
+            return null;
+        }
+
+        $scheme = $fallback['rhyme_scheme'] ?? 'AABB';
+        $prompt = $this->buildAiPrompt($category, $section, $context, $intake, $lineCount, $scheme, $contextLyrics);
+
+        // Meerdere pogingen: keur af als een woord op zichzelf rijmt, Van Dale
+        // het rijmpaar afkeurt, of de klant expliciet woorden/thema's wil mijden.
+        // Als niets perfect is, gebruiken we de hoogste score i.p.v. blind de
+        // eerste poging te nemen.
+        $best = null;
+        $bestScore = PHP_INT_MIN;
+        $attempts = max(1, (int) config('ai.lyrics_attempts', 5));
+        $fallbackAfter = max(1, (int) config('ai.lyrics_fallback_after_attempt', 3));
+        $previousIssues = '';
+
+        for ($attempt = 0; $attempt < $attempts; $attempt++) {
+            $attemptPrompt = $attempt === 0
+                ? $prompt
+                : $prompt . "\n\nHERZIENING: je vorige poging was nog niet goed genoeg. {$previousIssues} Schrijf een nieuwe, betere versie met concretere persoonlijke details, natuurlijker Nederlands en sterker zingbaar rijm.";
+
+            $lines = $this->parseAiLines($provider->complete($attemptPrompt, [
+                'use_fallback_model' => $attempt + 1 >= $fallbackAfter,
+            ]), $lineCount);
+            if (!$lines) {
+                $previousIssues = 'De output had niet precies het gevraagde aantal bruikbare regels.';
+                continue;
             }
-            $out[$key] = $value;
-        }
-        return $out;
-    }
 
-    /** @param string[] $lines */
-    private function fillLines(array $lines, array $placeholders): array
-    {
-        return array_map(fn (string $line) => $this->substitute($line, $placeholders), $lines);
-    }
+            $issues = $this->qualityIssues($lines, $scheme, $intake);
+            $score = $this->qualityScore($lines, $scheme, $context, $intake, $issues);
+            if ($score > $bestScore) {
+                $best = $lines;
+                $bestScore = $score;
+            }
 
-    private function substitute(string $text, array $placeholders): string
-    {
-        foreach ($placeholders as $key => $value) {
-            $text = str_replace('{' . $key . '}', $value, $text);
+            if (empty($issues)) {
+                return $lines;
+            }
+
+            $previousIssues = 'Problemen: '.implode('; ', $issues).'.';
         }
-        // Restplaceholders netjes leegmaken.
-        return trim(preg_replace('/\{[a-z0-9_]+\}/i', '', $text));
+
+        return $best;
     }
 
     /**
-     * Vraag het gepersonaliseerde couplet bij de AI op; val anders terug op de batch.
-     *
-     * @return array{0: string[], 1: bool}
+     * @return array<int, string>
      */
-    private function personalisedVerse(string $category, array $cfg, array $intake, array $placeholders): array
+    protected function qualityIssues(array $lines, string $scheme, array $intake): array
     {
-        $ai = $cfg['ai'] ?? null;
-        $fallback = $this->fillLines($ai['fallback'] ?? [], $placeholders);
+        $issues = [];
 
-        if (! $ai || empty($ai['instruction'])) {
-            return [$fallback, false];
+        if ($this->hasSelfRhyme($lines, $scheme)) {
+            $issues[] = 'gebruik geen zelfrijm of bijna hetzelfde eindwoord';
         }
 
-        // Bouw de prompt: placeholders + intake-detailvelden zoals {anecdotes}, {tone}.
-        $promptVars = $placeholders + [
-            'anecdotes' => trim((string) ($intake['anecdotes'] ?? '')),
-            'mustMention' => trim((string) ($intake['mustMention'] ?? '')),
-            'avoid' => trim((string) ($intake['avoid'] ?? '')),
-            'musicStyle' => trim((string) ($intake['musicStyle'] ?? 'Nederlandstalige pop')),
-            'tone' => trim((string) ($intake['tone'] ?? 'passend bij het moment')),
-        ];
-        $prompt = $this->substitute($ai['instruction'], $promptVars);
-        $prompt .= $this->promptContext($promptVars);
-
-        $result = $this->ai->for($category)->complete($prompt);
-
-        $lines = $this->cleanLines($result);
-        if (count($lines) >= 1) {
-            return [$lines, true];
+        if ($this->rhymeRejectedByVanDale($lines, $scheme)) {
+            $issues[] = 'een rijmpaar rijmt niet op Nederlandse uitspraak';
         }
 
-        return [$fallback, false];
-    }
+        if ($this->containsAvoidedTerms($lines, $intake)) {
+            $issues[] = 'er staan woorden of thema\'s in die de klant wilde vermijden';
+        }
 
-    private function promptContext(array $promptVars): string
-    {
-        $lines = [];
-
-        foreach ([
-            'mustMention' => 'Moet absoluut terugkomen',
-            'avoid' => 'Vermijd',
-            'musicStyle' => 'Muzikale richting',
-        ] as $key => $label) {
-            $value = trim((string) ($promptVars[$key] ?? ''));
-            if ($value !== '') {
-                $lines[] = $label.': '.$value;
+        foreach ($lines as $line) {
+            $words = preg_split('/\s+/u', trim($line), -1, PREG_SPLIT_NO_EMPTY);
+            $count = is_array($words) ? count($words) : 0;
+            if ($count > 12) {
+                $issues[] = 'minstens een regel is te lang om soepel te zingen';
+                break;
             }
         }
 
-        return $lines ? "\n\nExtra context:\n".implode("\n", $lines) : '';
+        return array_values(array_unique($issues));
     }
 
-    /** Maak AI-output schoon tot losse tekstregels. */
-    private function cleanLines(string $text): array
+    protected function qualityScore(array $lines, string $scheme, array $context, array $intake, array $issues): int
     {
-        $text = trim($text);
-        if ($text === '') {
+        $score = 100 - (count($issues) * 20);
+        $text = mb_strtolower(implode("\n", $lines));
+
+        foreach (['name', 'detail1', 'detail2', 'quote', 'place', 'moment'] as $key) {
+            $value = mb_strtolower(trim((string)($context[$key] ?? '')));
+            if ($value !== '' && str_contains($text, $value)) {
+                $score += 6;
+            }
+        }
+
+        foreach (['anecdotes', 'mustMention'] as $field) {
+            $value = mb_strtolower(trim((string)($intake[$field] ?? '')));
+            if ($value === '') {
+                continue;
+            }
+
+            foreach ($this->meaningfulWords($value) as $word) {
+                if (str_contains($text, $word)) {
+                    $score += 2;
+                }
+            }
+        }
+
+        foreach ($lines as $line) {
+            $words = preg_split('/\s+/u', trim($line), -1, PREG_SPLIT_NO_EMPTY);
+            $count = is_array($words) ? count($words) : 0;
+            if ($count >= 6 && $count <= 9) {
+                $score += 4;
+            } elseif ($count > 12) {
+                $score -= 8;
+            }
+        }
+
+        if ($this->hasSelfRhyme($lines, $scheme)) {
+            $score -= 25;
+        }
+
+        return $score;
+    }
+
+    protected function containsAvoidedTerms(array $lines, array $intake): bool
+    {
+        $avoid = trim((string)($intake['avoid'] ?? ''));
+        if ($avoid === '') {
+            return false;
+        }
+
+        $text = mb_strtolower(implode("\n", $lines));
+        foreach ($this->meaningfulWords($avoid) as $word) {
+            if (str_contains($text, $word)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function meaningfulWords(string $text): array
+    {
+        preg_match_all('/[A-Za-zÀ-ÿ0-9]+/u', mb_strtolower($text), $matches);
+
+        return array_values(array_unique(array_filter(
+            $matches[0] ?? [],
+            fn (string $word) => mb_strlen($word) >= 4
+        )));
+    }
+
+    /**
+     * True als Van Dale een rijmpaar expliciet afkeurt (woorden rijmen niet).
+     * Onbekende/niet te bepalen paren tellen NIET als afkeuring.
+     */
+    protected function rhymeRejectedByVanDale(array $lines, string $scheme): bool
+    {
+        foreach ($this->rhymePairs(count($lines), $scheme) as [$a, $b]) {
+            $wordA = $this->lastWord($lines[$a] ?? '');
+            $wordB = $this->lastWord($lines[$b] ?? '');
+
+            if ($this->rhyme->rhymesWith($wordA, $wordB) === false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /** Rijmparen-indexen op basis van het schema. */
+    protected function rhymePairs(int $count, string $scheme): array
+    {
+        $scheme = strtoupper($scheme);
+        if ($count === 2) return [[0, 1]];
+        if ($count === 4) return $scheme === 'ABAB' ? [[0, 2], [1, 3]] : [[0, 1], [2, 3]];
+        if ($count === 3) return [[0, 1]];
+        return [];
+    }
+
+    protected function lastWord(string $line): string
+    {
+        preg_match_all('/[A-Za-zÀ-ÿ]+/u', $line, $matches);
+        $word = end($matches[0]);
+        return $word ? mb_strtolower($word) : '';
+    }
+
+    /** True als een rijmpaar hetzelfde (of vrijwel hetzelfde) woord gebruikt. */
+    protected function hasSelfRhyme(array $lines, string $scheme): bool
+    {
+        foreach ($this->rhymePairs(count($lines), $scheme) as [$a, $b]) {
+            $wa = $this->lastWord($lines[$a] ?? '');
+            $wb = $this->lastWord($lines[$b] ?? '');
+            if ($wa === '' || $wb === '') {
+                continue;
+            }
+            if ($wa === $wb || str_ends_with($wa, $wb) || str_ends_with($wb, $wa)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Bouw de AI-prompt met onderwerp, context van het lied en formulier-personalisatie. */
+    protected function buildAiPrompt(string $category, string $section, array $context, array $intake, int $lineCount, string $scheme, string $contextLyrics): string
+    {
+        $topic = self::CATEGORY_TOPICS[$category] ?? $category;
+        $label = self::SECTION_LABELS[$section] ?? $section;
+        $name = $context['name'] ?: 'de hoofdpersoon';
+        $tone = trim((string)($intake['tone'] ?? ''));
+        $anecdoteItems = $this->intakeList($intake, 'anecdotesItems', 'anecdotes');
+        $mustMentionItems = $this->intakeList($intake, 'mustMentionItems', 'mustMention');
+        $additionalNames = trim((string)($intake['additionalRecipientNames'] ?? ''));
+        $additionalSenders = trim((string)($intake['additionalSenderNames'] ?? ''));
+        $avoid = trim((string)($intake['avoid'] ?? ''));
+
+        $lines = [];
+        $lines[] = "Je bent songtekstschrijver voor Nederlandstalige, persoonlijke liedjes.";
+        $lines[] = "";
+        $lines[] = "Onderwerp van het lied: {$topic}.";
+        $lines[] = "Naam in het lied: {$name}.";
+        if ($tone !== '') {
+            $lines[] = "Gewenste toon/sfeer: {$tone}.";
+        }
+        if ($anecdoteItems !== []) {
+            $lines[] = "Losse situaties/anekdotes. Elke regel is één apart item, NIET alles tegelijk gebruiken:";
+            foreach ($anecdoteItems as $index => $item) {
+                $lines[] = ($index + 1).". {$item}";
+            }
+        }
+        if ($additionalNames !== '') {
+            $lines[] = "Extra namen/personen met rol of relatie die genoemd mogen worden: {$additionalNames}";
+        }
+        if ($additionalSenders !== '') {
+            $lines[] = "Afzenders of betrokkenen met rol of relatie: {$additionalSenders}";
+        }
+        if ($mustMentionItems !== []) {
+            $lines[] = "Losse verplichte elementen. Gebruik alleen wat natuurlijk past bij deze sectie:";
+            foreach ($mustMentionItems as $index => $item) {
+                $lines[] = ($index + 1).". {$item}";
+            }
+        }
+        if ($avoid !== '') {
+            $lines[] = "Vermijd dit expliciet: {$avoid}";
+        }
+        $lines[] = "";
+        $lines[] = "Dit is de rest van het lied, puur als context voor sfeer, thema en rijm (NIET herhalen of overnemen):";
+        $lines[] = $contextLyrics !== '' ? $contextLyrics : '(nog geen context)';
+        $lines[] = "";
+        $lines[] = "Schrijf nu PRECIES {$lineCount} Nederlandse liedregels voor {$label}.";
+        $lines[] = "Eisen:";
+        $lines[] = "- Rijmschema {$scheme}: de aangegeven regels moeten op elkaar rijmen.";
+        $lines[] = "- Rijm op de Nederlandse UITSPRAAK van het laatste woord, NIET op de spelling.";
+        $lines[] = "  Voorbeelden van GEEN goed rijm: 'fan' (klinkt als 'fen') rijmt niet op 'van';";
+        $lines[] = "  'team' (klinkt als 'tiem') rijmt niet op 'thema'; 'cool' rijmt niet op 'wol'.";
+        $lines[] = "  Leenwoorden klinken vaak anders dan ze geschreven worden — let daar op.";
+        $lines[] = "- Rijm NOOIT een woord op zichzelf of op (bijna) hetzelfde woord (dus niet 'hart/hart', niet 'thuis/thuis').";
+        $lines[] = "- Controleer elk rijmpaar: spreek de laatste beklemtoonde lettergreep hardop uit — klinkt die echt identiek? Zo niet, kies een ander woord.";
+        $lines[] = "- Houd elke regel KORT en meezingbaar: streef naar 6 tot 9 woorden, zoals een echte popsongregel. Liever kort en krachtig dan lang en uitleggerig.";
+        $lines[] = "- Blijf CONCREET bij het onderwerp en de ingevulde gegevens. Geen vage of grootse beeldspraak en geen woorden die er niet bij horen (zoals 'de zee', 'de aarde', 'de boot', 'het heelal', 'geschiedenis') puur om te rijmen.";
+        $lines[] = "- Grijp niet naar een willekeurig woord om het rijm te forceren; het laatste woord moet logisch bij de regel en het onderwerp passen.";
+        $lines[] = "- Verwerk de persoonlijke details hierboven op een natuurlijke, niet-geforceerde manier.";
+        $lines[] = "- Gebruik per gegenereerde sectie maximaal één losse situatie/anekdote. Prop niet meerdere situaties in één couplet of rijmpaar.";
+        $lines[] = "- Kies voor deze {$label} één situatie die past bij de plek in het lied. Gebruik andere situaties later in andere verses/secties.";
+        $lines[] = "- Herhaal geen situatie die al duidelijk in de contextregels staat.";
+        $lines[] = "- Gebruik minstens één concreet detail uit de losse situaties of verplichte elementen als die velden gevuld zijn.";
+        $lines[] = "- Als er een 'Vermijd dit expliciet'-veld is: gebruik die woorden, onderwerpen en grappen niet.";
+        $lines[] = "- Pas qua toon en thema bij de rest van het lied.";
+        $lines[] = "- Gebruik de naam \"{$name}\" spaarzaam (zeker als die lang is); begin niet elke regel met de naam.";
+        $lines[] = "- Klinkt als gezongen, gesproken Nederlands; geen clichés stapelen, geen kromme zinnen om het rijm te forceren.";
+        $lines[] = "- Schrijf alsof dit direct in Suno gezongen moet worden: duidelijke cadans, geen proza, geen uitleg.";
+        $lines[] = "- Geef ALLEEN de {$lineCount} regels terug, elk op een nieuwe regel. Geen titel, geen nummering, geen aanhalingstekens, geen opmaak, geen uitleg.";
+
+        return implode("\n", $lines);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function intakeList(array $intake, string $arrayKey, string $fallbackKey): array
+    {
+        $items = $intake[$arrayKey] ?? [];
+        if (!is_array($items)) {
+            $decoded = json_decode((string) $items, true);
+            $items = is_array($decoded) ? $decoded : [];
+        }
+
+        $items = array_values(array_filter(array_map(
+            static fn ($item) => trim((string) $item),
+            $items
+        )));
+
+        if ($items !== []) {
+            return $items;
+        }
+
+        $fallback = trim((string)($intake[$fallbackKey] ?? ''));
+        if ($fallback === '') {
             return [];
         }
-        $lines = preg_split('/\r?\n/', $text) ?: [];
-        $lines = array_values(array_filter(array_map('trim', $lines), fn ($l) => $l !== ''));
-        return array_slice($lines, 0, 4);
+
+        return array_values(array_filter(array_map(
+            static fn ($item) => trim((string) $item),
+            preg_split('/\R+/u', $fallback) ?: []
+        )));
     }
 
-    private function preview(string $lyrics): string
+    /** Pluis platte AI-tekst uit naar exact $lineCount regels; null als onbruikbaar. */
+    protected function parseAiLines(string $raw, int $lineCount): ?array
     {
-        $lines = preg_split('/\r?\n/', $lyrics) ?: [];
-        return implode("\n", array_slice($lines, 0, 8));
+        $raw = trim($raw);
+        if ($raw === '') {
+            return null;
+        }
+
+        $clean = [];
+        foreach (preg_split('/\r\n|\r|\n/', $raw) as $line) {
+            $line = trim($line);
+            if ($line === '' || str_starts_with($line, '[')) {
+                continue;
+            }
+            // Verwijder eventuele opsommingstekens/nummering en aanhalingstekens.
+            $line = preg_replace('/^\s*(\d+[\.\)]|[-*•])\s*/u', '', $line);
+            // Strip markdown-opmaak (vet/cursief) die het model soms toevoegt.
+            $line = preg_replace('/[*_]{1,2}/', '', $line);
+            $line = trim($line, "\"'“”‘’ ");
+            if ($line !== '') {
+                $clean[] = $line;
+            }
+        }
+
+        if (count($clean) < $lineCount) {
+            return null;
+        }
+
+        return array_slice($clean, 0, $lineCount);
+    }
+
+    protected function formatLyrics(array $sections): string
+    {
+        $output = [];
+
+        foreach ($sections as $section) {
+            $sectionName = ucfirst(str_replace('_', ' ', $section['section']));
+            $output[] = "[{$sectionName}]";
+            foreach ($section['lines'] as $line) {
+                $output[] = $line;
+            }
+            $output[] = '';
+        }
+
+        return implode("\n", $output);
+    }
+
+    /** Korte preview: eerste couplet + eerste refrein. */
+    protected function buildPreview(array $lyrics): string
+    {
+        return $this->formatLyrics(array_slice($lyrics, 0, 2));
+    }
+
+    public function getSongform(): array
+    {
+        return $this->songform;
+    }
+
+    public function previewCategory(string $category): array
+    {
+        $sections = ['verse1', 'verse2', 'chorus', 'bridge'];
+        $preview = [];
+
+        foreach ($sections as $section) {
+            $couplets = $this->loadSectionLyrics($category, $section);
+            $preview[$section] = [
+                'count' => count($couplets),
+                'samples' => array_slice($couplets, 0, 2),
+            ];
+        }
+
+        return $preview;
     }
 }

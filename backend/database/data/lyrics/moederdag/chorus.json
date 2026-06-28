@@ -1,0 +1,19 @@
+{
+  "section": "chorus",
+  "category": "moederdag",
+  "description": "Refrein - Moederdag hook.",
+  "couplets": [
+    { "id": 1, "lines": ["Voor {{NAME}} dit lied, op Moederdag zacht", "De warmte die jij geeft, dag en ook nacht", "Een hart zo groot, een glimlach van goud", "Voor {{NAME}} dit nummer, met liefde gebouwd"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Hé {{NAME}}, dit is jouw moment, jouw dag", "Geniet er maar van, met een brede lach", "Jij bent ons hart, ons warme huis", "Voor jou dit lied, lekker knus en thuis"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Bedankt {{NAME}}, voor alles, voor altijd", "Voor je geduld, je liefde, je tijd", "De liefste moeder die er bestaat", "Dat ben jij, en dat is geen praat"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Lang leve {{NAME}}, op deze mooie dag", "We vieren jou met een lied en een lach", "Een moeder van goud, een hart zo warm", "Voor jou klinkt dit nummer, met open arm"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["O {{NAME}}, jij bent de allerbeste", "Van het oosten tot het westen", "We houden van je, dat weet je toch", "Fijne Moederdag, geniet ervan, joh"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Voor {{NAME}}, de koningin van het huis", "Vandaag is zij vrij, lekker thuis", "Mam, mama, oma, hoe je ook heet", "Jij bent de liefste, ver en breed"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Hef het glas, want het is Moederdag", "Voor {{NAME}} klinkt een liefdevolle slag", "Bedankt voor alles, groot en klein", "Geen liefdevollere moeder kan er zijn"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["{{NAME}}, {{NAME}}, dit lied is voor jou", "Vol dankbaarheid, vol liefde en trouw", "Je bent ons baken, ons licht in de nacht", "En dat zingen wij vandaag, met heel onze kracht"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Een dag voor {{NAME}}, voor de vrouw van het huis", "Leun maar achterover, lekker thuis", "Wij doen vandaag het werk voor jou", "Want zo'n moeder, die koesteren we trouw"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Dit is voor {{NAME}}, de allerliefste vrouw", "Die altijd voor haar gezin staat, oprecht en trouw", "Fijne Moederdag, geniet, ga zo door", "Voor jou zingen wij, in koor na koor"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Hoera voor {{NAME}}, hef het glas omhoog", "Een moeder zo warm, recht door de boog", "Wij houden van je, dat staat als een paal", "Fijne Moederdag, en dat menen we, allemaal"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Voor {{NAME}} dit feestje, vandaag in het zonnetje", "De liefste moeder, ons trouwe kroontje", "Bedankt voor altijd, voor nu en voor straks", "Geniet van je dag, en lekker relax"], "rhyme_scheme": "AABB" }
+  ]
+}

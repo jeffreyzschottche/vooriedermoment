@@ -1,0 +1,19 @@
+{
+  "section": "chorus",
+  "category": "bouwbedrijven",
+  "description": "Refrein - bouw hook. NAME=bedrijfsnaam, QUOTE=slogan",
+  "couplets": [
+    { "id": 1, "lines": ["{{NAME}}, wij bouwen door, regen of zon!", "Van fundament tot dak, zoals het ooit begon", "Handen uit de mouwen, vakwerk dat staat", "Bij {{NAME}} is \"{{QUOTE}}\" geen loze praat"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Hup {{NAME}}, wij bouwen aan de stad!", "Steen voor steen, geen klus ons te krap of te plat", "Van tekening tot sleutel, met trots en met daad", "Bij {{NAME}} weet je: het werk dat staat"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["{{NAME}}, {{NAME}}, wij bouwen met hart!", "Vakmanschap voorop, recht van de start", "Handen uit de mouwen, de helm op het hoofd", "Bij {{NAME}} wordt elke belofte beloofd"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Wij zijn {{NAME}}, en daar zijn we trots op!", "Van fundering tot nok, van onder tot top", "Solide en sterk, jaar in jaar uit", "Bij {{NAME}} klinkt het vakmanschap luid"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["O o o, {{NAME}} bouwt de mooiste dingen", "Wij laten ons werk voor zichzelf wel zingen", "Van schop in de grond tot de sleutel in de hand", "Bij {{NAME}} staat alles als een huis in het land"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Bouwen, bouwen, dat doen wij met plezier", "Bij {{NAME}} staat vakwerk altijd hier", "Regen of zon, wij gaan ervoor", "Voor {{NAME}} klinkt dit lied, in koor na koor"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Hef de hamer, hef het glas, voor {{NAME}}!", "Wij bouwen aan de toekomst, dag na dag, samen", "Van paal tot dak, met trots en met daad", "Bij {{NAME}} is kwaliteit geen loze praat"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["{{NAME}}, {{NAME}}, het vakwerk dat staat!", "Op tijd, binnen budget, eerlijk en paraat", "Een hechte ploeg die voor elkaar door het vuur gaat", "Bij {{NAME}} is dat de basis, vroeg en laat"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Voor {{NAME}} bouwen wij met kop en met kont", "Van het eerste ontwerp tot de laatste vierkante mond", "Steen op steen, met liefde en kracht", "Bij {{NAME}} wordt het vakwerk volbracht"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Wij houden van bouwen, bij {{NAME}} dag en nacht", "Vakwerk leveren, dat is onze kracht", "Helm op, schoenen aan, vol aan de slag", "Bij {{NAME}} draaien wij door, elke werkdag"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Olé, voor {{NAME}} klinkt de bouwhit luid", "Van fundament tot dak, dat zingen wij uit", "Solide werk, een trotse ploeg en klant", "Voor {{NAME}} bouwen wij door, in dit mooie land"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Voor {{NAME}} dit lied, voor de bouw en de man", "Wij bouwen met trots, zoveel als het maar kan", "Van schop tot sleutel, met vakwerk en daad", "Bij {{NAME}} weet je: het werk dat staat"], "rhyme_scheme": "AABB" }
+  ]
+}

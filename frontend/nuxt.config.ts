@@ -2,15 +2,16 @@ export default defineNuxtConfig({
   // Nuxt 4: bron leeft in app/ (default). Geen srcDir-override meer nodig.
   compatibilityDate: '2025-01-01',
 
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
+  modules: ['@pinia/nuxt'],
 
-  // Laad onze eigen Tailwind-entry (met tokens + component-classes). De module
-  // vond dit bestand niet meer op het Nuxt 4 app/-pad, dus registreren we het
-  // expliciet en zetten de default-injectie van de module uit.
+  // Laad onze eigen Tailwind CSS
   css: ['~/assets/css/tailwind.css'],
-  tailwindcss: {
-    cssPath: false,
-    configPath: '~~/tailwind.config.cjs',
+
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
   },
 
   app: {
@@ -29,6 +30,9 @@ export default defineNuxtConfig({
         { property: 'og:type', content: 'website' },
         { property: 'og:site_name', content: 'Voor Ieder Moment' },
         { property: 'og:locale', content: 'nl_NL' },
+        { property: 'og:image', content: 'https://vooriedermoment.nl/hero-studio.png' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:image', content: 'https://vooriedermoment.nl/hero-studio.png' },
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/faviconzwart.png' },

@@ -18,7 +18,11 @@ class StoreSongRequest extends FormRequest
             'categoryTitle' => ['nullable', 'string', 'max:255'],
             'intake' => ['required', 'array'],
             'intake.email' => ['nullable', 'email', 'max:255'],
-            'intake.*' => ['nullable', 'string', 'max:5000'],
+            'intake.*' => ['nullable'],
+            'intake.anecdotesItems' => ['nullable', 'array', 'max:20'],
+            'intake.anecdotesItems.*' => ['nullable', 'string', 'max:1000'],
+            'intake.mustMentionItems' => ['nullable', 'array', 'max:20'],
+            'intake.mustMentionItems.*' => ['nullable', 'string', 'max:1000'],
         ];
     }
 }

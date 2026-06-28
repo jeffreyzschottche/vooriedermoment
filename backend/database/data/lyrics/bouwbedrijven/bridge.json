@@ -1,0 +1,19 @@
+{
+  "section": "bridge",
+  "category": "bouwbedrijven",
+  "description": "Brug - trots/teamgevoel. NAME=bedrijfsnaam, DETAIL2=oprichtingsjaar, QUOTE=slogan",
+  "couplets": [
+    { "id": 1, "lines": ["Door de jaren heen, project na project gebouwd", "Bij {{NAME}} is alles met vakmanschap opgebouwd", "Een team dat staat, in weer en in wind", "Voor {{NAME}} is dat waar het bouwen begint"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Even stil voor de oplevering, kijk eens rond", "Bij {{NAME}} staat het werk, kerngezond op de grond", "Van een leeg stuk land tot een prachtig pand", "Voor {{NAME}} is dat vakwerk met hart en met hand"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Sinds {{DETAIL2}} bouwen wij aan een mooie naam", "Bij {{NAME}} doen we dat samen, als één en bekwaam", "Generatie na generatie, hetzelfde vuur", "Voor {{NAME}} brandt het vakmanschap, uur na uur"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["\"{{QUOTE}}\", dat is meer dan een leus", "Bij {{NAME}} is het de basis, telkens onze keus", "Wij maken het waar, op elke bouwplaats opnieuw", "Voor {{NAME}} geldt dat al menig jaar en eeuw"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["De ploeg is een familie, hecht en sterk", "Bij {{NAME}} draagt iedereen bij aan het werk", "Schouder aan schouder, samen door het vuur", "Voor {{NAME}} is dat de kracht, uur na uur"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Een huis, een school, een brug die blijft staan", "Bij {{NAME}} laten wij iets moois achter en gaan", "Wat wij bouwen vandaag, staat er morgen nog", "Voor {{NAME}} is dat geen droom maar de waarheid, toch"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Hef de helm, hef het glas, op {{NAME}} en de ploeg", "Op elke klus die we klaarden, vroeg of niet vroeg", "Wij zijn trots op ons werk, op ons vak en de man", "Voor {{NAME}} bouwen wij door, zoveel als het maar kan"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Van de jongste leerling tot de oudste rot", "Bij {{NAME}} hoort iedereen erbij, van begin tot slot", "Kennis gedeeld, het vak doorgegeven", "Voor {{NAME}} bouwen wij samen aan een mooi leven"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Als de oplevering rond is, breekt de trots los", "Bij {{NAME}} schudden we handen, het hele bos", "Een tevreden klant, een pand dat staat", "Voor {{NAME}} is dat de mooiste daad"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Een naam, een helm, een logo vol vuur", "Bij {{NAME}} staat vakmanschap, uur na uur", "Wij dragen het bedrijf met trots in ons hart", "Voor {{NAME}} bouwen wij door, van start tot start"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Dank aan de ploeg, het kantoor en de klant", "Bij {{NAME}} houden zij samen het bedrijf overeind in het land", "Achter de schermen, op de bouw, in de keet", "Voor {{NAME}} draait iedereen mee, present en gereed"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Dus kom op mannen, nog één steen erop", "Voor {{NAME}} bouwen wij door, van onder tot top", "Wij zijn één, wij zijn trots, wij zijn samen sterk", "Voor {{NAME}} klopt ons hart, in dit bouwwerk"], "rhyme_scheme": "AABB" }
+  ]
+}

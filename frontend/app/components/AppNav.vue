@@ -10,7 +10,7 @@ const links = [
   { to: '/momenten', label: 'Momenten' },
   { to: '/zakelijk/bouwbedrijven', label: 'Zakelijk' },
   { to: '/over-ons', label: 'Over ons' },
-  { to: '/faq-contact', label: 'FAQ & contact' },
+  { to: '/faq-contact', label: 'FAQ' },
 ];
 
 watch(
@@ -24,19 +24,24 @@ watch(
 
 <template>
   <header
-    class="sticky top-0 z-50 border-b backdrop-blur-2xl"
-    :style="{ borderColor: 'rgba(16,26,22,0.08)', background: 'rgba(244,246,239,0.78)' }"
+    class="sticky top-0 z-50 border-b backdrop-blur-2xl transition-all duration-300"
+    :style="{
+      borderColor: 'rgba(13,21,18,0.06)',
+      background: 'rgba(248,250,246,0.85)',
+    }"
   >
-    <div class="wide-container flex min-h-16 items-center justify-between gap-4 py-3 lg:min-h-[4.75rem]">
-      <NuxtLink to="/" class="flex min-w-0 items-center gap-2.5">
+    <div class="hero-inner flex min-h-[4.5rem] items-center justify-between gap-6 py-3">
+      <!-- Logo -->
+      <NuxtLink to="/" class="flex min-w-0 items-center gap-3 transition-transform duration-200 hover:scale-[1.02]">
         <span class="logo-card">
-          <img src="/logowit.png" alt="" class="h-4 w-auto sm:h-5" />
+          <img src="/logowit.png" alt="" class="h-5 w-auto" />
         </span>
-        <span class="truncate font-display text-base font-semibold" :style="{ color: 'var(--color-ink)' }">
+        <span class="hidden truncate font-display text-lg font-semibold sm:block" :style="{ color: 'var(--color-ink)' }">
           Voor Ieder Moment
         </span>
       </NuxtLink>
 
+      <!-- Desktop nav -->
       <nav class="hidden items-center gap-1 lg:flex">
         <div
           v-for="link in links"
@@ -47,7 +52,7 @@ watch(
         >
           <NuxtLink
             :to="link.to"
-            class="rounded-lg px-4 py-2.5 text-sm font-semibold transition duration-200"
+            class="rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200"
             :style="route.path === link.to || (link.to !== '/' && route.path.startsWith(link.to))
               ? { color: 'var(--accent-strong)', background: 'var(--accent-soft)' }
               : { color: 'var(--color-ink-soft)' }"
@@ -55,53 +60,92 @@ watch(
             {{ link.label }}
           </NuxtLink>
 
-          <div
-            v-if="link.to === '/momenten' && momentsOpen"
-            class="absolute left-0 top-full w-64 pt-2"
+          <!-- Dropdown -->
+          <Transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="opacity-0 translate-y-2"
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition duration-150 ease-in"
+            leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 translate-y-2"
           >
-            <div class="panel grid gap-1 p-2">
-              <NuxtLink
-                v-for="c in consumerCategories"
-                :key="c.slug"
-                :to="categoryPath(c)"
-                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-[var(--color-surface-soft)]"
-                :style="{ color: 'var(--color-ink)' }"
-              >
-                <span aria-hidden="true">{{ c.emoji }}</span>{{ c.title }}
-              </NuxtLink>
+            <div
+              v-if="link.to === '/momenten' && momentsOpen"
+              class="absolute left-0 top-full w-72 pt-3"
+            >
+              <div class="panel grid gap-1 p-2.5">
+                <NuxtLink
+                  v-for="c in consumerCategories"
+                  :key="c.slug"
+                  :to="categoryPath(c)"
+                  class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 hover:bg-[var(--color-surface-soft)]"
+                  :style="{ color: 'var(--color-ink)' }"
+                >
+                  <span class="text-lg" aria-hidden="true">{{ c.emoji }}</span>
+                  {{ c.title }}
+                </NuxtLink>
+              </div>
             </div>
-          </div>
+          </Transition>
         </div>
       </nav>
 
+      <!-- CTA button -->
       <div class="hidden lg:block">
-        <NuxtLink to="/aanvraag" class="stitch-button">Start aanvraag</NuxtLink>
+        <NuxtLink to="/aanvraag" class="stitch-button">
+          Start aanvraag
+        </NuxtLink>
       </div>
 
+      <!-- Mobile menu button -->
       <button
-        class="inline-flex h-11 w-11 items-center justify-center rounded-full border lg:hidden"
-        :style="{ borderColor: 'var(--color-line-strong)', color: 'var(--color-ink)' }"
+        class="inline-flex h-12 w-12 items-center justify-center rounded-xl border transition-all duration-200 lg:hidden"
+        :style="{
+          borderColor: isOpen ? 'var(--accent)' : 'var(--color-line-strong)',
+          color: isOpen ? 'var(--accent-strong)' : 'var(--color-ink)',
+          background: isOpen ? 'var(--accent-soft)' : 'transparent'
+        }"
         @click="isOpen = !isOpen"
         :aria-expanded="isOpen"
         aria-label="Menu openen"
       >
-        <span class="text-xl">{{ isOpen ? '×' : '☰' }}</span>
+        <span class="text-xl font-semibold">{{ isOpen ? '×' : '☰' }}</span>
       </button>
     </div>
 
-    <div v-if="isOpen" class="border-t lg:hidden" :style="{ borderColor: 'var(--color-line)', background: 'var(--color-bg)' }">
-      <div class="wide-container flex flex-col gap-2 py-5">
-        <NuxtLink
-          v-for="link in links"
-          :key="link.to"
-          :to="link.to"
-          class="rounded-lg border px-4 py-3.5 font-display text-base"
-          :style="{ borderColor: 'var(--color-line)', color: 'var(--color-ink)' }"
-        >
-          {{ link.label }}
-        </NuxtLink>
-        <NuxtLink to="/aanvraag" class="stitch-button mt-2 w-full">Start aanvraag</NuxtLink>
+    <!-- Mobile menu -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0 -translate-y-4"
+      enter-to-class="opacity-100 translate-y-0"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 translate-y-0"
+      leave-to-class="opacity-0 -translate-y-4"
+    >
+      <div
+        v-if="isOpen"
+        class="border-t lg:hidden"
+        :style="{ borderColor: 'var(--color-line)', background: 'var(--color-bg)' }"
+      >
+        <div class="hero-inner flex flex-col gap-3 py-6">
+          <NuxtLink
+            v-for="link in links"
+            :key="link.to"
+            :to="link.to"
+            class="rounded-xl border px-5 py-4 font-display text-base font-medium transition-all duration-200"
+            :style="{
+              borderColor: route.path === link.to ? 'var(--accent)' : 'var(--color-line)',
+              color: route.path === link.to ? 'var(--accent-strong)' : 'var(--color-ink)',
+              background: route.path === link.to ? 'var(--accent-soft)' : 'var(--color-surface)'
+            }"
+          >
+            {{ link.label }}
+          </NuxtLink>
+          <NuxtLink to="/aanvraag" class="stitch-button mt-3 w-full py-4 text-base">
+            Start aanvraag
+          </NuxtLink>
+        </div>
       </div>
-    </div>
+    </Transition>
   </header>
 </template>

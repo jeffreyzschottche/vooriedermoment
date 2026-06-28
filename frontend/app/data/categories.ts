@@ -39,6 +39,9 @@ export interface Category {
   emoji: string;
   variant: CategoryVariant;
   theme: AccentTheme;
+  // Categorie-specifieke cover (og:image + visuals). Valt terug op een
+  // gegenereerde kleur-cover per slug; zet hier een eigen foto om te overschrijven.
+  image?: string;
   kicker: string;
   heroTitle: string;
   heroLead: string;
@@ -57,35 +60,181 @@ export interface Category {
 }
 
 const themes: Record<string, AccentTheme> = {
-  road: { accent: '#2f9e7f', accentStrong: '#1f6f59', accentSoft: '#dcf3eb', accentInk: '#ffffff' },
-  honey: { accent: '#e8a317', accentStrong: '#a86f00', accentSoft: '#fdf0cf', accentInk: '#2a1d00' },
-  brick: { accent: '#cf6a3f', accentStrong: '#9c451f', accentSoft: '#fbe6da', accentInk: '#ffffff' },
-  navy: { accent: '#3f6bd6', accentStrong: '#2a4aa3', accentSoft: '#e2e9fb', accentInk: '#ffffff' },
-  rose: { accent: '#db5a8b', accentStrong: '#aa3a66', accentSoft: '#fce1ec', accentInk: '#ffffff' },
-  sky: { accent: '#46a7c9', accentStrong: '#2c7a96', accentSoft: '#dff2f8', accentInk: '#ffffff' },
-  grape: { accent: '#8a5cd1', accentStrong: '#643ca3', accentSoft: '#ece1fa', accentInk: '#ffffff' },
-  grass: { accent: '#4c9c3a', accentStrong: '#356d28', accentSoft: '#e3f3da', accentInk: '#ffffff' },
-  steel: { accent: '#d9821f', accentStrong: '#8f5212', accentSoft: '#f6e7d2', accentInk: '#2a1a00' },
+  road: { accent: '#1ea67f', accentStrong: '#147a5c', accentSoft: '#e3f6ef', accentInk: '#ffffff' },
+  honey: { accent: '#e6a008', accentStrong: '#9c6b00', accentSoft: '#fcf1cf', accentInk: '#2a1d00' },
+  brick: { accent: '#d96638', accentStrong: '#a23f17', accentSoft: '#fce7dc', accentInk: '#ffffff' },
+  navy: { accent: '#4169e6', accentStrong: '#2a45a8', accentSoft: '#e6ebfc', accentInk: '#ffffff' },
+  rose: { accent: '#e0538a', accentStrong: '#b13164', accentSoft: '#fde3ed', accentInk: '#ffffff' },
+  sky: { accent: '#1f9fcc', accentStrong: '#17738f', accentSoft: '#e0f4fa', accentInk: '#ffffff' },
+  grape: { accent: '#8b54d6', accentStrong: '#653ca8', accentSoft: '#efe4fb', accentInk: '#ffffff' },
+  grass: { accent: '#4aa838', accentStrong: '#347526', accentSoft: '#e7f5dd', accentInk: '#ffffff' },
+  steel: { accent: '#d97e1a', accentStrong: '#8f5212', accentSoft: '#f7e8d4', accentInk: '#2a1a00' },
 };
+
+// Merk-accent (default) — gelijk aan de CSS-vars in tailwind.css. Gebruikt als
+// terugval wanneer een context (bv. /aanvraag, checkout) geen categoriekleur heeft.
+export const defaultTheme: AccentTheme = {
+  accent: '#ff6a4a',
+  accentStrong: '#e04a2a',
+  accentSoft: '#fff0ec',
+  accentInk: '#ffffff',
+};
+
+// Zet een AccentTheme om naar de CSS-variabelen waarmee de hele UI zich kleurt.
+// Eén bron van waarheid voor per-categorie theming (moment, formulier, funnel).
+export function themeVars(theme: AccentTheme | null | undefined): Record<string, string> {
+  const t = theme ?? defaultTheme;
+  return {
+    '--accent': t.accent,
+    '--accent-strong': t.accentStrong,
+    '--accent-soft': t.accentSoft,
+    '--accent-ink': t.accentInk,
+  };
+}
+
+export const toneOptions = [
+  'Vrolijk & uptempo',
+  'Warm & persoonlijk',
+  'Emotioneel maar niet zwaar',
+  'Grappig & ad rem',
+  'Stoer & energiek',
+  'Feestelijk & uitbundig',
+  'Lief & teder',
+  'Nostalgisch',
+  'Trots & groots',
+  'Ontroerend',
+  'Speels',
+  'Rustig & intiem',
+  'Hoopvol',
+  'Brutaal met knipoog',
+  'Romantisch',
+  'Dromerig',
+  'Dankbaar',
+  'Kwetsbaar',
+  'Euforisch',
+  'Melancholisch',
+  'Motiverend',
+  'Ondeugend',
+  'Familiair & warm',
+  'Kampvuurgevoel',
+  'Kroeg / kantine',
+  'Festivalgevoel',
+  'Filmisch & groots',
+  'Klein en oprecht',
+  'Laat ons kiezen',
+];
+
+export const businessToneOptions = [
+  'Stoer & energiek',
+  'Trots & ingetogen',
+  'Vrolijk & uptempo',
+  'Grappig & ad rem',
+  'Betrouwbaar & professioneel',
+  'Ambachtelijk & warm',
+  'Modern & strak',
+  'Groots & inspirerend',
+  'Nuchter Nederlands',
+  'Feestelijk & verbindend',
+  'Premium & zakelijk',
+  'Menselijk & dichtbij',
+  'Innovatief',
+  'Teamgevoel',
+  'Recruitment-waardig',
+  'Jubileumwaardig',
+  'Laat ons kiezen',
+];
+
+export const musicStyleOptions = [
+  'Nederlandstalige pop',
+  'Feest / meezinger',
+  'Akoestisch en klein',
+  'Singer-songwriter',
+  'Pop ballad',
+  'Rock / anthem',
+  'Urban pop',
+  'Hiphop / rap coupletten',
+  'Dance pop',
+  'Disco / funk',
+  'Country pop',
+  'Indie pop',
+  'Schlager / apres-ski',
+  'Koor / stadion',
+  'R&B / soul',
+  'Piano ballad',
+  'Nederlandse levenslied',
+  'Volksmuziek modern',
+  'Reggaeton pop',
+  'Afro pop',
+  'Latin pop',
+  'EDM / festival',
+  'House',
+  'Techno pop',
+  'Drum & bass pop',
+  'Trap pop',
+  'Lo-fi pop',
+  'Gospel / soulkoor',
+  'Musical / theater',
+  'Orkestrale pop',
+  'Kinderlied / vrolijk',
+  'Carnaval',
+  'Hardstyle feest',
+  'Laat ons kiezen',
+];
+
+export const tempoOptions = [
+  'Rustig',
+  'Medium tempo',
+  'Dansbaar',
+  'Uptempo',
+  'Snel en feestelijk',
+  'Opbouwend van rustig naar groot',
+  'Laat ons kiezen',
+];
+
+export const vocalOptions = [
+  'Mannenstem',
+  'Vrouwenstem',
+  'Duet',
+  'Groep / koor',
+  'Warme mannenstem',
+  'Warme vrouwenstem',
+  'Hoge popstem',
+  'Lage rustige stem',
+  'Rauwe rockstem',
+  'Soulvolle stem',
+  'Rap coupletten + gezongen refrein',
+  'Kindvriendelijke stem',
+  'Familiekoor',
+  'Stadionkoor',
+  'Koor in refrein',
+  'Praat-zang',
+  'Instrumentaal intro met zang',
+  'Maakt niet uit',
+];
 
 // Veelgebruikte intake-velden (hergebruikt over categorieën)
 function baseFields(extra: IntakeField[] = []): IntakeField[] {
   return [
-    { name: 'recipientName', label: 'Naam of namen in het nummer', type: 'text', placeholder: 'Bijv. Sven, papa, team JO17-1', required: true, span: 'half' },
+    { name: 'recipientName', label: 'Voor wie is het nummer?', type: 'text', placeholder: 'Bijv. Sven, papa, team JO17-1', required: true, span: 'half', help: 'Vul hier één hoofdnaam in. Extra namen kun je met het plusje toevoegen.' },
     { name: 'fromName', label: 'Van wie komt het nummer?', type: 'text', placeholder: 'Bijv. Familie de Vries, het team, de kinderen', span: 'half' },
     ...extra,
     {
       name: 'tone', label: 'Sfeer / toon', type: 'select', required: true, span: 'half',
-      options: ['Vrolijk & uptempo', 'Emotioneel maar niet zwaar', 'Grappig & ad rem', 'Stoer & energiek', 'Warm & persoonlijk'],
+      options: toneOptions,
     },
     {
       name: 'vocals', label: 'Stem / uitvoering', type: 'select', span: 'half',
-      options: ['Mannenstem', 'Vrouwenstem', 'Duet', 'Maakt niet uit'],
+      options: vocalOptions,
     },
     {
-      name: 'musicStyle', label: 'Muzikale richting', type: 'select', span: 'half',
-      options: ['Nederlandstalige pop', 'Feest / meezinger', 'Akoestisch en klein', 'Rock / anthem', 'Urban pop', 'Laat ons kiezen'],
+      name: 'musicStyle', label: 'Genre kiezen', type: 'select', span: 'half',
+      options: musicStyleOptions,
       help: 'Dit gebruiken we later ook voor de muziekprompt.',
+    },
+    {
+      name: 'tempo', label: 'Snelheid / tempo', type: 'select', span: 'half',
+      options: tempoOptions,
+      help: 'Geen exact getal nodig: kies hoe snel het nummer moet voelen.',
     },
     {
       name: 'anecdotes', label: 'Verhaal, anekdotes & inside jokes', type: 'textarea', required: true, span: 'full',
@@ -94,13 +243,9 @@ function baseFields(extra: IntakeField[] = []): IntakeField[] {
     },
     {
       name: 'mustMention', label: 'Wat moet er absoluut in?', type: 'textarea', span: 'full',
-      placeholder: 'Bijv. “altijd te laat”, “opa’s schuur”, “de goal in de laatste minuut”, “bouwen op vertrouwen”...',
+      placeholder: "Bijv. \"altijd te laat\", \"opa's schuur\", \"de goal in de laatste minuut\", \"bouwen op vertrouwen\"...",
     },
-    {
-      name: 'avoid', label: 'Wat moeten we vermijden?', type: 'text', span: 'full',
-      placeholder: 'Bijv. te sentimenteel, scheldwoorden, privégrappen die niet geschikt zijn voor familie...',
-    },
-    { name: 'email', label: 'Jouw e-mailadres', type: 'email', placeholder: 'naam@voorbeeld.nl', required: true, span: 'full', help: 'Hier leveren we het nummer af.' },
+    { name: 'email', label: 'Jouw e-mailadres', type: 'email', placeholder: 'naam@voorbeeld.nl', required: true, span: 'full', help: 'Hier ontvang je je 4 samples.' },
   ];
 }
 
@@ -374,8 +519,11 @@ export const categories: Category[] = [
       { name: 'foundingYear', label: 'Opgericht in', type: 'text', placeholder: 'Bijv. 1998', span: 'half' },
       { name: 'slogan', label: 'Slogan of kernwaarden', type: 'text', placeholder: 'Bijv. "Bouwen op vertrouwen"', span: 'full' },
       { name: 'occasion', label: 'Waarvoor gebruik je het nummer?', type: 'select', span: 'half', options: ['Jubileum', 'Bedrijfsfeest', 'Social media / marketing', 'Recruitment', 'Beurs / open dag', 'Anders'] },
-      { name: 'tone', label: 'Sfeer / toon', type: 'select', span: 'half', options: ['Stoer & energiek', 'Trots & ingetogen', 'Vrolijk & uptempo', 'Grappig & ad rem'] },
+      { name: 'tone', label: 'Sfeer / toon', type: 'select', span: 'half', options: businessToneOptions },
+      { name: 'musicStyle', label: 'Genre kiezen', type: 'select', span: 'half', options: ['Nederlandstalige pop', 'Rock / anthem', 'Koor / stadion', 'Country pop', 'Dance pop', 'Hiphop / rap coupletten', 'Akoestisch en klein', 'Singer-songwriter', 'Pop ballad', 'Disco / funk', 'House', 'EDM / festival', 'Gospel / soulkoor', 'Orkestrale pop', 'Musical / theater', 'Laat ons kiezen'] },
+      { name: 'tempo', label: 'Snelheid / tempo', type: 'select', span: 'half', options: tempoOptions },
       { name: 'anecdotes', label: 'Verhaal van het bedrijf', type: 'textarea', required: true, span: 'full', placeholder: 'Wat maakt jullie bijzonder? Mooiste projecten, het team, de oprichter, typische uitspraken op de bouwplaats...', help: 'Deze details verwerken we in de songtekst.' },
+      { name: 'mustMention', label: 'Wat moet er absoluut in?', type: 'textarea', span: 'full', placeholder: 'Projectnamen, slogan, collega’s, locaties of zinnen die terug moeten komen.' },
       { name: 'email', label: 'Zakelijk e-mailadres', type: 'email', placeholder: 'naam@bedrijf.nl', required: true, span: 'full' },
     ],
     faq: [
@@ -394,6 +542,12 @@ export function getCategory(slug: string): Category | undefined {
 
 export function categoryPath(c: Pick<Category, 'slug' | 'route'>): string {
   return c.route ?? `/momenten/${c.slug}`;
+}
+
+// Categorie-cover voor visuals en og:image. Eigen `image` wint; anders de
+// gegenereerde kleur-cover (frontend/public/momenten/<slug>.svg).
+export function categoryImage(c: Pick<Category, 'slug' | 'image'>): string {
+  return c.image ?? `/momenten/${c.slug}.svg`;
 }
 
 // Categorieën die in het /momenten-overzicht en de nav verschijnen.

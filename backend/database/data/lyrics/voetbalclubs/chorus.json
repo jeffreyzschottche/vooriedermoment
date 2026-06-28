@@ -1,0 +1,19 @@
+{
+  "section": "chorus",
+  "category": "voetbalclubs",
+  "description": "Refrein - meezingbare team hook. NAME=club/team, DETAIL1=clubkleuren",
+  "couplets": [
+    { "id": 1, "lines": ["Hup {{NAME}}, vooruit, de overwinning tegemoet!", "In {{DETAIL1}} op de mat, het zit ons in het bloed", "Van de eerste fluit tot het laatste signaal", "Voor {{NAME}} zingen wij, keer op keer, allemaal"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["{{NAME}}, {{NAME}}, wij gaan voor de prijs!", "Geen tegenstander houdt ons tegen, op geen enkele wijs", "Sjaals de lucht in, en zing met volle borst", "Voor {{NAME}} lessen wij vandaag onze voetbaldorst"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Olé olé olé, voor {{NAME}} klinkt het lied", "Wij staan achter ons team, en wij wijken niet", "Door dik en door dun, in de winst en de strijd", "Voor {{NAME}} zijn wij trouw, voor altijd en wijd"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Hup {{NAME}}, kom op, laat ze maar zien wie we zijn", "In {{DETAIL1}} op het veld, in zon en in regen fijn", "De tribune davert, de trommels gaan hard", "Voor {{NAME}} klopt elk supportershart"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["O o o, {{NAME}} is de allerbeste club", "We zingen het rond, in de kantine en de pub", "Van voor tot achter, van keeper tot spits", "Voor {{NAME}} geven we alles, tot op het mits"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Wij zijn {{NAME}}, en daar zijn we trots op!", "Schouder aan schouder, van onder tot top", "Geen berg te hoog, geen duel te zwaar", "Voor {{NAME}} staan wij altijd voor elkaar"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Kom op {{NAME}}, knal de bal in het net!", "Voor jullie zingen wij, luid en onverzet", "De fans staan op, de keel gaat open", "Voor {{NAME}} blijven we zingen en hopen"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Hup hup hup, voor {{NAME}} gaan we los", "We juichen ze naar voren, het hele bos", "Een goal, een zege, een feest in de tent", "Voor {{NAME}} is elke fan hier present"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["{{NAME}} vooruit, met {{DETAIL1}} fier in de lucht", "Voor jullie zingen wij, geen enkele zucht", "Strijd tot het einde, geef nooit meer op", "Voor {{NAME}} gaan we ervoor, kop voor kop"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Wij houden van {{NAME}}, dat zingen wij luid", "In voor- en tegenspoed, dat maakt niet uit", "Een club in ons hart, met trots op ons gezicht", "Voor {{NAME}} klinkt het lied, op jullie gericht"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Olé, voor {{NAME}} klinkt de kreet over het veld", "Wij zijn de twaalfde man, met kracht en geweld", "Sjaal in de lucht, de hele tribune staat paraat", "Voor {{NAME}} geven wij alles, vroeg en laat"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Voor {{NAME}} dit lied, voor de club en de baan", "Wij staan erachter, en blijven altijd staan", "In de kantine, op de tribune, overal", "Voor {{NAME}} zingen wij, keer op keer, allemaal"], "rhyme_scheme": "AABB" }
+  ]
+}

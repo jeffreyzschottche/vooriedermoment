@@ -1,0 +1,19 @@
+{
+  "section": "bridge",
+  "category": "kind-geboren",
+  "description": "Brug - emotioneel moment. MOMENT=geboortedatum",
+  "couplets": [
+    { "id": 1, "lines": ["Zo lang gewacht, en nu ben je er echt", "{{NAME}}, jij maakt ons gezin volmaakt en perfect", "Een liefde zo groot, niet te bevatten", "Voor jou, lief kindje, willen wij alles omarmen en omvatten"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Even stil nu, even kijken naar jou", "{{NAME}}, zo klein, zo puur, zo trouw", "Een traan van geluk rolt over de wang", "Voor jou zijn we dankbaar, ons leven lang"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Op {{MOMENT}} veranderde alles voorgoed", "{{NAME}}, sinds jij er bent voelt alles weer goed", "De wereld is mooier, de dagen zijn licht", "Voor jou klopt ons hart, op jou is het gericht"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["We beloven je veilig, we beloven je warm", "{{NAME}}, jij rust voor altijd in onze arm", "Wat er ook komt, wij blijven dichtbij", "Voor jou staan we klaar, jij en wij"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["Klein hartje dat klopt tegen onze borst", "{{NAME}}, jij bent het antwoord op al onze dorst", "Geen rijkdom ter wereld zo groot als dit", "Voor jou, lief kindje, ons mooiste bezit"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Groei maar lekker, maar weet, waar je ook gaat", "{{NAME}}, je thuis is hier, vroeg en laat", "Wij houden je hand vast, en laten je los", "Maar altijd met liefde, diep in het bos"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Een wonder, een zegen, een droom die uitkwam", "{{NAME}}, sinds de dag dat jij bij ons kwam", "Is de wereld veranderd, in kleur en in klank", "Voor jou, lief kindje, een eeuwige dank"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Wij zingen je toe, in het zachte licht", "{{NAME}}, op jou is heel onze liefde gericht", "Slaap maar zacht, klein wonder van ons", "Voor jou klopt ons hart, voor altijd, gons"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["De familie staat om je wieg in een kring", "{{NAME}}, jij bent al zo geliefd, klein lief ding", "Iedereen wil je vasthouden, knuffelen, zien", "Voor jou, lief kindje, een leven vol misschien"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Wat de toekomst ook brengt, wij gaan met je mee", "{{NAME}}, hand in hand, op de wijde zee", "Val je, dan vangen wij je op, telkens weer", "Voor jou, lief kindje, doen wij alles, keer op keer"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Dank je wel, kleintje, dat jij er bent", "{{NAME}}, jij hebt onze harten in één klap herkend", "Geen woorden genoeg voor dit groot geluk", "Voor jou, lief kindje, geen dag te druk"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Welkom, welkom, in dit nieuwe bestaan", "{{NAME}}, samen met jou gaan wij verder gaan", "Een gezin compleet, een droom die leeft", "Voor jou alles wat een ouder geeft"], "rhyme_scheme": "AABB" }
+  ]
+}

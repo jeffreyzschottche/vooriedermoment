@@ -1,0 +1,19 @@
+{
+  "section": "chorus",
+  "category": "rijbewijs",
+  "description": "Refrein - rijbewijs hook.",
+  "couplets": [
+    { "id": 1, "lines": ["Geslaagd voor het rijbewijs, de weg is nu vrij!", "{{NAME}} achter het stuur — rij maar lekker voorbij", "Sleutel in het contact en het raampje omlaag", "Voor {{NAME}} is de snelweg een feest elke dag"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Hoera voor {{NAME}}, geslaagd en wel", "Het roze pasje op zak, dat ging snel", "De L mag eraf, de vrijheid lonkt", "Voor {{NAME}} een toekomst die op wielen vonkt"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["{{NAME}} is geslaagd, dat zingen wij luid", "Het oefenen betaalt zich eindelijk uit", "Spiegel, schakelen, de weg op, vooruit", "Voor {{NAME}} geen rem, alleen maar geluid"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Geslaagd, geslaagd, het feest gaat los!", "{{NAME}} reed zich een weg door dat bos", "Toeter maar, de muziek staat hard", "Voor {{NAME}}, recht vanuit ons hart"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["O o o, {{NAME}} is geslaagd vandaag", "We vieren het rond, zonder enige vraag", "Het pasje in de hand, de motor draait", "Voor {{NAME}} de mooiste dag, het stuur dat zwaait"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Dus zing maar mee, voor {{NAME}} dit lied", "Geslaagd is geslaagd, dat zie je toch, of niet", "Trots en blij, en helemaal terecht", "Voor {{NAME}} klinkt het luid en oprecht"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Hef het glas, want {{NAME}} is geslaagd!", "Geen herexamen dat nog aan je knaagt", "Het is gelukt, de weg is nu vrij", "Voor {{NAME}} rijdt de toekomst voorbij"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Geslaagd! Geslaagd! Roep het maar hard", "{{NAME}} verdient het, met heel ons hart", "De zenuwen weg, de vreugde compleet", "Voor {{NAME}} een feest, ver en breed"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Voor {{NAME}} de sleutels, het stuur en de vlag", "Geslaagd is geslaagd, wat een prachtige dag", "Het pasje op zak, de vrijheid lonkt", "Voor {{NAME}} een lied dat van trots vonkt"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Hoera, hoera, voor {{NAME}} klinkt het luid", "Geslaagd met glans, dat zingen wij uit", "Het stuur in de hand, de weg in het zicht", "Voor {{NAME}} geen zorg, alles is licht"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Geslaagd, geslaagd, en nu lekker rijden", "{{NAME}}, jij hoeft nooit meer op de bus te wachten of te lijden", "Het is voorbij, het is gehaald", "Voor {{NAME}} wordt het feestje dubbel betaald"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Voor {{NAME}} dit feestje, geslaagd en trots", "Een rijbewijs op zak, dat is je beloning, godganse klos", "We juichen voor jou, we zingen het rond", "Voor {{NAME}} de weg op, kerngezond"], "rhyme_scheme": "AABB" }
+  ]
+}

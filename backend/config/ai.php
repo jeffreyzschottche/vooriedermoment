@@ -41,7 +41,25 @@ return [
             'max_tokens' => (int) env('OPENAI_MAX_TOKENS', 1024),
         ],
 
+        'deepseek' => [
+            'driver' => 'deepseek',
+            'key' => env('DEEPSEEK_API_KEY'),
+            'model' => env('DEEPSEEK_DEFAULT_MODEL', 'deepseek-chat'),
+            'fallback_model' => env('DEEPSEEK_FALLBACK_MODEL', 'deepseek-reasoner'),
+            'base_url' => env('DEEPSEEK_BASE_URL', 'https://api.deepseek.com'),
+            'max_tokens' => (int) env('DEEPSEEK_MAX_TOKENS', 1024),
+            'temperature' => (float) env('DEEPSEEK_TEMPERATURE', 0.7),
+        ],
+
     ],
+
+    /*
+    | Aantal AI-pogingen per lyric-sectie. DeepSeek is goedkoop genoeg om wat
+    | vaker te itereren; vanaf de latere pogingen mag de provider zijn fallback-
+    | model gebruiken als dat is geconfigureerd.
+    */
+    'lyrics_attempts' => (int) env('LYRICS_AI_ATTEMPTS', env('DEEPSEEK_LYRICS_ATTEMPTS', 5)),
+    'lyrics_fallback_after_attempt' => (int) env('LYRICS_AI_FALLBACK_AFTER_ATTEMPT', 3),
 
     /*
     | Per-categorie override van provider en/of model. Voorbeeld:

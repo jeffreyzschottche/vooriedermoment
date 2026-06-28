@@ -1,0 +1,19 @@
+{
+  "section": "chorus",
+  "category": "geslaagd",
+  "description": "Refrein - geslaagd hook.",
+  "couplets": [
+    { "id": 1, "lines": ["Geslaagd, geslaagd, de vlag mag uit vandaag!", "{{NAME}} heeft het gehaald, geen enkele vraag", "Het diploma is binnen, de pet vliegt omhoog", "Voor {{NAME}} schijnt vandaag een gloednieuwe boog"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Hoera voor {{NAME}}, geslaagd en wel", "Na al dat blokken klinkt nu de feestbel", "De boeken dicht, het glas omhoog", "Voor {{NAME}} kleurt de hemel als een regenboog"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["{{NAME}} is geslaagd, dat zingen wij luid", "Het harde werken betaalt zich nu uit", "De vlag aan de stok, de tas eraan vast", "Voor {{NAME}} geen enkele zorg of last"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Geslaagd, geslaagd, het feest gaat los!", "{{NAME}} hakte zich een weg door het bos", "Champagne ontkurkt, de muziek staat hard", "Voor {{NAME}}, recht vanuit ons hart"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["O o o, {{NAME}} is geslaagd vandaag", "We vieren het rond, zonder enige vraag", "De pet de lucht in, het diploma in de hand", "Voor {{NAME}} de mooiste dag van het land"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Dus zing maar mee, voor {{NAME}} dit lied", "Geslaagd is geslaagd, dat zie je toch, of niet", "Trots en blij, en helemaal terecht", "Voor {{NAME}} klinkt het luid en oprecht"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Hef het glas, want {{NAME}} is geslaagd!", "Geen herexamen dat nog aan je knaagt", "Het is gelukt, het is gedaan", "Voor {{NAME}} breekt nu de toekomst aan"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Geslaagd! Geslaagd! Roep het maar hard", "{{NAME}} verdient het, met heel ons hart", "De zenuwen weg, de vreugde compleet", "Voor {{NAME}} een feest, ver en breed"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Voor {{NAME}} de slingers, de taart en de vlag", "Geslaagd is geslaagd, wat een prachtige dag", "Het diploma op zak, de toekomst lonkt", "Voor {{NAME}} een lied dat van trots vonkt"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Hoera, hoera, voor {{NAME}} klinkt het luid", "Geslaagd met glans, dat zingen wij uit", "De pet omhoog, het glas in de lucht", "Voor {{NAME}} geen zorg en geen zucht"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Geslaagd, geslaagd, en nu lekker feest", "{{NAME}}, jij bent de allerslimste geweest", "Het is voorbij, het is gehaald", "Voor {{NAME}} wordt het feestje dubbel en dwars betaald"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Voor {{NAME}} dit feestje, geslaagd en trots", "Een diploma op zak, dat is je beloning, godganse klos", "We juichen voor jou, we zingen het rond", "Voor {{NAME}} alles goed, en kerngezond"], "rhyme_scheme": "AABB" }
+  ]
+}

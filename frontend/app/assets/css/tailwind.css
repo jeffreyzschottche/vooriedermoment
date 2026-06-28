@@ -5,28 +5,33 @@
 @layer base {
   :root {
     /* Premium studio huisstijl */
-    --color-bg: #f4f6ef;
-    --color-bg-soft: #e8efe8;
-    --color-bg-contrast: #101a16;
+    --color-bg: #f8faf6;
+    --color-bg-soft: #edf3ed;
+    --color-bg-contrast: #0d1512;
     --color-surface: #ffffff;
-    --color-surface-soft: #edf3ed;
-    --color-line: #d8e3d8;
-    --color-line-strong: #bbcfc2;
+    --color-surface-soft: #f3f7f3;
+    --color-line: #dce6dc;
+    --color-line-strong: #c5d4c5;
 
-    --color-ink: #101a16;
-    --color-ink-soft: #52625a;
-    --color-ink-faint: #87968e;
+    --color-ink: #0d1512;
+    --color-ink-soft: #4a5a52;
+    --color-ink-faint: #7a8f82;
 
     /* Merk-accent (default). Wordt per categorie overschreven via .moment-theme */
     --accent: #ff6a4a;
-    --accent-strong: #c54127;
-    --accent-soft: #ffe3dc;
+    --accent-strong: #e04a2a;
+    --accent-soft: #fff0ec;
     --accent-ink: #ffffff;
-    --accent-alt: #2f9c86;
-    --accent-alt-soft: #d9f0ea;
-    --accent-gold: #f4bd54;
+    --accent-alt: #2a9a82;
+    --accent-alt-soft: #e0f5ef;
+    --accent-gold: #f5c042;
 
-    /* Backwards-compat aliassen voor nog niet herschreven views (bv. auth-layout) */
+    /* Smooth transitions */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+    /* Backwards-compat */
     --color-primary: var(--accent);
     --color-primary-deep: var(--accent-strong);
     --color-on-surface: var(--color-ink);
@@ -40,13 +45,14 @@
     color: var(--color-ink);
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
     min-height: 100vh;
     background:
-      linear-gradient(135deg, color-mix(in srgb, var(--accent-soft) 48%, transparent) 0%, transparent 32%),
-      linear-gradient(225deg, color-mix(in srgb, var(--accent-alt-soft) 58%, transparent) 0%, transparent 36%),
+      radial-gradient(ellipse 80% 50% at 20% 0%, color-mix(in srgb, var(--accent-soft) 60%, transparent) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 10%, color-mix(in srgb, var(--accent-alt-soft) 50%, transparent) 0%, transparent 50%),
       var(--color-bg);
     color: var(--color-ink);
   }
@@ -60,104 +66,160 @@
     html {
       scroll-behavior: auto;
     }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
 @layer components {
   .font-display {
     font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
   }
 
+  /* Container systeem */
   .site-container {
-    @apply mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-10;
+    @apply mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-12;
   }
 
   .wide-container {
-    @apply mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12;
   }
 
+  .full-bleed {
+    @apply w-full;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    width: 100vw;
+  }
+
+  .edge-container {
+    @apply mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Hero section - full width met inner padding */
+  .hero-section {
+    @apply relative w-full overflow-hidden;
+    min-height: calc(100vh - 4.5rem);
+    min-height: calc(100svh - 4.5rem);
+  }
+
+  .hero-inner {
+    @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12;
+  }
+
+  /* Kaart componenten */
   .site-frame {
-    @apply border bg-white/[0.72] shadow-[0_30px_90px_rgba(16,26,22,0.12)] backdrop-blur-xl;
-    border-color: color-mix(in srgb, var(--color-line) 82%, white);
-    border-radius: 8px;
+    @apply border bg-white/80 shadow-xl backdrop-blur-xl;
+    border-color: var(--color-line);
+    border-radius: 16px;
+    box-shadow:
+      0 4px 6px -1px rgba(13, 21, 18, 0.04),
+      0 24px 48px -12px rgba(13, 21, 18, 0.12);
   }
 
   .studio-shell {
-    @apply relative overflow-hidden border text-white shadow-[0_34px_100px_rgba(16,26,22,0.22)];
-    background:
-      linear-gradient(135deg, rgba(16, 26, 22, 0.94), rgba(20, 40, 34, 0.9)),
-      var(--color-bg-contrast);
-    border-color: rgba(255, 255, 255, 0.13);
-    border-radius: 8px;
+    @apply relative overflow-hidden text-white;
+    background: linear-gradient(135deg, #0d1512 0%, #142822 50%, #1a3530 100%);
+    border-radius: 20px;
+    box-shadow:
+      0 4px 6px -1px rgba(13, 21, 18, 0.1),
+      0 32px 64px -12px rgba(13, 21, 18, 0.25);
+  }
+
+  .studio-shell-full {
+    @apply relative overflow-hidden text-white;
+    background: linear-gradient(135deg, #0d1512 0%, #142822 50%, #1a3530 100%);
+    border-radius: 0;
   }
 
   .glass-panel {
-    @apply border bg-white/[0.08] shadow-[0_18px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl;
-    border-color: rgba(255, 255, 255, 0.14);
-    border-radius: 8px;
+    @apply border backdrop-blur-xl;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  .glass-panel-light {
+    @apply border backdrop-blur-xl;
+    background: rgba(255, 255, 255, 0.72);
+    border-color: var(--color-line);
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(13, 21, 18, 0.08);
   }
 
   .section-band {
     @apply border-y;
     border-color: var(--color-line);
     background:
-      linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0)),
+      linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%),
       var(--color-surface-soft);
   }
 
-  /* Per-categorie thema-wrapper: zet accent-variabelen via inline style */
   .moment-theme {
     background:
-      linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 70%, transparent) 0%, transparent 42%),
+      radial-gradient(ellipse 100% 60% at 50% 0%, color-mix(in srgb, var(--accent-soft) 80%, transparent) 0%, transparent 50%),
       var(--color-bg);
   }
 
   .panel {
-    @apply border bg-white shadow-[0_18px_50px_rgba(16,26,22,0.08)];
+    @apply border bg-white;
     border-color: var(--color-line);
-    border-radius: 8px;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(13, 21, 18, 0.06);
   }
 
   .rich-card {
-    @apply border bg-white shadow-[0_16px_46px_rgba(16,26,22,0.08)] transition duration-300;
+    @apply border bg-white transition-all;
     border-color: var(--color-line);
-    border-radius: 8px;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(13, 21, 18, 0.06);
+    transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.3s ease;
   }
   .rich-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 24%, var(--color-line));
-    box-shadow: 0 22px 64px rgba(16,26,22,0.12);
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--color-line));
+    box-shadow: 0 12px 40px rgba(13, 21, 18, 0.12);
   }
 
   .soft-card {
     @apply border;
     background: var(--color-surface-soft);
     border-color: var(--color-line);
-    border-radius: 8px;
+    border-radius: 14px;
   }
 
   .accent-gradient {
-    background-image: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 54%, #842f22 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
   }
 
   .section-kicker {
-    @apply mb-4 inline-flex items-center rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em];
+    @apply mb-5 inline-flex items-center rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em];
     color: var(--accent-strong);
-    border-color: color-mix(in srgb, var(--accent) 28%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
     background: var(--accent-soft);
   }
 
   .section-heading {
-    @apply font-display font-semibold leading-[1.02];
+    @apply font-display font-semibold;
     color: var(--color-ink);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
   }
 
   .section-subtext {
-    @apply text-base leading-7;
+    @apply text-lg leading-relaxed;
     color: var(--color-ink-soft);
   }
 
   .nav-link {
-    @apply text-sm font-semibold transition;
+    @apply text-sm font-semibold transition-colors duration-200;
     color: var(--color-ink-soft);
   }
   .nav-link:hover {
@@ -165,88 +227,225 @@
   }
 
   .logo-card {
-    @apply inline-flex items-center justify-center rounded-md px-2.5 py-1.5 shadow-[0_10px_28px_rgba(16,26,22,0.18)];
-    background: linear-gradient(135deg, var(--color-ink), #25433a);
+    @apply inline-flex items-center justify-center rounded-xl px-3 py-2;
+    background: linear-gradient(135deg, var(--color-ink), #1e3a34);
+    box-shadow: 0 4px 16px rgba(13, 21, 18, 0.2);
   }
 
   /* Knoppen */
   .stitch-button {
-    @apply accent-gradient inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-bold transition duration-300;
+    @apply accent-gradient inline-flex items-center justify-center rounded-xl px-7 py-3.5 text-sm font-bold transition-all duration-300;
     color: var(--accent-ink);
-    box-shadow: 0 16px 34px color-mix(in srgb, var(--accent) 38%, transparent);
+    box-shadow:
+      0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent),
+      0 2px 4px rgba(0, 0, 0, 0.1);
   }
   .stitch-button:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.05) saturate(1.03);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      0 8px 24px color-mix(in srgb, var(--accent) 45%, transparent),
+      0 4px 8px rgba(0, 0, 0, 0.1);
+    filter: brightness(1.05);
+  }
+  .stitch-button:active {
+    transform: translateY(0) scale(0.98);
   }
   .stitch-button:focus-visible {
     outline: 3px solid var(--accent-strong);
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 
   .stitch-outline-button {
-    @apply inline-flex items-center justify-center rounded-lg border bg-white/[0.92] px-6 py-3 text-sm font-bold transition duration-300 backdrop-blur;
+    @apply inline-flex items-center justify-center rounded-xl border-2 bg-white/90 px-7 py-3.5 text-sm font-bold backdrop-blur transition-all duration-300;
     color: var(--color-ink);
     border-color: var(--color-line-strong);
   }
   .stitch-outline-button:hover {
     border-color: var(--accent);
     color: var(--accent-strong);
+    background: var(--accent-soft);
+    transform: translateY(-2px);
+  }
+  .stitch-outline-button:active {
+    transform: translateY(0);
   }
   .stitch-outline-button:focus-visible {
     outline: 3px solid var(--accent-strong);
-    outline-offset: 2px;
+    outline-offset: 3px;
+  }
+
+  .ghost-button {
+    @apply inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-200;
+    color: var(--color-ink-soft);
+  }
+  .ghost-button:hover {
+    color: var(--color-ink);
+    background: var(--color-surface-soft);
   }
 
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold;
+    @apply inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold;
     border-color: var(--color-line);
-    background: var(--color-surface-soft);
+    background: var(--color-surface);
     color: var(--color-ink-soft);
   }
 
   .metric-tile {
-    @apply border bg-white/[0.78] px-4 py-3 text-left shadow-[0_10px_28px_rgba(16,26,22,0.08)] backdrop-blur;
+    @apply border bg-white/80 px-5 py-4 text-left backdrop-blur;
     border-color: var(--color-line);
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(13, 21, 18, 0.06);
   }
 
   .bento-card {
-    @apply relative overflow-hidden border bg-white p-6 shadow-[0_20px_70px_rgba(16,26,22,0.09)] transition duration-300;
+    @apply relative overflow-hidden border bg-white p-7 transition-all duration-500;
     border-color: var(--color-line);
-    border-radius: 8px;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(13, 21, 18, 0.06);
+    transition-timing-function: var(--ease-out-expo);
   }
   .bento-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 28px 90px rgba(16,26,22,0.14);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 48px rgba(13, 21, 18, 0.12);
+    border-color: color-mix(in srgb, var(--accent) 25%, var(--color-line));
+  }
+
+  .bento-card-icon {
+    @apply flex h-14 w-14 items-center justify-center rounded-2xl text-2xl font-semibold;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
   }
 
   .field-label {
-    @apply mb-2 block text-xs font-bold uppercase tracking-[0.16em];
+    @apply mb-2.5 block text-xs font-bold uppercase tracking-[0.18em];
     color: var(--color-ink-soft);
   }
 
   .field-input {
-    @apply w-full rounded-lg border bg-white px-4 py-3.5 text-sm outline-none transition;
+    @apply w-full rounded-xl border bg-white px-5 py-4 text-sm outline-none transition-all duration-200;
     border-color: var(--color-line-strong);
     color: var(--color-ink);
   }
+  .field-input:hover {
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--color-line-strong));
+  }
   .field-input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
+    box-shadow: 0 0 0 4px var(--accent-soft);
   }
   .field-input::placeholder {
     color: var(--color-ink-faint);
   }
 
+  /* Keuze-knop (select-opties, intake) — herbruikbaar i.p.v. inline styles */
+  .option-pill {
+    @apply rounded-xl border px-4 py-3 text-left text-sm font-semibold transition-all duration-200;
+    border-color: var(--color-line-strong);
+    background: var(--color-surface);
+    color: var(--color-ink);
+  }
+  .option-pill:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--color-line-strong));
+    background: color-mix(in srgb, var(--accent-soft) 55%, var(--color-surface));
+  }
+  .option-pill[aria-pressed='true'],
+  .option-pill.is-active {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+
+  /* "+ toevoegen"-knop — herbruikbaar accent-pill */
+  .add-pill {
+    @apply inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-bold transition-all duration-200;
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--color-line));
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+  }
+  .add-pill:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+
   .soft-divider {
     @apply h-px w-full;
-    background: linear-gradient(90deg, transparent, var(--color-line-strong), transparent);
+    background: linear-gradient(90deg, transparent 0%, var(--color-line-strong) 50%, transparent 100%);
   }
 
   .price-strike {
     @apply text-base font-semibold line-through;
     color: var(--color-ink-faint);
+  }
+
+  /* Pipeline step styling */
+  .pipeline-step {
+    @apply relative;
+  }
+  .pipeline-step::before {
+    content: '';
+    @apply absolute left-8 top-16 h-full w-px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+  }
+  .pipeline-step:last-child::before {
+    display: none;
+  }
+
+  /* Smooth number display */
+  .number-display {
+    @apply font-display font-semibold tabular-nums;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    @apply h-2 overflow-hidden rounded-full;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .progress-bar-fill {
+    @apply h-full rounded-full accent-gradient;
+    transition: width 1s var(--ease-out-expo);
+  }
+
+  /* FAQ Details styling */
+  details.rich-card summary {
+    @apply flex cursor-pointer list-none items-center justify-between gap-4 font-semibold;
+    color: var(--color-ink);
+  }
+  details.rich-card summary::-webkit-details-marker {
+    display: none;
+  }
+  details.rich-card summary::after {
+    content: '';
+    width: 0.62rem;
+    height: 0.62rem;
+    flex-shrink: 0;
+    border-right: 2px solid var(--accent-strong);
+    border-bottom: 2px solid var(--accent-strong);
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 0.3s var(--ease-out-expo);
+  }
+  details.rich-card[open] summary::after {
+    transform: translateY(2px) rotate(-135deg);
+  }
+  details.rich-card[open] summary {
+    @apply mb-3;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glow effects */
+  .glow-accent {
+    box-shadow:
+      0 0 40px color-mix(in srgb, var(--accent) 30%, transparent),
+      0 0 80px color-mix(in srgb, var(--accent) 15%, transparent);
   }
 }
 
@@ -254,11 +453,39 @@
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(24px);
+    will-change: opacity, transform;
   }
   .reveal.is-revealed {
     opacity: 1;
     transform: none;
-    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
+}
+
+/* Hero reveal initial state */
+[v-hero-reveal] {
+  opacity: 0;
+}
+
+/* Smooth scrollbar */
+@supports (scrollbar-width: thin) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line-strong) transparent;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-faint);
 }

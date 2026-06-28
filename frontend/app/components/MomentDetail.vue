@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import type { Category } from '~/data/categories';
-import { categoryPath } from '~/data/categories';
+import { categoryPath, themeVars, categoryImage } from '~/data/categories';
 
 const props = defineProps<{ category: Category }>();
 
-const t = computed(() => props.category.theme);
+const cover = computed(() => categoryImage(props.category));
+
 // Zet de accent-variabelen voor deze pagina (per-categorie huisstijl).
-const themeStyle = computed(() => ({
-  '--accent': t.value.accent,
-  '--accent-strong': t.value.accentStrong,
-  '--accent-soft': t.value.accentSoft,
-  '--accent-ink': t.value.accentInk,
-}));
+const themeStyle = computed(() => themeVars(props.category.theme));
 
 const requestHref = computed(() => `${categoryPath(props.category)}#aanvraag`);
 const isExisting = computed(() => props.category.variant === 'existing');
@@ -41,14 +37,27 @@ const productionHighlights = [
           </div>
         </div>
 
-        <div v-reveal class="rich-card p-7 sm:p-8">
-          <h2 class="font-display text-xl font-semibold" :style="{ color: 'var(--color-ink)' }">Wat je krijgt</h2>
-          <ul class="mt-5 space-y-3 text-sm" :style="{ color: 'var(--color-ink-soft)' }">
-            <li v-for="item in category.whatYouGet" :key="item" class="flex gap-3">
-              <span :style="{ color: 'var(--accent-strong)' }" aria-hidden="true">✓</span>{{ item }}
-            </li>
-          </ul>
-          <p class="mt-6 text-sm leading-7" :style="{ color: 'var(--color-ink-soft)' }">{{ category.intro }}</p>
+        <div v-reveal class="space-y-5">
+          <div
+            class="overflow-hidden rounded-2xl border"
+            :style="{ borderColor: 'var(--color-line)', boxShadow: '0 18px 48px rgba(13,21,18,0.14)' }"
+          >
+            <img
+              :src="cover"
+              :alt="`${category.title} — persoonlijk nummer`"
+              class="aspect-[16/9] w-full object-cover"
+            />
+          </div>
+
+          <div class="rich-card p-7 sm:p-8">
+            <h2 class="font-display text-xl font-semibold" :style="{ color: 'var(--color-ink)' }">Wat je krijgt</h2>
+            <ul class="mt-5 space-y-3 text-sm" :style="{ color: 'var(--color-ink-soft)' }">
+              <li v-for="item in category.whatYouGet" :key="item" class="flex gap-3">
+                <span :style="{ color: 'var(--accent-strong)' }" aria-hidden="true">✓</span>{{ item }}
+              </li>
+            </ul>
+            <p class="mt-6 text-sm leading-7" :style="{ color: 'var(--color-ink-soft)' }">{{ category.intro }}</p>
+          </div>
         </div>
       </div>
     </section>
