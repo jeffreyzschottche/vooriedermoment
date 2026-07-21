@@ -7,9 +7,9 @@ useSeoMeta({
   title: 'Een persoonlijk nummer voor elk moment',
   ogTitle: 'Voor Ieder Moment — een persoonlijk nummer voor elk moment',
   description:
-    'Laat voor € 9,99 een persoonlijk nummer maken voor een verjaardag, rijbewijs, nieuw huis, team, bedrijf en meer. Inclusief 4 samples en release op Spotify en Apple Music.',
+    'Laat voor € 9,99 een persoonlijk nummer maken voor ieder bijzonder moment. Kies uit verschillende muzikale opties; wij publiceren jouw favoriet op Spotify en Apple Music.',
   ogDescription:
-    'Vertel jouw verhaal, kies uit 4 samples en luister naar je eigen nummer op Spotify en Apple Music.',
+    'Vertel jouw verhaal, kies de muzikale optie die raakt en luister naar je eigen nummer op Spotify en Apple Music.',
   ogUrl: 'https://vooriedermoment.nl/',
   ogImage: 'https://vooriedermoment.nl/hero-studio.png',
   twitterTitle: 'Voor Ieder Moment — een persoonlijk nummer voor elk moment',
@@ -20,23 +20,23 @@ useJsonLd([
   productSchema({
     name: 'Persoonlijk nummer',
     description:
-      'Eén persoonlijk nummer op basis van jouw verhaal, inclusief vier samples en release op Spotify en Apple Music.',
+      'Eén persoonlijk nummer op basis van jouw verhaal, met keuze uit verschillende muzikale opties en publicatie op Spotify en Apple Music.',
     price: offer.currentPrice.value,
     url: '/aanvraag',
   }),
 ]);
 
 const heroStats = [
-  { value: '9', prefix: '€ ', suffix: ',99', label: 'één complete prijs' },
-  { value: '4', prefix: '', suffix: ' samples', label: 'om uit te kiezen' },
-  { value: '1', prefix: '', suffix: ' nummer', label: 'op Spotify & Apple Music' },
+  { display: '€ 9,99', label: 'één complete prijs' },
+  { display: 'Meerdere', label: 'muzikale opties' },
+  { display: '1 nummer', label: 'door ons gepubliceerd' },
 ];
 
 const pipeline = [
   { n: '01', title: 'Moment kiezen', text: 'Geslaagd, rijbewijs, teamlied, bouwbedrijf of een eigen gelegenheid.' },
   { n: '02', title: 'Vertel jouw verhaal', text: 'Deel namen, herinneringen, inside jokes en de sfeer die bij het moment past.' },
-  { n: '03', title: 'Luister naar 4 samples', text: 'Binnen 24–72 uur ontvang je vier unieke voorproefjes in je inbox.' },
-  { n: '04', title: 'Kies jouw favoriet', text: 'Wij maken hem af en publiceren hem binnen 24–72 uur op Spotify en Apple Music.' },
+  { n: '03', title: 'Kies uit de opties', text: 'Binnen 24–72 uur ontvang je verschillende korte voorproefjes in je inbox.' },
+  { n: '04', title: 'Wij regelen de release', text: 'Wij maken jouw favoriet compleet en publiceren hem binnen 24–72 uur op Spotify en Apple Music.' },
 ];
 
 const valueProps = [
@@ -71,9 +71,9 @@ const proof = [
 ];
 
 const faqPreview = [
-  { q: 'Hoe werkt het precies?', a: 'Na betaling ontvang je binnen 24–72 uur vier unieke samples van 15 seconden. Zodra je jouw favoriet hebt gekozen, staat de complete versie binnen 24–72 uur op Spotify en Apple Music.' },
+  { q: 'Hoe werkt het precies?', a: 'Je kiest een moment en vult stap voor stap ons formulier in met namen, herinneringen en de gewenste sfeer. Na betaling sturen we je verschillende muzikale opties. Jij kiest je favoriet; wij maken het nummer compleet en publiceren het voor je op Spotify en Apple Music.' },
   { q: 'Waarom zoveel context in het formulier?', a: 'Omdat goede persoonlijke nummers draaien om specifieke details: namen, plekken, zinnen, grappen en sfeer. Hoe concreter, hoe unieker jouw nummer.' },
-  { q: 'Wat kost het?', a: offer.hasDiscount.value ? `Normaal ${offer.formattedRegular}, nu ${offer.formattedSale}. Inclusief vier samples en release op Spotify en Apple Music.` : `${offer.formattedRegular}. Inclusief vier samples en release op Spotify en Apple Music.` },
+  { q: 'Wat kost het?', a: offer.hasDiscount.value ? `Normaal ${offer.formattedRegular}, nu ${offer.formattedSale}. Je kiest uit verschillende opties; wij maken één favoriet compleet en verzorgen de publicatie.` : `${offer.formattedRegular}. Je kiest uit verschillende opties; wij maken één favoriet compleet en verzorgen de publicatie.` },
 ];
 </script>
 
@@ -121,8 +121,8 @@ const faqPreview = [
               data-hero-delay="0.2"
               class="mt-8 max-w-xl text-lg leading-relaxed text-white/70 sm:text-xl"
             >
-              Vertel wat dit moment bijzonder maakt en ontvang vier unieke samples.
-              Kies jouw favoriet; wij maken hem af voor Spotify en Apple Music.
+              Vertel wat dit moment bijzonder maakt en kies uit vier unieke samples.
+              Wij maken jouw favoriet compleet en publiceren hem voor je.
             </p>
 
             <div
@@ -131,7 +131,7 @@ const faqPreview = [
               class="mt-10 flex flex-col gap-4 sm:flex-row"
             >
               <NuxtLink to="/aanvraag" class="stitch-button px-10 py-5 text-base">
-                Start je nummer
+                Maak je nummer
               </NuxtLink>
               <NuxtLink
                 to="/momenten"
@@ -153,12 +153,7 @@ const faqPreview = [
                 class="glass-panel p-5"
               >
                 <p class="font-display text-3xl font-semibold text-white">
-                  <span
-                    v-counter
-                    :data-counter-target="stat.value"
-                    :data-counter-prefix="stat.prefix"
-                    :data-counter-suffix="stat.suffix"
-                  >{{ stat.prefix }}{{ stat.value }}{{ stat.suffix }}</span>
+                  {{ stat.display }}
                 </p>
                 <p class="mt-1.5 text-sm font-medium text-white/50">{{ stat.label }}</p>
               </div>
@@ -247,12 +242,13 @@ const faqPreview = [
           <div>
             <span class="section-kicker">Kies je startpunt</span>
             <h2 class="section-heading text-4xl sm:text-5xl lg:text-6xl">
-              Voor cadeaus, teams en bedrijven
+              Voor bekende én totaal eigen momenten
             </h2>
           </div>
           <p class="section-subtext max-w-2xl lg:justify-self-end">
-            Elk moment verdient andere vragen. Bij een bouwbedrijf draait het om projecten
-            en een slogan, bij een teamlied om clubcultuur en bij een verjaardag om karakter en inside jokes.
+            Van geboorte en verjaardag tot jubileum, pensioen, team, bedrijf of een moment
+            dat alleen voor jullie betekenis heeft. Staat jouw gelegenheid er niet tussen?
+            Kies dan ‘Een ander moment’ en vertel ons wat er gevierd, bedankt of herinnerd mag worden.
           </p>
         </div>
 
@@ -276,8 +272,8 @@ const faqPreview = [
             Van jouw verhaal naar een echte release
           </h2>
           <p class="mt-6 text-lg leading-relaxed text-white/60">
-            Jij levert de details, wij maken vier muzikale richtingen. Na jouw keuze
-            werken we de favoriet uit en regelen we de release.
+            Jij vertelt wat het nummer persoonlijk maakt en kiest uit verschillende muzikale opties.
+            Wij werken jouw favoriet uit en publiceren hem voor je op Spotify en Apple Music.
           </p>
         </div>
 
@@ -356,8 +352,8 @@ const faqPreview = [
               Jouw verhaal. Straks overal te beluisteren.
             </h2>
             <p class="mt-5 max-w-2xl text-base leading-relaxed text-white/60 sm:text-lg">
-              Voor € 9,99 krijg je vier unieke samples, één complete versie en de release
-              op Spotify en Apple Music.
+              Voor € 9,99 kies je uit verschillende muzikale opties. Wij maken jouw favoriet
+              compleet en publiceren hem voor je, zodat je hem steeds opnieuw kunt beluisteren en delen.
             </p>
           </div>
           <div class="glass-panel p-7 text-center">
@@ -390,6 +386,11 @@ const faqPreview = [
                 {{ item.a }}
               </p>
             </details>
+          </div>
+          <div class="mt-8 text-center">
+            <NuxtLink to="/faq-contact" class="stitch-outline-button px-8 py-3.5">
+              Bekijk alle vragen
+            </NuxtLink>
           </div>
         </div>
       </div>

@@ -56,7 +56,7 @@ const cover = computed(() => categoryImage(props.category));
         class="mt-5 inline-flex items-center gap-2 text-sm font-bold"
         :style="{ color: t.accentStrong }"
       >
-        Bekijk intake
+        {{ category.slug === 'anders' ? 'Vertel jouw moment' : 'Bekijk intake' }}
         <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
       </span>
     </div>

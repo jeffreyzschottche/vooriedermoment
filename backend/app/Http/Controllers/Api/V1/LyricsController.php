@@ -82,4 +82,28 @@ class LyricsController extends Controller
 
         return response()->json($lyrics);
     }
+
+    /**
+     * Generate a complete song for an occasion without a fixed category.
+     */
+    public function generateGeneral(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'intake' => ['required', 'array'],
+            'intake.occasion' => ['required', 'string', 'max:255'],
+            'intake.recipientName' => ['required', 'string', 'max:255'],
+            'intake.fromName' => ['nullable', 'string', 'max:255'],
+            'intake.tone' => ['nullable', 'string', 'max:255'],
+            'intake.vocals' => ['nullable', 'string', 'max:255'],
+            'intake.musicStyle' => ['nullable', 'string', 'max:255'],
+            'intake.tempo' => ['nullable', 'string', 'max:255'],
+            'intake.anecdotes' => ['required', 'string', 'max:5000'],
+            'intake.mustMention' => ['nullable', 'string', 'max:3000'],
+            'intake.avoid' => ['nullable', 'string', 'max:1000'],
+            'intake.additionalRecipientNames' => ['nullable', 'string', 'max:2000'],
+            'intake.additionalSenderNames' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        return response()->json($this->generator->generateGeneral($validated['intake']));
+    }
 }

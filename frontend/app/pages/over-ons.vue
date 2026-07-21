@@ -2,7 +2,7 @@
 useSeoMeta({
   title: 'Over ons',
   description:
-    'Voor Ieder Moment maakt van echte verhalen persoonlijke nummers voor Spotify en Apple Music. Transparant, betaalbaar en snel geregeld.',
+    'Voor Ieder Moment maakt van echte verhalen persoonlijke nummers voor Spotify en Apple Music. Persoonlijk, betaalbaar en snel geregeld.',
 });
 
 useJsonLd(breadcrumbSchema([
@@ -12,7 +12,7 @@ useJsonLd(breadcrumbSchema([
 
 const steps = [
   { n: '01', t: 'Jij vertelt wat telt', d: 'Via een korte briefing deel je namen, herinneringen, inside jokes en jouw gewenste sfeer.' },
-  { n: '02', t: 'Wij maken vier samples', d: 'We vertalen jouw verhaal naar vier muzikale richtingen van 15 seconden.' },
+  { n: '02', t: 'Wij maken verschillende opties', d: 'We vertalen jouw verhaal naar korte muzikale opties om uit te kiezen.' },
   { n: '03', t: 'Jij kiest de favoriet', d: 'Luister thuis of samen en kies de versie die het moment het beste vangt.' },
   { n: '04', t: 'Wij regelen de release', d: 'We maken jouw keuze compleet voor Spotify, Apple Music en social media.' },
 ];
@@ -28,7 +28,7 @@ const steps = [
         </h1>
         <p v-reveal class="mt-6 text-lg leading-8" :style="{ color: 'var(--color-ink-soft)' }">
           Een eigen nummer laten maken was ooit vooral duur en tijdrovend. Wij maken het bereikbaar:
-          jouw verhaal, vier muzikale richtingen en één complete release voor
+          jouw verhaal, verschillende muzikale opties en één complete release voor
           <strong>€ 9,99</strong> — voor ieder moment en voor iedereen.
         </p>
       </div>
@@ -38,7 +38,7 @@ const steps = [
       <div class="site-container">
         <div v-reveal class="mb-12 max-w-xl">
           <h2 class="section-heading text-3xl md:text-4xl">Hoe wij werken</h2>
-          <p class="section-subtext mt-3">Geen ingewikkeld studiotraject. Wel een duidelijk proces en een nummer dat echt over jullie gaat.</p>
+          <p class="section-subtext mt-3">Geen ingewikkeld studiotraject. Wel een duidelijk proces en een nummer dat echt over jouw moment gaat.</p>
         </div>
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <article v-for="s in steps" :key="s.n" v-reveal class="rich-card p-7">
@@ -47,19 +47,6 @@ const steps = [
             <p class="mt-2 text-sm leading-6" :style="{ color: 'var(--color-ink-soft)' }">{{ s.d }}</p>
           </article>
         </div>
-      </div>
-    </section>
-
-    <section class="site-container py-16 sm:py-20">
-      <div v-reveal class="mx-auto max-w-3xl rich-card p-8 sm:p-12">
-        <h2 class="section-heading text-2xl md:text-3xl">Transparant over AI</h2>
-        <p class="mt-4 leading-8" :style="{ color: 'var(--color-ink-soft)' }">
-          AI helpt ons om sneller verschillende teksten en muzikale richtingen te maken. Daarbij gebruiken
-          we vaste songstructuren en rijmende bouwstenen, aangevuld met de details die jij deelt. Zo houden
-          we de prijs laag én blijft jouw verhaal herkenbaar. We doen daar niet geheimzinnig over: juist de
-          combinatie van slimme techniek en concrete input maakt dit mogelijk.
-        </p>
-        <NuxtLink to="/aanvraag" class="stitch-button mt-8">Vraag jouw nummer aan</NuxtLink>
       </div>
     </section>
 

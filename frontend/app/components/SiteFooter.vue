@@ -12,26 +12,18 @@ const year = new Date().getFullYear();
         <div class="grid gap-14 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
           <!-- Left: CTA -->
           <div v-reveal>
-            <NuxtLink to="/" aria-label="Voor Ieder Moment — naar home" class="inline-block">
-              <img
-                src="/logowit.png"
-                alt="Voor Ieder Moment"
-                class="h-28 w-64 object-cover sm:h-32 sm:w-80"
-              />
-            </NuxtLink>
-
-            <h2 class="mt-10 max-w-xl font-display text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
-              Klaar om van een verhaal een nummer te maken?
+            <h2 class="max-w-xl font-display text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
+              Jouw verhaal verdient een eigen soundtrack.
             </h2>
 
             <p class="mt-5 max-w-lg text-base leading-relaxed text-white/55 sm:text-lg">
-              Vertel wat jouw moment bijzonder maakt en ontvang vier unieke samples.
-              Kies je favoriet; wij regelen de release op Spotify en Apple Music.
+              Verras iemand met een nummer dat nergens anders bestaat. Jij kiest de versie
+              die raakt; wij maken hem compleet en publiceren hem, klaar om te beluisteren en te delen.
             </p>
 
             <div class="mt-10 flex flex-col gap-4 sm:flex-row">
               <NuxtLink to="/aanvraag" class="stitch-button px-10 py-4 text-base">
-                Start aanvraag
+                Maak je nummer
               </NuxtLink>
               <NuxtLink to="/momenten" class="stitch-outline-button border-white/15 bg-white/5 px-10 py-4 text-base text-white hover:bg-white hover:text-[var(--color-ink)]">
                 Alle momenten

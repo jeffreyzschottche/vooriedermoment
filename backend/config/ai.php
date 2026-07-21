@@ -60,6 +60,7 @@ return [
     */
     'lyrics_attempts' => (int) env('LYRICS_AI_ATTEMPTS', env('DEEPSEEK_LYRICS_ATTEMPTS', 5)),
     'lyrics_fallback_after_attempt' => (int) env('LYRICS_AI_FALLBACK_AFTER_ATTEMPT', 3),
+    'general_lyrics_attempts' => (int) env('GENERAL_LYRICS_ATTEMPTS', 3),
 
     /*
     | Per-categorie override van provider en/of model. Voorbeeld:
@@ -67,7 +68,7 @@ return [
     | 'verjaardag' => ['provider' => 'openai',    'model' => 'gpt-4o-mini'],
     */
     'category_overrides' => [
-        // slug => ['provider' => '...', 'model' => '...'],
+        'anders' => ['provider' => 'deepseek', 'model' => env('DEEPSEEK_DEFAULT_MODEL', 'deepseek-chat')],
     ],
 
 ];

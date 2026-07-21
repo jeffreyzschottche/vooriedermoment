@@ -34,6 +34,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/lyrics/songform', [LyricsController::class, 'songform']);
     Route::get('/lyrics/preview/{category}', [LyricsController::class, 'preview']);
     Route::post('/lyrics/generate', [LyricsController::class, 'generate']);
+    Route::post('/lyrics/general', [LyricsController::class, 'generateGeneral'])
+        ->middleware('throttle:5,1');
 
     // Email verification
     Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])

@@ -268,34 +268,34 @@ function removeItem(fieldName: 'anecdotes' | 'mustMention', index: number) {
     <form v-else @submit.prevent="nextStep" novalidate>
       <section v-if="!started" class="grid gap-0 lg:grid-cols-[0.78fr_1.22fr]">
         <aside class="border-b p-6 sm:p-8 lg:border-b-0 lg:border-r" :style="{ borderColor: 'var(--color-line)', background: 'var(--color-surface-soft)' }">
-          <span class="section-kicker">Briefing</span>
+          <span class="section-kicker">Jouw verhaal</span>
           <h2 class="font-display text-2xl font-semibold leading-tight" :style="{ color: 'var(--color-ink)' }">
-            Vertel stap voor stap wat dit nummer herkenbaar maakt
+            In een paar korte stappen naar een nummer dat écht persoonlijk voelt
           </h2>
           <p class="mt-3 text-sm leading-7" :style="{ color: 'var(--color-ink-soft)' }">
-            Je krijgt steeds één duidelijke vraag. Zo blijft het kort, maar verzamelen we genoeg details voor een persoonlijke tekst.
+            We vragen alleen wat nodig is: wie centraal staat, welke verhalen niet mogen ontbreken en hoe het nummer moet voelen.
           </p>
         </aside>
 
         <div class="flex min-h-[460px] flex-col justify-center p-6 sm:p-10">
           <span class="text-xs font-bold uppercase tracking-[0.18em]" :style="{ color: 'var(--accent-strong)' }">
-            {{ fields.length }} korte stappen
+            {{ fields.length }} korte vragen
           </span>
           <h3 class="mt-4 font-display text-3xl font-semibold leading-tight sm:text-5xl" :style="{ color: 'var(--color-ink)' }">
-            Start je aanvraag voor {{ category.title.toLowerCase() }}
+            Maak een nummer voor {{ category.title.toLowerCase() }}
           </h3>
           <p class="mt-5 max-w-2xl text-base leading-8" :style="{ color: 'var(--color-ink-soft)' }">
-            Denk aan echte namen, situaties, uitspraken en muzikale voorkeuren. In de volgende stap zie je hoe jouw songtekst vorm krijgt.
+            Deel echte namen, herinneringen en typische uitspraken. Wij halen daar de details uit die jouw nummer herkenbaar en uniek maken.
           </p>
 
           <div class="mt-8 grid gap-3 text-sm sm:grid-cols-3" :style="{ color: 'var(--color-ink-soft)' }">
-            <div class="metric-tile">1 vraag per scherm</div>
-            <div class="metric-tile">Losse situaties met plusjes</div>
+            <div class="metric-tile">Eén heldere vraag tegelijk</div>
+            <div class="metric-tile">Voeg herinneringen los toe</div>
             <div class="metric-tile"><OfferBadge size="sm" inline /></div>
           </div>
 
           <button type="button" class="stitch-button mt-9 w-full py-4 text-base sm:w-auto sm:px-10" @click="start">
-            Start aanvraag
+            Begin met vertellen
           </button>
         </div>
       </section>

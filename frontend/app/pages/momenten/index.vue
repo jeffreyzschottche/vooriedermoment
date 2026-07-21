@@ -19,8 +19,8 @@ useJsonLd(breadcrumbSchema([
       <span class="section-kicker">Alle momenten</span>
       <h1 class="section-heading text-4xl md:text-6xl">Welk verhaal mag een nummer worden?</h1>
       <p class="section-subtext mx-auto mt-5 max-w-2xl">
-        Kies de gelegenheid die het beste past. Daarna stellen we precies de vragen
-        waarmee jouw nummer persoonlijk, herkenbaar en deelbaar wordt.
+        Kies de gelegenheid die het beste past. Staat jouw moment er niet tussen?
+        Kies dan ‘Een ander moment’ en vertel zelf wat er gevierd, bedankt of herinnerd mag worden.
       </p>
     </header>
 

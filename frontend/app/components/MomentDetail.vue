@@ -15,7 +15,7 @@ const isB2b = computed(() => props.category.variant === 'b2b');
 
 const productionHighlights = [
   { title: 'Vertel wat het persoonlijk maakt', text: 'Deel namen, herinneringen, uitspraken en details die alleen jullie herkennen.' },
-  { title: 'Ontvang vier unieke samples', text: 'Binnen 24–72 uur sturen we vier muzikale richtingen van 15 seconden naar je inbox.' },
+  { title: 'Kies uit verschillende opties', text: 'Binnen 24–72 uur sturen we verschillende korte muzikale voorproefjes naar je inbox.' },
   { title: 'Kies en luister overal', text: 'Na jouw keuze maken we de favoriet af voor Spotify en Apple Music.' },
 ];
 </script>
@@ -85,7 +85,7 @@ const productionHighlights = [
         <div v-reveal class="mb-8 text-center">
           <span class="section-kicker">Voorbeelden</span>
           <h2 class="section-heading text-3xl md:text-4xl">Zo kan jouw bedrijfsnummer klinken</h2>
-          <p class="section-subtext mx-auto mt-3 max-w-2xl">Vier richtingen als voorproefje. Jouw nummer wordt volledig op jullie bedrijf afgestemd.</p>
+          <p class="section-subtext mx-auto mt-3 max-w-2xl">Kies uit verschillende muzikale opties. Jouw nummer wordt volledig op jullie bedrijf afgestemd.</p>
         </div>
         <div v-reveal>
           <SampleTrackList :tracks="category.sampleTracks" :columns="4" />

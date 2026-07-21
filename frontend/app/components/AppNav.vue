@@ -23,10 +23,10 @@ watch(
 
 <template>
   <header
-    class="sticky top-0 z-50 border-b backdrop-blur-2xl transition-all duration-300"
+    class="sticky top-0 z-50 border-b transition-all duration-300"
     :style="{
       borderColor: 'rgba(13,21,18,0.06)',
-      background: 'rgba(248,250,246,0.85)',
+      background: '#ffffff',
     }"
   >
     <div class="hero-inner flex min-h-[5.5rem] items-center justify-between gap-6 py-2">
