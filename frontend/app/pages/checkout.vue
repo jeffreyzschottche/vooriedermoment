@@ -183,10 +183,10 @@ function isVisibleLyricLine(index: number) {
             <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h2 class="font-display text-xl font-semibold" :style="{ color: 'var(--color-ink)' }">
-                  Volledige lyrics-preview
+                  Voorproefje van jouw songtekst
                 </h2>
                 <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                  Je ziet de lengte en een paar echte regels. Ongeveer 75% blijft afgeschermd tot na het afronden.
+                  Bekijk de opbouw en enkele persoonlijke regels. De rest gebruiken we om jouw vier samples te maken.
                 </p>
               </div>
               <span class="chip shrink-0">{{ lyricsLines.length }} regels</span>
@@ -221,7 +221,7 @@ function isVisibleLyricLine(index: number) {
                   4 samples in je inbox
                 </p>
                 <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                  Binnen 48 uur ontvang je 4 unieke samples in je mail. Jij kiest je favoriet.
+                  Binnen 24–72 uur ontvang je vier unieke samples van 15 seconden. Jij kiest de favoriet.
                 </p>
               </div>
               <div class="rich-card p-5">
@@ -229,10 +229,10 @@ function isVisibleLyricLine(index: number) {
                   Stap 2
                 </p>
                 <p class="mt-3 font-display text-lg font-semibold" :style="{ color: 'var(--color-ink)' }">
-                  Live binnen 72 uur
+                  Jouw favoriet wordt de complete versie
                 </p>
                 <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                  Wij maken je gekozen nummer compleet en zetten het binnen 72 uur op Spotify én Apple Music.
+                  Na jouw keuze maken wij het nummer af. Binnen 24–72 uur staat het op Spotify en Apple Music.
                 </p>
               </div>
             </div>
@@ -252,20 +252,20 @@ function isVisibleLyricLine(index: number) {
                 <span class="font-semibold" :style="{ color: 'var(--color-ink)' }">{{ offer.formattedCurrent.value }}</span>
               </div>
               <div class="flex justify-between">
-                <span>4 samples (15s)</span>
+                <span>4 samples van 15 seconden</span>
                 <span class="text-xs font-medium" :style="{ color: 'var(--accent-strong)' }">Inclusief</span>
               </div>
               <div class="flex justify-between">
-                <span>Spotify &amp; Apple Music release</span>
+                <span>Release op Spotify &amp; Apple Music</span>
                 <span class="text-xs font-medium" :style="{ color: 'var(--accent-strong)' }">Inclusief</span>
               </div>
               <div
-                v-if="offer.saleOn.value"
+                v-if="offer.hasDiscount.value"
                 class="flex justify-between rounded-lg p-3"
                 :style="{ background: 'var(--accent-soft)', color: 'var(--accent-strong)' }"
               >
                 <span class="font-semibold">Aanbiedingskorting</span>
-                <span class="font-bold">-{{ (offer.regularPrice.value - offer.salePrice.value).toFixed(2).replace('.', ',') }} korting</span>
+                <span class="font-bold">-{{ (offer.regularPrice - offer.salePrice).toFixed(2).replace('.', ',') }} korting</span>
               </div>
             </div>
 
@@ -287,14 +287,14 @@ function isVisibleLyricLine(index: number) {
                 <span class="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                 Bezig met verwerken...
               </span>
-              <span v-else>Betalen en nummer maken →</span>
+              <span v-else>Bestellen en betalen →</span>
             </button>
 
             <p
               class="mt-4 rounded-xl px-4 py-3 text-center text-xs leading-relaxed"
               :style="{ background: 'var(--color-surface-soft)', color: 'var(--color-ink-faint)' }"
             >
-              Demo: betaling is gestubd. Na betaling ontvang je binnen 48 uur 4 samples per mail.
+              Demo: betaling is gestubd. Na betaling ontvang je binnen 24–72 uur 4 samples per mail.
             </p>
           </div>
         </aside>

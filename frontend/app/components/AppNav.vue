@@ -8,7 +8,6 @@ const momentsOpen = ref(false);
 const links = [
   { to: '/', label: 'Home' },
   { to: '/momenten', label: 'Momenten' },
-  { to: '/zakelijk/bouwbedrijven', label: 'Zakelijk' },
   { to: '/over-ons', label: 'Over ons' },
   { to: '/faq-contact', label: 'FAQ' },
 ];
@@ -33,9 +32,7 @@ watch(
     <div class="hero-inner flex min-h-[4.5rem] items-center justify-between gap-6 py-3">
       <!-- Logo -->
       <NuxtLink to="/" class="flex min-w-0 items-center gap-3 transition-transform duration-200 hover:scale-[1.02]">
-        <span class="logo-card">
-          <img src="/logowit.png" alt="" class="h-5 w-auto" />
-        </span>
+        <img src="/logozwart.png" alt="" class="h-9 w-auto sm:h-10" />
         <span class="hidden truncate font-display text-lg font-semibold sm:block" :style="{ color: 'var(--color-ink)' }">
           Voor Ieder Moment
         </span>

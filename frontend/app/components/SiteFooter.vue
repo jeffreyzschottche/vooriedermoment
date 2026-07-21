@@ -13,9 +13,7 @@ const year = new Date().getFullYear();
           <!-- Left: CTA -->
           <div v-reveal>
             <div class="flex items-center gap-4">
-              <span class="logo-card">
-                <img src="/logowit.png" alt="" class="h-6 w-auto" />
-              </span>
+              <img src="/logowit.png" alt="" class="h-12 w-auto" />
               <span class="font-display text-xl font-semibold text-white sm:text-2xl">
                 Voor Ieder Moment
               </span>
@@ -26,8 +24,8 @@ const year = new Date().getFullYear();
             </h2>
 
             <p class="mt-5 max-w-lg text-base leading-relaxed text-white/55 sm:text-lg">
-              Kies een moment, vul een gerichte briefing in en ontvang 4 unieke samples.
-              Kies je favoriet en wij uploaden het naar Spotify.
+              Vertel wat jouw moment bijzonder maakt en ontvang vier unieke samples.
+              Kies je favoriet; wij regelen de release op Spotify en Apple Music.
             </p>
 
             <div class="mt-10 flex flex-col gap-4 sm:flex-row">
@@ -86,7 +84,7 @@ const year = new Date().getFullYear();
         <!-- Bottom bar -->
         <div class="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/35 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {{ year }} Voor Ieder Moment. Alle rechten voorbehouden.</p>
-          <p>Gepersonaliseerde nummers op Spotify.</p>
+          <p>Persoonlijke nummers op Spotify &amp; Apple Music.</p>
         </div>
       </div>
     </div>

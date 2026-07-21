@@ -117,13 +117,13 @@
             <h1>Hoi {{ $recipientName }}!</h1>
 
             <p>
-                Goed nieuws! We hebben <strong>4 unieke samples</strong> gemaakt voor je
+                Goed nieuws! We hebben <strong>vier unieke samples</strong> gemaakt voor je
                 <strong>{{ $songRequest->category_title }}</strong> nummer.
             </p>
 
             <p>
-                Luister ze hieronder en reply op deze mail met het nummer van je favoriet.
-                Wij maken dan de volledige versie en uploaden het naar Spotify!
+                Luister rustig naar alle vier en kies via de knop je favoriet.
+                Daarna maken wij die versie compleet. Binnen 24–72 uur staat je nummer op Spotify en Apple Music.
             </p>
 
             <div class="samples">
@@ -155,7 +155,7 @@
 
             <div class="footer">
                 <p>&copy; {{ date('Y') }} Voor Ieder Moment</p>
-                <p>Gepersonaliseerde nummers op Spotify</p>
+                <p>Persoonlijke nummers op Spotify &amp; Apple Music</p>
             </div>
         </div>
     </div>

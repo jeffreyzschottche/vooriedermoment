@@ -43,10 +43,9 @@ const themeStyle = computed(() => themeVars(theme.value));
           class="mt-6 text-lg leading-relaxed sm:text-xl"
           :style="{ color: 'var(--color-ink-soft)' }"
         >
-          Je betaling is gelukt en je aanvraag voor een
+          Je betaling is gelukt. We hebben je aanvraag voor
           <strong :style="{ color: 'var(--accent-strong)' }">{{ lastPayload?.categoryTitle }}</strong>
-          nummer staat genoteerd.
-          Je ontvangt binnen 48 uur 4 samples in je mail.
+          ontvangen. Binnen 24–72 uur staan vier samples voor je klaar.
         </p>
         <p
           v-hero-reveal
@@ -87,10 +86,10 @@ const themeStyle = computed(() => themeVars(theme.value));
                     Stap 1
                   </p>
                   <p class="mt-2 font-display text-xl font-semibold" :style="{ color: 'var(--color-ink)' }">
-                    4 Samples
+                    4 samples
                   </p>
                   <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                    Binnen 48 uur ontvang je 4 unieke samples van 15 seconden per mail.
+                    Binnen 24–72 uur ontvang je vier unieke samples van 15 seconden in je inbox.
                   </p>
                 </div>
               </div>
@@ -107,7 +106,7 @@ const themeStyle = computed(() => themeVars(theme.value));
                     Spotify &amp; Apple Music
                   </p>
                   <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                    Kies je favoriet; binnen 72 uur staat het op Spotify én Apple Music.
+                    Na jouw keuze maken we de favoriet af. Binnen 24–72 uur staat je nummer op beide platforms.
                   </p>
                 </div>
               </div>

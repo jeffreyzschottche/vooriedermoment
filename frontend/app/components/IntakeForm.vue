@@ -56,7 +56,7 @@ const progress = computed(() => fields.value.length ? Math.round(((currentIndex.
 const activeSection = computed(() => sectionForField(activeField.value?.name ?? ''));
 const isLastStep = computed(() => currentIndex.value >= fields.value.length - 1);
 
-const loadingWords = ['briefing lezen', 'details wegen', 'rijm zoeken', 'melodie voelen', 'preview klaarzetten'];
+const loadingWords = ['verhaal lezen', 'details kiezen', 'rijm vinden', 'sfeer bepalen', 'preview maken'];
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -124,7 +124,7 @@ function questionCopy(f: IntakeField) {
     fromName: 'Vertel wie het nummer geeft. Dat kan één naam zijn, maar ook een groep zoals familie, vrienden of collega’s.',
     tone: 'Kies de emotionele kleur van het nummer. Dit stuurt de tekst, zang en productie.',
     vocals: 'Kies hoe de stem moet aanvoelen. Als je twijfelt, laat ons kiezen wat muzikaal het beste werkt.',
-    musicStyle: 'Kies een genre als richting. We gebruiken dit niet star, maar als basis voor de muziekprompt.',
+    musicStyle: 'Kies een genre als richting. We gebruiken het als vertrekpunt en laten ruimte voor wat muzikaal het beste werkt.',
     tempo: 'Kies geen exact BPM-getal, maar hoe snel of rustig het nummer moet voelen.',
     anecdotes: 'Maak per plusje één losse situatie. Bijvoorbeeld één herinnering, één grap, één typische uitspraak of één moment.',
     mustMention: 'Maak per plusje één los verplicht element. Zo kan de tekst per couplet kiezen wat daar natuurlijk past.',
@@ -246,10 +246,10 @@ function removeItem(fieldName: 'anecdotes' | 'mustMention', index: number) {
         </div>
         <span class="section-kicker">Songtekst voorbereiden</span>
         <h2 class="font-display text-3xl font-semibold leading-tight sm:text-5xl" :style="{ color: 'var(--color-ink)' }">
-          We zetten je briefing om naar lyrics
+          De eerste regels krijgen vorm
         </h2>
         <p class="mt-5 max-w-xl text-base leading-8" :style="{ color: 'var(--color-ink-soft)' }">
-          We ordenen de situaties, kiezen passende details voor coupletten en bouwen alvast een preview voor de checkout.
+          We kiezen de sterkste details uit jouw verhaal en bouwen een eerste voorproefje voor de volgende stap.
         </p>
 
         <div class="mt-9 grid w-full gap-3 sm:grid-cols-5">
@@ -285,7 +285,7 @@ function removeItem(fieldName: 'anecdotes' | 'mustMention', index: number) {
             Start je aanvraag voor {{ category.title.toLowerCase() }}
           </h3>
           <p class="mt-5 max-w-2xl text-base leading-8" :style="{ color: 'var(--color-ink-soft)' }">
-            Denk aan echte namen, situaties, uitspraken en muzikale voorkeuren. Je kunt later bij de checkout nog zien hoe lang de lyrics worden.
+            Denk aan echte namen, situaties, uitspraken en muzikale voorkeuren. In de volgende stap zie je hoe jouw songtekst vorm krijgt.
           </p>
 
           <div class="mt-8 grid gap-3 text-sm sm:grid-cols-3" :style="{ color: 'var(--color-ink-soft)' }">

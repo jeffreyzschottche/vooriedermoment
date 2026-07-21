@@ -2,7 +2,7 @@
 useSeoMeta({
   title: 'Over ons',
   description:
-    'Voor Ieder Moment maakt persoonlijke nummers betaalbaar door slimme bouwstenen te combineren met AI. Eerlijk, snel en voor iedereen.',
+    'Voor Ieder Moment maakt van echte verhalen persoonlijke nummers voor Spotify en Apple Music. Transparant, betaalbaar en snel geregeld.',
 });
 
 useJsonLd(breadcrumbSchema([
@@ -11,10 +11,10 @@ useJsonLd(breadcrumbSchema([
 ]));
 
 const steps = [
-  { n: '01', t: 'Jij vertelt je verhaal', d: 'Via een kort formulier deel je namen, anekdotes en de sfeer die je voor ogen hebt.' },
-  { n: '02', t: 'Wij stellen de tekst samen', d: 'We combineren kant-en-klare, rijmende bouwstenen met AI-tekst die jouw details verwerkt.' },
-  { n: '03', t: 'Het nummer wordt gemaakt', d: 'De tekst wordt omgezet naar een afgewerkt nummer in de gekozen stijl.' },
-  { n: '04', t: 'Jij deelt het overal', d: 'Je krijgt één vaste versie, klaar voor Spotify, Apple Music en social media.' },
+  { n: '01', t: 'Jij vertelt wat telt', d: 'Via een korte briefing deel je namen, herinneringen, inside jokes en jouw gewenste sfeer.' },
+  { n: '02', t: 'Wij maken vier samples', d: 'We vertalen jouw verhaal naar vier muzikale richtingen van 15 seconden.' },
+  { n: '03', t: 'Jij kiest de favoriet', d: 'Luister thuis of samen en kies de versie die het moment het beste vangt.' },
+  { n: '04', t: 'Wij regelen de release', d: 'We maken jouw keuze compleet voor Spotify, Apple Music en social media.' },
 ];
 </script>
 
@@ -27,9 +27,9 @@ const steps = [
           Een persoonlijk nummer hoeft geen luxe te zijn
         </h1>
         <p v-reveal class="mt-6 text-lg leading-8" :style="{ color: 'var(--color-ink-soft)' }">
-          Vroeger was een eigen nummer laten maken duur en traag. Wij doen het anders: door slimme,
-          kant-en-klare bouwstenen te combineren met AI, maken we persoonlijke muziek
-          <strong>snel en betaalbaar</strong> — voor ieder moment, voor iedereen.
+          Een eigen nummer laten maken was ooit vooral duur en tijdrovend. Wij maken het bereikbaar:
+          jouw verhaal, vier muzikale richtingen en één complete release voor
+          <strong>€ 9,99</strong> — voor ieder moment en voor iedereen.
         </p>
       </div>
     </section>
@@ -38,7 +38,7 @@ const steps = [
       <div class="site-container">
         <div v-reveal class="mb-12 max-w-xl">
           <h2 class="section-heading text-3xl md:text-4xl">Hoe wij werken</h2>
-          <p class="section-subtext mt-3">Eerlijk verhaal: geen verborgen studio-uren, wél een nummer dat over jou gaat.</p>
+          <p class="section-subtext mt-3">Geen ingewikkeld studiotraject. Wel een duidelijk proces en een nummer dat echt over jullie gaat.</p>
         </div>
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <article v-for="s in steps" :key="s.n" v-reveal class="rich-card p-7">
@@ -54,10 +54,10 @@ const steps = [
       <div v-reveal class="mx-auto max-w-3xl rich-card p-8 sm:p-12">
         <h2 class="section-heading text-2xl md:text-3xl">Transparant over AI</h2>
         <p class="mt-4 leading-8" :style="{ color: 'var(--color-ink-soft)' }">
-          We vinden eerlijkheid belangrijk. Onze nummers zijn deels samengesteld uit vooraf gemaakte,
-          rijmende bouwstenen en worden met AI gepersonaliseerd op basis van wat jij aanlevert. Dat is
-          precies waarom we het zo snel en voordelig kunnen aanbieden — zonder dat je inlevert op het
-          persoonlijke gevoel.
+          AI helpt ons om sneller verschillende teksten en muzikale richtingen te maken. Daarbij gebruiken
+          we vaste songstructuren en rijmende bouwstenen, aangevuld met de details die jij deelt. Zo houden
+          we de prijs laag én blijft jouw verhaal herkenbaar. We doen daar niet geheimzinnig over: juist de
+          combinatie van slimme techniek en concrete input maakt dit mogelijk.
         </p>
         <NuxtLink to="/aanvraag" class="stitch-button mt-8">Vraag jouw nummer aan</NuxtLink>
       </div>

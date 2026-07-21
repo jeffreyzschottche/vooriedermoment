@@ -4,7 +4,7 @@ Laravel 12 API voor aanvragen, concept-lyrics, checkout-status en auth.
 
 ## Status
 
-De backend is technisch lokaal werkend en kan als API live gezet worden. De huidige betaalflow gebruikt nog `PAYMENT_PROVIDER=stub`: een checkout wordt direct als betaald gemarkeerd zonder echte Mollie/Stripe betaling. Ook de daadwerkelijke productie van het nummer is nog niet gekoppeld; na checkout staat daarvoor een TODO in `SongRequestController`.
+De backend is technisch lokaal werkend en kan als API live worden gezet. Met `PAYMENT_PROVIDER=stub` wordt een checkout direct als betaald gemarkeerd zonder echte Mollie- of Stripe-betaling. Na een geslaagde checkout start de productiepipeline; met `MUSIC_PROVIDER=stub` wordt daarbij nog geen externe muziekdienst aangeroepen.
 
 ## Lokale Setup
 
@@ -54,7 +54,6 @@ MAIL_PASSWORD=...
 MAIL_FROM_ADDRESS=info@vooriedermoment.nl
 MAIL_FROM_NAME="Voor Ieder Moment"
 
-saleOn=1
 AI_PROVIDER=null
 PAYMENT_PROVIDER=stub
 MUSIC_PROVIDER=stub
@@ -70,6 +69,27 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 ```
+
+### Lyrics synchroniseren
+
+De JSON-bestanden in `database/data/lyrics` worden met de backend gedeployed en zijn de
+primaire bron. Nieuwe of aangepaste lyrics kunnen gecontroleerd vanuit een map of ZIP
+worden geïmporteerd:
+
+```bash
+php artisan lyrics:sync /pad/naar/newlyrics --dry-run
+php artisan lyrics:sync /pad/naar/newlyrics
+```
+
+Het commando valideert eerst de volledige import, toont welke bestanden veranderen en
+maakt bij het overschrijven standaard een back-up in
+`storage/app/private/lyrics-backups`. Het voegt samen: categorieën die niet in de import
+staan worden niet verwijderd.
+
+Voor productie heeft een normale deploy van de bijgewerkte, gecommitte JSON-bestanden
+de voorkeur. Voor een losse live-update: upload de map of ZIP naar de server en voer daar
+eerst dezelfde dry-run en daarna het synccommando uit. Zo'n losse update moet daarna ook
+in Git worden vastgelegd, anders kan een volgende deploy hem weer overschrijven.
 
 Als de frontend live staat, zet daar:
 

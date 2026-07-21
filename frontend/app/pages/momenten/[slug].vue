@@ -6,8 +6,8 @@ const route = useRoute();
 const slug = computed(() => String(route.params.slug));
 const category = computed(() => getCategory(slug.value));
 
-// b2b heeft een eigen route; onbekende slug => 404.
-if (!category.value || category.value.variant === 'b2b') {
+// Onbekende slug => 404.
+if (!category.value) {
   throw createError({ statusCode: 404, statusMessage: 'Moment niet gevonden', fatal: true });
 }
 

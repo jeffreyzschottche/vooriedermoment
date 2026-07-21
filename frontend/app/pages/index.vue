@@ -7,9 +7,9 @@ useSeoMeta({
   title: 'Een persoonlijk nummer voor elk moment',
   ogTitle: 'Voor Ieder Moment — een persoonlijk nummer voor elk moment',
   description:
-    'Laat een persoonlijk nummer maken voor geslaagd, rijbewijs, eigen huis, teamlied, bouwbedrijf en meer. Met intake, lyrics en muziekprompt na betaling.',
+    'Laat voor € 9,99 een persoonlijk nummer maken voor een verjaardag, rijbewijs, nieuw huis, team, bedrijf en meer. Inclusief 4 samples en release op Spotify en Apple Music.',
   ogDescription:
-    'Laat een persoonlijk nummer maken voor elk moment. Van intake tot lyrics en muziekprompt.',
+    'Vertel jouw verhaal, kies uit 4 samples en luister naar je eigen nummer op Spotify en Apple Music.',
   ogUrl: 'https://vooriedermoment.nl/',
   ogImage: 'https://vooriedermoment.nl/hero-studio.png',
   twitterTitle: 'Voor Ieder Moment — een persoonlijk nummer voor elk moment',
@@ -20,40 +20,40 @@ useJsonLd([
   productSchema({
     name: 'Persoonlijk nummer',
     description:
-      'Eén gepersonaliseerd nummer, samengesteld uit herbruikbare rijmblokken, persoonlijke context en een muziekprompt op maat.',
+      'Eén persoonlijk nummer op basis van jouw verhaal, inclusief vier samples en release op Spotify en Apple Music.',
     price: offer.currentPrice.value,
     url: '/aanvraag',
   }),
 ]);
 
 const heroStats = [
-  { value: '9', suffix: ',99', label: 'voor jouw nummer' },
-  { value: '4', suffix: ' samples', label: 'om uit te kiezen' },
-  { value: '1', suffix: ' hit', label: 'op Spotify' },
+  { value: '9', prefix: '€ ', suffix: ',99', label: 'één complete prijs' },
+  { value: '4', prefix: '', suffix: ' samples', label: 'om uit te kiezen' },
+  { value: '1', prefix: '', suffix: ' nummer', label: 'op Spotify & Apple Music' },
 ];
 
 const pipeline = [
   { n: '01', title: 'Moment kiezen', text: 'Geslaagd, rijbewijs, teamlied, bouwbedrijf of een eigen gelegenheid.' },
-  { n: '02', title: 'Briefing invullen', text: 'Namen, inside jokes, sfeer, stijl en wat er absoluut in moet.' },
-  { n: '03', title: '4 samples ontvangen', text: 'Binnen 2-5 werkdagen ontvang je 4 unieke samples in je mail.' },
-  { n: '04', title: 'Kies & op Spotify', text: 'Kies je favoriet en wij zetten het écht op Spotify.' },
+  { n: '02', title: 'Vertel jouw verhaal', text: 'Deel namen, herinneringen, inside jokes en de sfeer die bij het moment past.' },
+  { n: '03', title: 'Luister naar 4 samples', text: 'Binnen 24–72 uur ontvang je vier unieke voorproefjes in je inbox.' },
+  { n: '04', title: 'Kies jouw favoriet', text: 'Wij maken hem af en publiceren hem binnen 24–72 uur op Spotify en Apple Music.' },
 ];
 
 const valueProps = [
   {
     icon: '🎵',
-    title: 'Niet kaal gegenereerd',
-    body: 'We bouwen nummers uit vaste songstructuren, rijmende regels en persoonlijke details. Daardoor voelt het minder willekeurig en meer als een echt cadeau.',
+    title: 'Jouw verhaal staat centraal',
+    body: 'Geen standaardtekst met alleen een andere naam. We verwerken echte herinneringen, uitspraken en details die alleen jullie herkennen.',
   },
   {
     icon: '📝',
-    title: 'Formulieren die meedenken',
-    body: 'Een bouwbedrijf krijgt andere vragen dan een verjaardag of teamlied. Zo krijg je input die bruikbaar is voor lyrics en muziek.',
+    title: 'Vragen die bij het moment passen',
+    body: 'Een bouwbedrijf vraagt om andere details dan een verjaardag of teamlied. Daarom sluit iedere aanvraag aan op de gelegenheid.',
   },
   {
     icon: '🚀',
-    title: 'Automatisch naar Spotify',
-    body: 'Na betaling draait alles automatisch. Je kiest 1 van 4 samples en wij regelen de release op Spotify.',
+    title: 'Van sample naar streaming',
+    body: 'Kies het voorproefje dat het beste voelt. Wij maken die versie compleet en regelen de release op Spotify en Apple Music.',
   },
 ];
 
@@ -71,9 +71,9 @@ const proof = [
 ];
 
 const faqPreview = [
-  { q: 'Hoe werkt het precies?', a: 'Na betaling ontvang je binnen 2-5 werkdagen 4 unieke samples van 15 seconden in je mail. Je kiest je favoriet en wij uploaden het nummer naar Spotify.' },
+  { q: 'Hoe werkt het precies?', a: 'Na betaling ontvang je binnen 24–72 uur vier unieke samples van 15 seconden. Zodra je jouw favoriet hebt gekozen, staat de complete versie binnen 24–72 uur op Spotify en Apple Music.' },
   { q: 'Waarom zoveel context in het formulier?', a: 'Omdat goede persoonlijke nummers draaien om specifieke details: namen, plekken, zinnen, grappen en sfeer. Hoe concreter, hoe unieker jouw nummer.' },
-  { q: 'Wat kost het?', a: offer.saleOn.value ? `Normaal ${offer.formattedRegular}, nu ${offer.formattedSale} per nummer. Jouw nummer komt écht op Spotify.` : `${offer.formattedRegular} per nummer. Jouw nummer komt écht op Spotify.` },
+  { q: 'Wat kost het?', a: offer.hasDiscount.value ? `Normaal ${offer.formattedRegular}, nu ${offer.formattedSale}. Inclusief vier samples en release op Spotify en Apple Music.` : `${offer.formattedRegular}. Inclusief vier samples en release op Spotify en Apple Music.` },
 ];
 </script>
 
@@ -104,7 +104,7 @@ const faqPreview = [
               class="section-kicker"
               style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: var(--accent-gold);"
             >
-              Van verhaal naar hit
+              Van jouw verhaal naar muziek
             </span>
 
             <h1
@@ -121,8 +121,8 @@ const faqPreview = [
               data-hero-delay="0.2"
               class="mt-8 max-w-xl text-lg leading-relaxed text-white/70 sm:text-xl"
             >
-              Kies een moment, vul een slimme briefing in en ontvang 4 unieke
-              samples in je mail. Kies je favoriet en wij regelen de Spotify release.
+              Vertel wat dit moment bijzonder maakt en ontvang vier unieke samples.
+              Kies jouw favoriet; wij maken hem af voor Spotify en Apple Music.
             </p>
 
             <div
@@ -156,8 +156,9 @@ const faqPreview = [
                   <span
                     v-counter
                     :data-counter-target="stat.value"
+                    :data-counter-prefix="stat.prefix"
                     :data-counter-suffix="stat.suffix"
-                  >{{ stat.value }}{{ stat.suffix }}</span>
+                  >{{ stat.prefix }}{{ stat.value }}{{ stat.suffix }}</span>
                 </p>
                 <p class="mt-1.5 text-sm font-medium text-white/50">{{ stat.label }}</p>
               </div>
@@ -250,8 +251,8 @@ const faqPreview = [
             </h2>
           </div>
           <p class="section-subtext max-w-2xl lg:justify-self-end">
-            Elk moment heeft een andere intake. Een bouwbedrijf vraagt om projecten
-            en slogan; een teamlied om clubcultuur; een verjaardag om karakter en inside jokes.
+            Elk moment verdient andere vragen. Bij een bouwbedrijf draait het om projecten
+            en een slogan, bij een teamlied om clubcultuur en bij een verjaardag om karakter en inside jokes.
           </p>
         </div>
 
@@ -272,11 +273,11 @@ const faqPreview = [
             Zo werkt het
           </span>
           <h2 class="font-display text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
-            Van intake tot Spotify in 4 stappen
+            Van jouw verhaal naar een echte release
           </h2>
           <p class="mt-6 text-lg leading-relaxed text-white/60">
-            Na betaling draait alles automatisch. Je ontvangt 4 samples,
-            kiest je favoriet, en wij regelen de rest.
+            Jij levert de details, wij maken vier muzikale richtingen. Na jouw keuze
+            werken we de favoriet uit en regelen we de release.
           </p>
         </div>
 
@@ -303,17 +304,17 @@ const faqPreview = [
           <div v-reveal>
             <span class="section-kicker">Voor iedereen</span>
             <h2 class="section-heading text-4xl sm:text-5xl lg:text-6xl">
-              Niet alleen een formulier, maar een productervaring
+              Een cadeau dat niemand ziet aankomen
             </h2>
             <p class="section-subtext mt-6 max-w-xl">
-              Bezoekers zien direct wat er gebeurt, wat ze moeten invullen en waarom
-              dat betere nummers oplevert.
+              Persoonlijk genoeg voor kippenvel, verrassend genoeg om nog lang over na te praten.
+              Voor thuis, in de kleedkamer of op de werkvloer.
             </p>
             <div class="mt-10 flex flex-col gap-4 sm:flex-row">
               <NuxtLink to="/aanvraag" class="stitch-button px-8 py-4">
                 Maak mijn nummer
               </NuxtLink>
-              <NuxtLink to="/zakelijk/bouwbedrijven" class="stitch-outline-button px-8 py-4">
+              <NuxtLink to="/momenten/bouwbedrijven" class="stitch-outline-button px-8 py-4">
                 Zakelijk nummer
               </NuxtLink>
             </div>
@@ -352,15 +353,15 @@ const faqPreview = [
               Eén duidelijke prijs
             </span>
             <h2 class="font-display text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
-              Start met context. Eindig met een hit op Spotify.
+              Jouw verhaal. Straks overal te beluisteren.
             </h2>
             <p class="mt-5 max-w-2xl text-base leading-relaxed text-white/60 sm:text-lg">
-              Geen lege generator, maar een intake en productieflow die jouw verhaal omzet
-              naar 4 samples waaruit je kiest.
+              Voor € 9,99 krijg je vier unieke samples, één complete versie en de release
+              op Spotify en Apple Music.
             </p>
           </div>
           <div class="glass-panel p-7 text-center">
-            <p class="text-xs font-bold uppercase tracking-[0.2em]" style="color: var(--accent-gold);">Vanaf</p>
+            <p class="text-xs font-bold uppercase tracking-[0.2em]" style="color: var(--accent-gold);">Complete prijs</p>
             <div class="mt-5 flex justify-center">
               <OfferBadge size="lg" />
             </div>

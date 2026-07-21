@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Rijkere playlist-weergave voor de existing-categorieën.
-defineProps<{ embed?: string | null; title: string; subtitle?: string }>();
+defineProps<{ embed?: string | null; title: string; subtitle?: string; cover?: string | null }>();
 </script>
 
 <template>
@@ -10,7 +10,9 @@ defineProps<{ embed?: string | null; title: string; subtitle?: string }>();
         :src="embed"
         :title="title"
         :height="380"
-        placeholder-text="Deze playlist delen we hier binnenkort. Mis je een naam? Vraag je eigen versie aan."
+        :cover="cover"
+        showcase
+        placeholder-text="Mis je een naam? Vraag dan je eigen versie aan."
       />
       <div class="p-4 sm:p-6">
         <span class="section-kicker">Al uitgebracht</span>
@@ -23,7 +25,7 @@ defineProps<{ embed?: string | null; title: string; subtitle?: string }>();
         <div class="mt-5 flex flex-wrap gap-2">
           <span class="chip">Spotify</span>
           <span class="chip">Apple Music</span>
-          <span class="chip">1 gedeelde versie</span>
+          <span class="chip">Persoonlijke versie mogelijk</span>
         </div>
       </div>
     </div>

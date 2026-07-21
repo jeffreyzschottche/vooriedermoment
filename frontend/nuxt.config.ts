@@ -4,6 +4,12 @@ export default defineNuxtConfig({
 
   modules: ['@pinia/nuxt'],
 
+  // Bouwbedrijven valt nu onder Momenten; oude zakelijke URL's 301-redirecten.
+  routeRules: {
+    '/zakelijk/bouwbedrijven': { redirect: { to: '/momenten/bouwbedrijven', statusCode: 301 } },
+    '/zakelijk': { redirect: { to: '/momenten', statusCode: 301 } },
+  },
+
   // Laad onze eigen Tailwind CSS
   css: ['~/assets/css/tailwind.css'],
 

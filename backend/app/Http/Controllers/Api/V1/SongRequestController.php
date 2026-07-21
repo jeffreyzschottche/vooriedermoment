@@ -13,9 +13,7 @@ use Illuminate\Http\JsonResponse;
 
 class SongRequestController extends Controller
 {
-    public function __construct(private LyricsGenerator $lyrics)
-    {
-    }
+    public function __construct(private LyricsGenerator $lyrics) {}
 
     /**
      * Maak een aanvraag aan en genereer alvast een concept-songtekst.
@@ -42,8 +40,7 @@ class SongRequestController extends Controller
     }
 
     /**
-     * Reken (gestubd) af. Daarna STOPT het proces bewust: het daadwerkelijk
-     * produceren van het nummer (bv. via Suno) is nog niet ingebouwd.
+     * Reken af en start daarna de productiepipeline.
      */
     public function checkout(SongRequest $songRequest, PaymentProvider $payment, SongProductionPipeline $production, OrderExporter $orders): JsonResponse
     {
@@ -69,9 +66,8 @@ class SongRequestController extends Controller
 
     private function priceCents(): int
     {
-        $saleOn = in_array(env('saleOn', env('SALE_ON')), ['1', 1, true, 'true'], true);
-
-        return $saleOn ? 999 : 1499;
+        // Eén vaste prijs: € 9,99 per nummer.
+        return 999;
     }
 
     private function present(SongRequest $song): array

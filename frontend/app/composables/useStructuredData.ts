@@ -16,7 +16,7 @@ export const organizationSchema = {
   logo: `${SITE_URL}/faviconzwart.png`,
   email: 'info@vooriedermoment.nl',
   description:
-    'Persoonlijke, AI-gegenereerde nummers voor elk moment — overal te beluisteren op Spotify en Apple Music.',
+    'Persoonlijke nummers op basis van jouw verhaal, uitgebracht op Spotify en Apple Music.',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Amsterdam',

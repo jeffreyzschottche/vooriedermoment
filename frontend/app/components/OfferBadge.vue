@@ -1,5 +1,6 @@
 <script setup lang="ts">
-// Toont de prijs. Bij saleOn: €14,99 doorgestreept + €9,99 + label.
+// Toont de prijs (€ 9,99). Alleen bij een echte korting (hasDiscount) tonen we
+// een doorgestreepte prijs + aanbieding-label.
 withDefaults(defineProps<{ size?: 'sm' | 'md' | 'lg'; inline?: boolean }>(), {
   size: 'md',
   inline: false,
@@ -10,7 +11,7 @@ const offer = useOffer();
 
 <template>
   <div :class="inline ? 'inline-flex items-baseline gap-3' : 'flex flex-wrap items-baseline gap-3'">
-    <span v-if="offer.saleOn.value" class="price-strike" :class="size === 'lg' ? 'text-xl' : ''">
+    <span v-if="offer.hasDiscount.value" class="price-strike" :class="size === 'lg' ? 'text-xl' : ''">
       {{ offer.formattedRegular }}
     </span>
     <span
@@ -25,7 +26,7 @@ const offer = useOffer();
       {{ offer.formattedCurrent.value }}
     </span>
     <span
-      v-if="offer.saleOn.value"
+      v-if="offer.hasDiscount.value"
       class="rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em]"
       :style="{ background: 'var(--accent)', color: 'var(--accent-ink)' }"
     >

@@ -7,12 +7,12 @@ useSeoMeta({
 });
 
 const faqs = [
-  { question: 'Zijn de nummers met AI gemaakt?', answer: 'Ja. We combineren kant-en-klare, deels al gemaakte rijmende bouwstenen met AI die de tekst personaliseert op basis van jouw verhaal. Daardoor is het snel én betaalbaar.' },
-  { question: 'Wat krijg ik precies?', answer: 'Eén afgewerkte versie van je nummer. Diezelfde ene versie deel je overal — op Spotify, Apple Music en social media.' },
-  { question: 'Wat kost een nummer?', answer: offer.saleOn.value ? `Normaal ${offer.formattedRegular}, nu in de aanbieding ${offer.formattedSale} per nummer.` : `${offer.formattedRegular} per nummer.` },
-  { question: 'Hoe snel heb ik mijn nummer?', answer: 'Doorgaans binnen enkele dagen. Heb je een specifieke datum (zoals een feest of Vaderdag), vraag het dan ruim van tevoren aan.' },
+  { question: 'Worden de nummers met AI gemaakt?', answer: 'Ja. AI helpt ons verschillende teksten en muzikale richtingen te maken. We combineren dat met vaste songstructuren, rijmende bouwstenen en de persoonlijke details uit jouw briefing. Zo blijft het betaalbaar én herkenbaar.' },
+  { question: 'Wat krijg ik precies?', answer: 'Je ontvangt eerst vier unieke samples van 15 seconden. Jij kiest je favoriet; daarna maken wij één complete versie en regelen we de release op Spotify en Apple Music.' },
+  { question: 'Wat kost een nummer?', answer: offer.hasDiscount.value ? `Normaal ${offer.formattedRegular}, nu ${offer.formattedSale}. Vier samples en de release zijn inbegrepen.` : `${offer.formattedRegular}. Vier samples en de release op Spotify en Apple Music zijn inbegrepen.` },
+  { question: 'Hoe snel heb ik mijn nummer?', answer: 'Binnen 24–72 uur na betaling ontvang je vier samples. Na jouw keuze duurt het nog 24–72 uur voordat de complete versie op Spotify en Apple Music staat. Heb je een vaste datum? Vraag dan ruim op tijd aan.' },
   { question: 'Sommige nummers staan al op Spotify — hoe zit dat?', answer: 'Voor populaire momenten zoals geslaagd, rijbewijs en eigen huis hebben we al een nummer met heel veel namen. Staat jouw naam er niet bij, dan maken we op aanvraag een eigen versie.' },
-  { question: 'Kan ik het voor iemand anders aanvragen?', answer: 'Zeker — vul gewoon de naam van diegene in. Ideaal als verrassingscadeau.' },
+  { question: 'Kan ik het voor iemand anders aanvragen?', answer: 'Zeker. Vul de naam en details van diegene in en houd de verrassing geheim tot het grote moment.' },
 ];
 
 useJsonLd(faqSchema(faqs));
@@ -42,25 +42,20 @@ useJsonLd(faqSchema(faqs));
 
       <section v-reveal>
         <div class="rich-card p-8">
-          <h2 class="font-display text-2xl font-semibold" :style="{ color: 'var(--color-ink)' }">Neem contact op</h2>
-          <form class="mt-6 space-y-4" @submit.prevent>
-            <div>
-              <label class="field-label" for="c-name">Naam</label>
-              <input id="c-name" class="field-input" placeholder="Je naam" />
-            </div>
-            <div>
-              <label class="field-label" for="c-email">E-mailadres</label>
-              <input id="c-email" type="email" class="field-input" placeholder="naam@voorbeeld.nl" />
-            </div>
-            <div>
-              <label class="field-label" for="c-msg">Bericht</label>
-              <textarea id="c-msg" rows="4" class="field-input" placeholder="Waar kunnen we je mee helpen?" />
-            </div>
-            <button type="submit" class="stitch-button w-full py-3.5">Verstuur bericht</button>
-          </form>
+          <span class="section-kicker">Persoonlijk contact</span>
+          <h2 class="mt-4 font-display text-2xl font-semibold" :style="{ color: 'var(--color-ink)' }">
+            Staat je vraag er niet tussen?
+          </h2>
+          <p class="mt-4 leading-7" :style="{ color: 'var(--color-ink-soft)' }">
+            Mail ons gerust over je aanvraag, een vaste deadline of een moment dat nog niet op de site staat.
+            Heb je al besteld? Vermeld dan het e-mailadres van je bestelling.
+          </p>
+          <a href="mailto:info@vooriedermoment.nl" class="stitch-button mt-7 w-full py-3.5 text-center">
+            Mail info@vooriedermoment.nl
+          </a>
 
           <div class="mt-8 space-y-2 border-t pt-6 text-sm" :style="{ borderColor: 'var(--color-line)', color: 'var(--color-ink-soft)' }">
-            <p><a class="underline" href="mailto:info@vooriedermoment.nl">info@vooriedermoment.nl</a></p>
+            <p>Voor Ieder Moment</p>
             <p>Amsterdam, Nederland</p>
           </div>
         </div>

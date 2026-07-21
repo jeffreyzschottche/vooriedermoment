@@ -78,7 +78,8 @@ useSeoMeta({
           <div class="bento-card-icon mx-auto mb-6 text-3xl">✓</div>
           <h1 class="section-heading text-2xl sm:text-3xl">Je hebt al gekozen!</h1>
           <p class="mt-4 text-[var(--color-ink-soft)]">
-            Je hebt sample {{ chosenSampleId }} gekozen. We gaan aan de slag met de volledige versie!
+            Sample {{ chosenSampleId }} is jouw favoriet. We maken die versie nu compleet.
+            Binnen 24–72 uur staat je nummer op Spotify en Apple Music.
           </p>
           <NuxtLink to="/" class="stitch-button mt-8">
             Naar homepage
@@ -98,8 +99,8 @@ useSeoMeta({
             Bedankt voor je keuze!
           </h1>
           <p v-hero-reveal data-hero-delay="0.2" class="mt-6 text-lg text-[var(--color-ink-soft)]">
-            Je hebt sample {{ selectedSample }} gekozen. We gaan nu aan de slag met de
-            volledige versie en uploaden het naar Spotify. Je ontvangt bericht zodra het live staat!
+            Goede keuze! We maken sample {{ selectedSample }} nu compleet. Binnen 24–72 uur
+            staat je nummer op Spotify en Apple Music. Je ontvangt bericht zodra het live is.
           </p>
           <NuxtLink v-hero-reveal data-hero-delay="0.3" to="/" class="stitch-button mt-10">
             Naar homepage
@@ -116,7 +117,7 @@ useSeoMeta({
             <p class="mt-4 text-lg text-[var(--color-ink-soft)]">
               Hieronder staan de 4 samples voor
               <strong :style="{ color: 'var(--accent-strong)' }">{{ recipientName }}</strong>
-              ({{ categoryTitle }}). Luister ze allemaal en kies je favoriet!
+              ({{ categoryTitle }}). Luister rustig naar alle vier en kies de versie die het beste voelt.
             </p>
           </div>
 

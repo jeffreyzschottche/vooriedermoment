@@ -1,8 +1,8 @@
-// Eén bron van waarheid voor de prijs. 1 product: één gepersonaliseerd nummer,
-// overal beschikbaar (Spotify + Apple Music), 1 gedeelde versie.
-// Aanbieding aan/uit via env `saleOn=1` (zie nuxt.config runtimeConfig.public.saleOn).
+// Eén bron van waarheid voor de prijs: één persoonlijk nummer en één gedeelde
+// versie voor Spotify en Apple Music. Kortingsweergave blijft voorbereid voor
+// een toekomstige aanbieding.
 
-const REGULAR_PRICE = 14.99;
+const REGULAR_PRICE = 9.99;
 const SALE_PRICE = 9.99;
 
 function euro(value: number): string {
@@ -16,9 +16,12 @@ export function useOffer() {
   const regularPrice = REGULAR_PRICE;
   const salePrice = SALE_PRICE;
   const currentPrice = computed(() => (saleOn.value ? salePrice : regularPrice));
+  // Alleen een echte korting tonen als de reguliere prijs hoger is dan de actieprijs.
+  const hasDiscount = computed(() => saleOn.value && regularPrice > salePrice);
 
   return {
     saleOn,
+    hasDiscount,
     regularPrice,
     salePrice,
     currentPrice,

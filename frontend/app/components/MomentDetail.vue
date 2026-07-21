@@ -14,9 +14,9 @@ const isExisting = computed(() => props.category.variant === 'existing');
 const isB2b = computed(() => props.category.variant === 'b2b');
 
 const productionHighlights = [
-  { title: 'Context ophalen', text: 'Het formulier vraagt per categorie naar namen, momenten, sfeer en details die in de tekst moeten.' },
-  { title: 'Lyrics bouwen', text: 'We combineren herbruikbare rijmblokken met persoonlijke regels uit jouw verhaal.' },
-  { title: 'Muziekprompt maken', text: 'Na betaling gaat de definitieve tekst samen met stijl, stem en tempo door naar de muziekstap.' },
+  { title: 'Vertel wat het persoonlijk maakt', text: 'Deel namen, herinneringen, uitspraken en details die alleen jullie herkennen.' },
+  { title: 'Ontvang vier unieke samples', text: 'Binnen 24–72 uur sturen we vier muzikale richtingen van 15 seconden naar je inbox.' },
+  { title: 'Kies en luister overal', text: 'Na jouw keuze maken we de favoriet af voor Spotify en Apple Music.' },
 ];
 </script>
 
@@ -70,6 +70,7 @@ const productionHighlights = [
             :embed="category.playlistEmbed"
             :title="category.sampleTracks?.[0]?.title ?? category.title"
             :subtitle="category.intro"
+            :cover="cover"
           />
         </div>
         <div v-reveal>
@@ -109,8 +110,8 @@ const productionHighlights = [
           <span class="section-kicker">Aanvragen</span>
           <h2 class="section-heading text-3xl md:text-4xl">{{ isB2b ? 'Vraag jullie bedrijfsnummer aan' : 'Vraag jouw nummer aan' }}</h2>
           <p class="section-subtext mx-auto mt-3 max-w-2xl">
-            Dit formulier is afgestemd op {{ category.title.toLowerCase() }}. De antwoorden worden gebruikt
-            voor de lyrics én voor de muziekprompt na betaling.
+            De vragen zijn afgestemd op {{ category.title.toLowerCase() }}. Hoe concreter je antwoorden,
+            hoe persoonlijker de tekst, sfeer en uitvoering.
           </p>
         </div>
         <div v-reveal>

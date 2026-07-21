@@ -37,7 +37,7 @@ const otherCategory: Category = {
     { name: 'anecdotes', label: 'Verhaal, anekdotes & inside jokes', type: 'textarea', required: true, span: 'full', placeholder: 'Vertel wat dit moment uniek maakt — namen, plaatsen, grapjes...', help: 'Hoe concreter, hoe persoonlijker het nummer.' },
     { name: 'mustMention', label: 'Wat moet er absoluut in?', type: 'textarea', span: 'full', placeholder: 'Namen, zinnen, plekken of gebeurtenissen die niet mogen ontbreken.' },
     { name: 'avoid', label: 'Wat moeten we vermijden?', type: 'text', span: 'full', placeholder: 'Bijv. te sentimenteel, bepaalde namen, grove grappen...' },
-    { name: 'email', label: 'Jouw e-mailadres', type: 'email', placeholder: 'naam@voorbeeld.nl', required: true, span: 'full', help: 'Hier leveren we het nummer af.' },
+    { name: 'email', label: 'Jouw e-mailadres', type: 'email', placeholder: 'naam@voorbeeld.nl', required: true, span: 'full', help: 'Hier ontvang je de samples en updates.' },
   ],
   faq: [],
   seoTitle: '',
@@ -50,16 +50,16 @@ const otherCategory: Category = {
     <header v-reveal class="site-frame grid gap-8 p-7 sm:p-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
       <div>
         <span class="section-kicker">Aanvragen</span>
-        <h1 class="section-heading text-4xl md:text-6xl">Kies eerst het juiste type nummer</h1>
+        <h1 class="section-heading text-4xl md:text-6xl">Kies het moment dat je wilt vereeuwigen</h1>
         <p class="section-subtext mt-5 max-w-2xl">
-          Elk moment heeft een eigen formulier. Zo vragen we bij een bouwbedrijf naar slogan en projecten,
-          bij een teamlied naar clubcultuur, en bij een cadeau naar herinneringen en inside jokes.
+          Elk verhaal vraagt om andere details. Daarom krijg je vragen die passen bij jouw moment,
+          van herinneringen en inside jokes tot een slogan, clubcultuur of bijzondere gebeurtenis.
         </p>
       </div>
       <div class="grid gap-3 text-sm" :style="{ color: 'var(--color-ink-soft)' }">
-        <div class="metric-tile"><strong :style="{ color: 'var(--color-ink)' }">Stap 1:</strong> context verzamelen</div>
-        <div class="metric-tile"><strong :style="{ color: 'var(--color-ink)' }">Stap 2:</strong> lyrics + rijmblokken genereren</div>
-        <div class="metric-tile"><strong :style="{ color: 'var(--color-ink)' }">Stap 3:</strong> muziekprompt na betaling</div>
+        <div class="metric-tile"><strong :style="{ color: 'var(--color-ink)' }">Stap 1:</strong> kies jouw moment</div>
+        <div class="metric-tile"><strong :style="{ color: 'var(--color-ink)' }">Stap 2:</strong> vertel wat het persoonlijk maakt</div>
+        <div class="metric-tile"><strong :style="{ color: 'var(--color-ink)' }">Stap 3:</strong> ontvang vier samples</div>
       </div>
     </header>
 

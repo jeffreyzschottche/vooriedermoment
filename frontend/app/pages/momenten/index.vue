@@ -4,7 +4,7 @@ import { requestCategories } from '~/data/categories';
 useSeoMeta({
   title: 'Alle momenten',
   description:
-    'Voor welk moment wil je een nummer? Geslaagd, rijbewijs, eigen huis, vaderdag, moederdag, geboorte, verjaardag of een clublied.',
+    'Laat een persoonlijk nummer maken voor een verjaardag, rijbewijs, diploma, nieuw huis, geboorte, team, bedrijf en meer.',
 });
 
 useJsonLd(breadcrumbSchema([
@@ -17,10 +17,10 @@ useJsonLd(breadcrumbSchema([
   <div class="site-container py-16 sm:py-20">
     <header v-reveal class="mx-auto max-w-3xl text-center">
       <span class="section-kicker">Alle momenten</span>
-      <h1 class="section-heading text-4xl md:text-6xl">Voor welk moment wordt het?</h1>
+      <h1 class="section-heading text-4xl md:text-6xl">Welk verhaal mag een nummer worden?</h1>
       <p class="section-subtext mx-auto mt-5 max-w-2xl">
-        Kies hieronder je moment. Van persoonlijk cadeau tot teamlied of bedrijfsnummer:
-        elk formulier vraagt precies de context die we nodig hebben.
+        Kies de gelegenheid die het beste past. Daarna stellen we precies de vragen
+        waarmee jouw nummer persoonlijk, herkenbaar en deelbaar wordt.
       </p>
     </header>
 
