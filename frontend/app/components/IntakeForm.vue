@@ -266,35 +266,35 @@ function removeItem(fieldName: 'anecdotes' | 'mustMention', index: number) {
     </div>
 
     <form v-else @submit.prevent="nextStep" novalidate>
-      <section v-if="!started" class="grid gap-0 lg:grid-cols-[0.78fr_1.22fr]">
-        <aside class="border-b p-6 sm:p-8 lg:border-b-0 lg:border-r" :style="{ borderColor: 'var(--color-line)', background: 'var(--color-surface-soft)' }">
+      <section v-if="!started" class="grid gap-0 lg:grid-cols-[0.82fr_1.18fr]">
+        <aside class="border-b p-7 sm:p-9 lg:border-b-0 lg:border-r lg:p-10" :style="{ borderColor: 'var(--color-line)', background: 'var(--color-surface-soft)' }">
           <span class="section-kicker">Jouw verhaal</span>
-          <h2 class="font-display text-2xl font-semibold leading-tight" :style="{ color: 'var(--color-ink)' }">
-            In een paar korte stappen naar een nummer dat écht persoonlijk voelt
+          <h2 class="mt-6 font-display text-2xl font-semibold leading-tight sm:text-3xl" :style="{ color: 'var(--color-ink)' }">
+            Alles wat jouw nummer eigen maakt
           </h2>
-          <p class="mt-3 text-sm leading-7" :style="{ color: 'var(--color-ink-soft)' }">
-            We vragen alleen wat nodig is: wie centraal staat, welke verhalen niet mogen ontbreken en hoe het nummer moet voelen.
+          <p class="mt-5 text-sm leading-7 sm:text-base" :style="{ color: 'var(--color-ink-soft)' }">
+            Geen lange briefing. Wel gerichte vragen over de mensen, herinneringen en sfeer die in het nummer terug mogen komen.
           </p>
         </aside>
 
-        <div class="flex min-h-[460px] flex-col justify-center p-6 sm:p-10">
+        <div class="flex min-h-[420px] flex-col justify-center p-7 sm:p-10 lg:p-12">
           <span class="text-xs font-bold uppercase tracking-[0.18em]" :style="{ color: 'var(--accent-strong)' }">
             {{ fields.length }} korte vragen
           </span>
-          <h3 class="mt-4 font-display text-3xl font-semibold leading-tight sm:text-5xl" :style="{ color: 'var(--color-ink)' }">
-            Maak een nummer voor {{ category.title.toLowerCase() }}
+          <h3 class="mt-4 max-w-2xl font-display text-3xl font-semibold leading-[1.05] sm:text-4xl" :style="{ color: 'var(--color-ink)' }">
+            Vertel ons wat dit moment bijzonder maakt
           </h3>
-          <p class="mt-5 max-w-2xl text-base leading-8" :style="{ color: 'var(--color-ink-soft)' }">
-            Deel echte namen, herinneringen en typische uitspraken. Wij halen daar de details uit die jouw nummer herkenbaar en uniek maken.
+          <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" :style="{ color: 'var(--color-ink-soft)' }">
+            Deel echte namen, herinneringen en typische uitspraken. Wij vertalen jouw antwoorden naar een nummer dat alleen bij dit moment past.
           </p>
 
-          <div class="mt-8 grid gap-3 text-sm sm:grid-cols-3" :style="{ color: 'var(--color-ink-soft)' }">
-            <div class="metric-tile">Eén heldere vraag tegelijk</div>
-            <div class="metric-tile">Voeg herinneringen los toe</div>
-            <div class="metric-tile"><OfferBadge size="sm" inline /></div>
+          <div class="mt-7 flex flex-wrap items-center gap-3 text-sm" :style="{ color: 'var(--color-ink-soft)' }">
+            <div class="rounded-full border bg-white px-4 py-2.5" :style="{ borderColor: 'var(--color-line)' }">✓ Eén vraag tegelijk</div>
+            <div class="rounded-full border bg-white px-4 py-2.5" :style="{ borderColor: 'var(--color-line)' }">✓ Persoonlijk uitgewerkt</div>
+            <div class="rounded-full border bg-white px-4 py-2.5" :style="{ borderColor: 'var(--color-line)' }"><OfferBadge size="sm" inline /></div>
           </div>
 
-          <button type="button" class="stitch-button mt-9 w-full py-4 text-base sm:w-auto sm:px-10" @click="start">
+          <button type="button" class="stitch-button mt-8 w-full py-4 text-base sm:w-auto sm:px-10" @click="start">
             Begin met vertellen
           </button>
         </div>

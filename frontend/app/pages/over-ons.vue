@@ -24,7 +24,7 @@ const steps = [
       <div class="mx-auto max-w-3xl text-center">
         <span v-reveal class="section-kicker">Over ons</span>
         <h1 v-reveal class="section-heading text-4xl leading-tight md:text-6xl">
-          Een persoonlijk nummer hoeft geen luxe te zijn
+          Jouw eigen nummer is binnen handbereik
         </h1>
         <p v-reveal class="mt-6 text-lg leading-8" :style="{ color: 'var(--color-ink-soft)' }">
           Een eigen nummer laten maken was ooit vooral duur en tijdrovend. Wij maken het bereikbaar:
@@ -55,6 +55,7 @@ const steps = [
         <h2 v-reveal class="section-heading text-3xl md:text-4xl">Klaar voor jouw moment?</h2>
         <div v-reveal class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <NuxtLink to="/momenten" class="stitch-button px-8 py-3.5">Bekijk alle momenten</NuxtLink>
+          <NuxtLink to="/aanvraag#ander-moment" class="stitch-outline-button px-8 py-3.5">Kies je eigen moment</NuxtLink>
           <NuxtLink to="/faq-contact" class="stitch-outline-button px-8 py-3.5">Stel een vraag</NuxtLink>
         </div>
       </div>

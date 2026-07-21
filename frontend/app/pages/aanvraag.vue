@@ -33,7 +33,7 @@ useSeoMeta({
       <MomentCard v-for="c in requestCategories" :key="c.slug" :category="c" />
     </div>
 
-    <div id="ander-moment" class="mx-auto mt-16 max-w-3xl scroll-mt-32">
+    <div id="ander-moment" class="mx-auto mt-16 max-w-4xl scroll-mt-32">
       <div v-reveal class="mb-6 text-center">
         <span class="section-kicker">Helemaal jouw gelegenheid</span>
         <h2 class="section-heading text-2xl md:text-3xl">Maak een nummer voor een ander moment</h2>
