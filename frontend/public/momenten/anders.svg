@@ -20,6 +20,6 @@
   <rect width="1200" height="630" fill="url(#glow)"/>
   <text x="600" y="312" font-size="300" text-anchor="middle" dominant-baseline="central">✨</text>
   <rect width="1200" height="630" fill="url(#shade)"/>
-  <text x="80" y="96" font-family="'Manrope','Segoe UI',sans-serif" font-size="28" font-weight="700" letter-spacing="3" fill="#ffffff" opacity="0.82">VOOR IEDER MOMENT</text>
-  <text x="80" y="556" font-family="Georgia,'Times New Roman',serif" font-size="68" font-weight="700" fill="#ffffff">Een ander moment</text>
+  <text x="600" y="96" text-anchor="middle" font-family="'Manrope','Segoe UI',sans-serif" font-size="28" font-weight="700" letter-spacing="3" fill="#ffffff" opacity="0.82">VOOR IEDER MOMENT</text>
+  <text x="600" y="556" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="58" font-weight="700" fill="#ffffff">Een ander moment</text>
 </svg>
