@@ -283,6 +283,8 @@ export const categories: Category[] = [
     ]),
     faq: [
       { question: 'Het rijbewijs-nummer bestaat toch al?', answer: 'Klopt — er staat een versie op Spotify met heel veel namen. Zit jouw naam er niet bij, of wil je een eigen variant met je eigen verhaal? Dan maken we die op aanvraag.' },
+      { question: 'Welke details kunnen jullie verwerken?', answer: 'Denk aan de rijschool of instructeur, het aantal pogingen, een droomauto, de eerste rit en alles wat er op de examendag gebeurde.' },
+      { question: 'Kan ik dit als verrassing voor iemand anders bestellen?', answer: 'Ja. Vul de naam en het rijverhaal van de geslaagde in en gebruik je eigen e-mailadres om de samples te ontvangen.' },
       { question: 'Hoe snel heb ik mijn versie?', answer: 'Binnen 24–72 uur na betaling ontvang je vier samples. Na jouw keuze staat de complete versie binnen 24–72 uur op Spotify en Apple Music.' },
     ],
     seoTitle: 'Rijbewijs gehaald? Een persoonlijk feestnummer',
@@ -319,8 +321,10 @@ export const categories: Category[] = [
       { name: 'examStory', label: 'Examenmoment of stressverhaal', type: 'text', placeholder: 'Bijv. herexamen, nachten blokken, champagne bij de vlag', span: 'half' },
     ]),
     faq: [
-      { question: 'Hoe weet ik of mijn naam er al in zit?', answer: 'Gebruik de zoekbalk op deze pagina. Vind je je naam niet, dan vraag je in een paar klikken een eigen versie aan.' },
+      { question: 'Hoe weet ik of mijn naam al in het bestaande nummer zit?', answer: 'De volledige namenzoeker komt binnenkort online. Wil je nu zeker weten dat jouw naam én eigen verhaal erin zitten? Vraag dan direct een persoonlijke versie aan.' },
+      { question: 'Voor welke diploma’s en examens is dit geschikt?', answer: 'Voor middelbare school, mbo, hbo, universiteit, een vakopleiding of een ander belangrijk examen. Vermeld het niveau, de opleiding en wat hierna komt in de briefing.' },
       { question: 'Kan ik het voor iemand anders aanvragen?', answer: 'Zeker — vul gewoon de naam van de geslaagde in. Perfect als verrassingscadeau.' },
+      { question: 'Wat maakt een geslaagd-nummer persoonlijk?', answer: 'Details zoals nachten blokken, een herexamen, favoriete docenten, de vlag aan de gevel en plannen voor een studie, tussenjaar of eerste baan.' },
     ],
     seoTitle: 'Geslaagd-nummer met jouw naam',
     seoDescription: 'Geslaagd voor je examen? Vind je naam in ons geslaagd-nummer (10.000+ namen) of vraag je eigen persoonlijke versie aan.',
@@ -358,6 +362,8 @@ export const categories: Category[] = [
     faq: [
       { question: 'Is dit voor een housewarming?', answer: 'Perfect daarvoor. We verwerken jullie namen en het verhaal van de nieuwe plek, zodat je hem op het feestje kunt draaien.' },
       { question: 'Kan het over een stel gaan?', answer: 'Ja, vul beide namen in bij het verhaal en we verwerken ze allebei.' },
+      { question: 'Welke details over het huis kan ik doorgeven?', answer: 'Bijvoorbeeld de plaats of buurt, het type woning, favoriete kamer, verbouwplannen, verhuisblunders en het moment waarop jullie de sleutel kregen.' },
+      { question: 'Kan ik kiezen tussen een rustig nummer en een housewarming-hit?', answer: 'Ja. Je kiest zelf de sfeer, het genre en tempo. Van klein en akoestisch tot uitbundig en dansbaar.' },
     ],
     seoTitle: 'Eigen huis gekocht? Een persoonlijk nummer',
     seoDescription: 'Nieuw eigen huis? Vier de sleuteloverdracht met een persoonlijk nummer met jullie namen. Al op Spotify, of vraag je eigen versie aan.',
@@ -384,6 +390,9 @@ export const categories: Category[] = [
     ]),
     faq: [
       { question: 'Op tijd voor Vaderdag?', answer: 'Reken op 24–72 uur voor de vier samples en na je keuze nog eens op 24–72 uur voor de release. Vraag dus ruim voor Vaderdag aan.' },
+      { question: 'Kan het ook voor opa, een stiefvader of bonusvader?', answer: 'Zeker. Vul in hoe jullie hem noemen en welke rol hij in jullie leven speelt. Het nummer hoeft niet letterlijk over “papa” te gaan.' },
+      { question: 'Kan het grappig én oprecht zijn?', answer: 'Ja. Deel zowel zijn typische gewoontes en uitspraken als waar je hem voor wilt bedanken. Zo kan het nummer luchtig beginnen en toch echt raken.' },
+      { question: 'Welke informatie maakt het nummer persoonlijk?', answer: 'Een koosnaam, hobby, vaste uitspraak, mooie herinnering en iets waarvoor je dankbaar bent geven ons de sterkste bouwstenen.' },
     ],
     seoTitle: 'Persoonlijk Vaderdag-nummer cadeau',
     seoDescription: 'Verras je vader met een persoonlijk Vaderdag-nummer met jullie eigen verhaal. Snel en betaalbaar.',
@@ -408,6 +417,9 @@ export const categories: Category[] = [
     ]),
     faq: [
       { question: 'Kan het emotioneel én licht?', answer: 'Zeker — kies de sfeer in het formulier. We kunnen ontroerend of juist vrolijk werken.' },
+      { question: 'Kan het ook voor oma of een andere moederfiguur?', answer: 'Ja. Vertel hoe je haar noemt en wat zij voor jullie betekent. We stemmen de woorden af op jullie relatie.' },
+      { question: 'Welke herinneringen kan ik delen?', answer: 'Alles wat haar herkenbaar maakt: tradities, vakanties, zondagse etentjes, typische appjes, wijze raad of dat ene moment dat jullie nooit vergeten.' },
+      { question: 'Kan ik zelf de muziekstijl kiezen?', answer: 'Ja. Kies bijvoorbeeld warme pop, een klein akoestisch nummer of juist iets vrolijks. Je kunt de muzikale keuze ook aan ons overlaten.' },
     ],
     seoTitle: 'Persoonlijk Moederdag-nummer cadeau',
     seoDescription: 'Verras je moeder met een persoonlijk Moederdag-nummer met jullie eigen herinneringen. Snel en betaalbaar.',
@@ -432,6 +444,9 @@ export const categories: Category[] = [
     ]),
     faq: [
       { question: 'Geschikt als kraamcadeau?', answer: 'Heel geschikt. Vul de naam van het kindje en de ouders in, dan maken we er een persoonlijk welkomstlied van.' },
+      { question: 'Kunnen de namen van ouders, broer of zus erin?', answer: 'Ja. Voeg de belangrijke namen en hun relatie tot het kindje toe, dan kunnen we ze op een natuurlijke plek in de tekst verwerken.' },
+      { question: 'Welke geboortedetails kan ik delen?', answer: 'Denk aan de geboortedatum, plaats, tijd, gewicht, sterrenbeeld of een bijzonder verhaal rond de geboorte. Deel alleen wat goed voelt.' },
+      { question: 'Kan het een rustig slaapliedje worden?', answer: 'Ja. Kies een rustige, tedere sfeer en een passende stem. Liever iets vrolijks als welkomstlied? Dat kan natuurlijk ook.' },
     ],
     seoTitle: 'Persoonlijk geboortenummer voor je baby',
     seoDescription: 'Welkomstlied voor je pasgeboren kindje, met naam en geboortedatum erin verwerkt. Een uniek kraamcadeau.',
@@ -456,6 +471,9 @@ export const categories: Category[] = [
     ]),
     faq: [
       { question: 'Kan het grappig?', answer: 'Absoluut. Kies “Grappig & ad rem” als sfeer en deel de beste inside jokes in het verhaalveld.' },
+      { question: 'Is het geschikt voor iedere leeftijd?', answer: 'Ja. Van een eerste verjaardag tot 18, 30, 50 of 80 jaar: leeftijd, karakter en jullie verhaal bepalen de tekst.' },
+      { question: 'Wanneer kan ik het nummer het beste draaien?', answer: 'Bij de binnenkomst, een speech, het aansnijden van de taart of als verrassing op de dansvloer. Geef het gewenste moment door, dan kunnen we daar rekening mee houden.' },
+      { question: 'Kunnen meerdere vrienden of familieleden erin voorkomen?', answer: 'Ja. Voeg extra namen en hun rol toe. Kies vooral de personen en details die voor de jarige echt betekenis hebben.' },
     ],
     seoTitle: 'Persoonlijk verjaardagsnummer op maat',
     seoDescription: 'Een uniek verjaardagsnummer met naam, leeftijd en inside jokes. Het hoogtepunt van elk verjaardagsfeest.',
@@ -483,6 +501,9 @@ export const categories: Category[] = [
     faq: [
       { question: 'Moet het voor één persoon zijn?', answer: 'Nee. Dit formulier is juist bedoeld voor een team, club of supportersgroep. Namen zijn optioneel en alleen handig als ze in het refrein of couplet mogen terugkomen.' },
       { question: 'Voor een amateurclub?', answer: 'Juist leuk. Geef teamnaam, clubcultuur en herkenbare momenten door, dan maken we een meezinger voor in de kantine.' },
+      { question: 'Kunnen spelers, trainer en een bestaande yell erin?', answer: 'Ja. Deel de belangrijkste namen, rollen en jullie vaste leus. We verwerken alleen wat muzikaal natuurlijk past.' },
+      { question: 'Kan het een echte stadion- of kantineversie worden?', answer: 'Ja. Kies voor een meezinger, stadionkoor of feestelijke uitvoering en vertel welke sfeer bij jullie club past.' },
+      { question: 'Voor welke momenten is een clublied geschikt?', answer: 'Bij een kampioenschap, seizoensopening, afscheid, sponsoravond, jubileum of gewoon als vaste track voor de kleedkamer en kantine.' },
     ],
     seoTitle: 'Persoonlijk teamlied of clublied laten maken',
     seoDescription: 'Een uniek voetballied voor je club, team of supportersgroep, met clubnaam, kleuren en herkenbare momenten erin.',
@@ -531,6 +552,9 @@ export const categories: Category[] = [
     faq: [
       { question: 'Krijgen we de rechten om het zakelijk te gebruiken?', answer: 'Je ontvangt één vaste versie die je mag inzetten op je eigen kanalen (social media, website, bedrijfsfeest). Neem voor uitgebreidere commerciële licenties even contact op.' },
       { question: 'Kunnen jullie onze slogan en kernwaarden verwerken?', answer: 'Ja. Een sterke slogan of kernwaarde kan de herkenbare hook van het refrein worden.' },
+      { question: 'Voor welke bouwbedrijven is dit geschikt?', answer: 'Voor onder meer aannemers, installateurs, renovatiebedrijven, infrabedrijven en dakdekkers. Jullie specialisme, mensen en projecten vormen de inhoud.' },
+      { question: 'Waar kunnen we het bedrijfsnummer voor gebruiken?', answer: 'Bij een jubileum, bedrijfsfeest, beurs, open dag, recruitmentcampagne of als herkenbare track voor social media en de website.' },
+      { question: 'Krijgen we ook vier verschillende samples?', answer: 'Ja. Binnen 24–72 uur ontvangen jullie vier voorproefjes van 15 seconden. Daarna kiezen jullie welke uitvoering we compleet maken.' },
       { question: 'Hoe snel is het klaar?', answer: 'Binnen 24–72 uur ontvang je vier samples. Na je keuze staat de complete versie binnen 24–72 uur op Spotify en Apple Music. Voor een vaste deadline kun je het best vooraf contact opnemen.' },
     ],
     seoTitle: 'Bedrijfsnummer voor bouwbedrijven in Nederland',

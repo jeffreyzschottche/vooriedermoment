@@ -7,12 +7,20 @@ useSeoMeta({
 });
 
 const faqs = [
-  { question: 'Worden de nummers met AI gemaakt?', answer: 'Ja. AI helpt ons verschillende teksten en muzikale richtingen te maken. We combineren dat met vaste songstructuren, rijmende bouwstenen en de persoonlijke details uit jouw briefing. Zo blijft het betaalbaar én herkenbaar.' },
   { question: 'Wat krijg ik precies?', answer: 'Je ontvangt eerst vier unieke samples van 15 seconden. Jij kiest je favoriet; daarna maken wij één complete versie en regelen we de release op Spotify en Apple Music.' },
   { question: 'Wat kost een nummer?', answer: offer.hasDiscount.value ? `Normaal ${offer.formattedRegular}, nu ${offer.formattedSale}. Vier samples en de release zijn inbegrepen.` : `${offer.formattedRegular}. Vier samples en de release op Spotify en Apple Music zijn inbegrepen.` },
   { question: 'Hoe snel heb ik mijn nummer?', answer: 'Binnen 24–72 uur na betaling ontvang je vier samples. Na jouw keuze duurt het nog 24–72 uur voordat de complete versie op Spotify en Apple Music staat. Heb je een vaste datum? Vraag dan ruim op tijd aan.' },
+  { question: 'Hoe persoonlijk wordt het nummer?', answer: 'Dat hangt vooral af van jouw input. Namen, herinneringen, typische uitspraken, plekken en inside jokes maken het verschil tussen een algemeen nummer en een verhaal dat echt herkenbaar voelt.' },
+  { question: 'Kan ik zelf het genre, tempo en de stem kiezen?', answer: 'Ja. In de briefing kies je de gewenste sfeer, muzikale richting, snelheid en uitvoering. Twijfel je? Kies dan “Laat ons kiezen”, zodat we kunnen gaan voor wat het beste bij jouw verhaal past.' },
+  { question: 'Kan ik meerdere namen laten terugkomen?', answer: 'Ja. Je vult eerst één hoofdnaam in en kunt daarna extra namen, koosnamen, rollen of afzenders toevoegen. Deel alleen de namen die echt belangrijk zijn voor het verhaal.' },
+  { question: 'Zijn de vier samples complete nummers?', answer: 'Nee. Het zijn vier voorproefjes van 15 seconden in verschillende muzikale richtingen. Je kiest één favoriet en van die uitvoering maken we het complete nummer.' },
+  { question: 'Worden de nummers met AI gemaakt?', answer: 'Ja. AI helpt ons verschillende teksten en muzikale richtingen te maken. We combineren dat met vaste songstructuren, rijmende bouwstenen en de persoonlijke details uit jouw briefing. Zo blijft het betaalbaar én herkenbaar.' },
   { question: 'Sommige nummers staan al op Spotify — hoe zit dat?', answer: 'Voor populaire momenten zoals geslaagd, rijbewijs en eigen huis hebben we al een nummer met heel veel namen. Staat jouw naam er niet bij, dan maken we op aanvraag een eigen versie.' },
   { question: 'Kan ik het voor iemand anders aanvragen?', answer: 'Zeker. Vul de naam en details van diegene in en houd de verrassing geheim tot het grote moment.' },
+  { question: 'Mijn gelegenheid staat er niet tussen. Kan ik toch aanvragen?', answer: 'Ja. Kies op de aanvraagpagina voor “Een ander moment”. Daar kun je bijvoorbeeld een pensioen, jubileum, afscheid of andere bijzondere gelegenheid beschrijven.' },
+  { question: 'Hoe ontvang ik de samples en updates?', answer: 'We sturen alles naar het e-mailadres dat je tijdens de aanvraag invult. Gebruik daarom een adres dat je regelmatig controleert en kijk eventueel ook in je map met ongewenste e-mail.' },
+  { question: 'Kan ik het nummer delen met familie, vrienden of collega’s?', answer: 'Ja. Zodra het nummer op Spotify en Apple Music staat, kun je de link eenvoudig delen via WhatsApp, e-mail en social media.' },
+  { question: 'Is de release op Spotify en Apple Music inbegrepen?', answer: 'Ja. De release van jouw gekozen, complete versie op beide platforms zit bij de prijs inbegrepen.' },
 ];
 
 useJsonLd(faqSchema(faqs));
