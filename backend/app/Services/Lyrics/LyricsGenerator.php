@@ -128,6 +128,12 @@ class LyricsGenerator
             'detail2' => 'foundingYear',
             'quote' => 'slogan',
         ],
+        'anders' => [
+            'name' => 'recipientName',
+            'from' => 'fromName',
+            'detail1' => 'occasion',
+            'moment' => 'occasion',
+        ],
     ];
 
     public function __construct(?AiManager $ai = null, ?RhymeChecker $rhyme = null)
@@ -400,47 +406,49 @@ class LyricsGenerator
         $context = $this->buildContext('anders', $intake);
         $provider = $this->ai->for('anders');
         $sections = [];
+        $baseSections = $this->buildGeneralBaseLyrics($context);
 
         if (! $provider instanceof NullProvider) {
-            $prompt = $this->buildGeneralLyricsPrompt($context, $intake);
-            $attempts = max(1, (int) config('ai.general_lyrics_attempts', 3));
             $bestCandidate = [];
-            $fewestIssues = PHP_INT_MAX;
+            $bestScore = PHP_INT_MIN;
             $previousIssues = [];
+            $currentDraft = $this->formatLyrics($baseSections);
+            $rotations = max(2, (int) config('ai.general_lyrics_rotations', 3));
 
-            for ($attempt = 0; $attempt < $attempts; $attempt++) {
-                $attemptPrompt = $attempt === 0
-                    ? $prompt
-                    : $prompt."\n\nHERZIENING: verbeter de vorige versie. Los vooral dit op: ".implode('; ', $previousIssues).'.';
-
-                $candidate = $this->parseGeneralLyrics($provider->complete($attemptPrompt, [
-                    'use_fallback_model' => $attempt > 0,
+            for ($rotation = 0; $rotation < $rotations; $rotation++) {
+                $prompt = $this->buildGeneralLyricsPrompt(
+                    $context,
+                    $intake,
+                    $currentDraft,
+                    $rotation + 1,
+                    $rotations,
+                    $previousIssues,
+                );
+                $candidate = $this->parseGeneralLyrics($provider->complete($prompt, [
+                    'use_fallback_model' => $rotation > 0,
                 ]));
                 $issues = $this->generalLyricsQualityIssues($candidate, $context, $intake);
+                $score = $this->generalLyricsQualityScore($candidate, $context, $intake, $issues);
 
-                if ($candidate !== [] && count($issues) < $fewestIssues) {
+                if ($candidate !== [] && $score >= $bestScore) {
                     $bestCandidate = $candidate;
-                    $fewestIssues = count($issues);
-                }
-
-                if ($candidate !== [] && $issues === []) {
-                    $sections = $candidate;
-                    break;
+                    $bestScore = $score;
+                    $currentDraft = $this->formatLyrics($candidate);
                 }
 
                 $previousIssues = $issues !== []
                     ? $issues
-                    : ['houd exact de gevraagde vijf secties met vier regels per sectie aan'];
+                    : ['maak de tekst nog concreter, natuurlijker en beter zingbaar zonder sterke regels kwijt te raken'];
             }
 
-            if ($sections === []) {
-                $sections = $bestCandidate;
-            }
+            $sections = $bestCandidate;
         }
 
         $usedAi = $sections !== [];
         if (! $usedAi) {
-            $sections = $this->generalLyricsFallback($context, $intake);
+            $sections = $baseSections !== []
+                ? $baseSections
+                : $this->generalLyricsFallback($context, $intake);
         }
 
         $formatted = $this->formatLyrics($sections);
@@ -456,7 +464,14 @@ class LyricsGenerator
         ];
     }
 
-    protected function buildGeneralLyricsPrompt(array $context, array $intake): string
+    protected function buildGeneralLyricsPrompt(
+        array $context,
+        array $intake,
+        string $currentDraft,
+        int $rotation,
+        int $rotations,
+        array $previousIssues = [],
+    ): string
     {
         $details = [
             'Gelegenheid' => $intake['occasion'] ?? '',
@@ -494,6 +509,13 @@ class LyricsGenerator
             implode("\n", $briefing),
             '</briefing>',
             '',
+            "Verbeteringsronde {$rotation} van {$rotations}.",
+            'Dit is de huidige basistekst. Herschrijf en verbeter deze; kopieer zwakke of algemene regels niet blind:',
+            '<huidige_tekst>',
+            $currentDraft,
+            '</huidige_tekst>',
+            $previousIssues !== [] ? 'Aandachtspunten uit de vorige controle: '.implode('; ', $previousIssues).'.' : '',
+            '',
             'Eisen:',
             '- Gebruik concrete namen, herinneringen en uitspraken uit de briefing.',
             '- Maak er één logisch verhaal van; prop niet alle details in iedere sectie.',
@@ -514,6 +536,56 @@ class LyricsGenerator
             '[Final Chorus]',
             'vier regels',
         ]);
+    }
+
+    /** @return array<int, array{section: string, lines: array<int, string>}> */
+    protected function buildGeneralBaseLyrics(array $context): array
+    {
+        $verse1 = $this->combineGeneralCouplets('verse1', $context);
+        $verse2 = $this->combineGeneralCouplets('verse2', $context);
+        $chorus = $this->getRandomCouplet('anders', 'chorus', $context);
+        $bridge = $this->getRandomCouplet('anders', 'bridge', $context);
+
+        if ($verse1 === [] || $verse2 === [] || ! $chorus || ! $bridge) {
+            return [];
+        }
+
+        $chorusLines = $this->replacePlaceholders($chorus['lines'], $context);
+
+        return [
+            ['section' => 'verse1', 'lines' => $verse1],
+            ['section' => 'chorus', 'lines' => $chorusLines],
+            ['section' => 'verse2', 'lines' => $verse2],
+            ['section' => 'bridge', 'lines' => $this->replacePlaceholders($bridge['lines'], $context)],
+            ['section' => 'chorus_final', 'lines' => $chorusLines],
+        ];
+    }
+
+    /** @return array<int, string> */
+    protected function combineGeneralCouplets(string $section, array $context): array
+    {
+        $first = $this->getRandomCouplet('anders', $section, $context);
+        $second = $this->getRandomCouplet('anders', $section, $context);
+
+        if (! $first || ! $second) {
+            return [];
+        }
+
+        if (($first['id'] ?? null) === ($second['id'] ?? null)) {
+            $pool = array_values(array_filter(
+                $this->loadSectionLyrics('anders', $section),
+                fn (array $couplet) => ($couplet['id'] ?? null) !== ($first['id'] ?? null)
+                    && $this->coupletSatisfied($couplet, $context)
+            ));
+            if ($pool !== []) {
+                $second = $pool[array_rand($pool)];
+            }
+        }
+
+        return $this->replacePlaceholders(array_merge(
+            $first['lines'] ?? [],
+            $second['lines'] ?? [],
+        ), $context);
     }
 
     /** @return array<int, array{section: string, lines: array<int, string>}> */
@@ -614,6 +686,41 @@ class LyricsGenerator
         }
 
         return array_values(array_unique($issues));
+    }
+
+    protected function generalLyricsQualityScore(array $sections, array $context, array $intake, array $issues): int
+    {
+        if ($sections === []) {
+            return PHP_INT_MIN;
+        }
+
+        $lines = array_merge(...array_column($sections, 'lines'));
+        $text = mb_strtolower(implode("\n", $lines));
+        $score = 100 - (count($issues) * 30);
+
+        $name = mb_strtolower(trim((string) ($context['name'] ?? '')));
+        if ($name !== '') {
+            $score += min(18, substr_count($text, $name) * 6);
+        }
+
+        foreach ($this->meaningfulWords(implode("\n", [
+            (string) ($intake['anecdotes'] ?? ''),
+            (string) ($intake['mustMention'] ?? ''),
+        ])) as $word) {
+            if (str_contains($text, $word)) {
+                $score += 3;
+            }
+        }
+
+        foreach ($lines as $line) {
+            $words = preg_split('/\s+/u', trim($line), -1, PREG_SPLIT_NO_EMPTY);
+            $count = is_array($words) ? count($words) : 0;
+            if ($count >= 5 && $count <= 10) {
+                $score += 2;
+            }
+        }
+
+        return $score;
     }
 
     /** @return array<int, array{section: string, lines: array<int, string>}> */

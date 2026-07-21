@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Services\Lyrics\LyricsGenerator;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -70,9 +71,41 @@ class GeneralLyricsRouteTest extends TestCase
 
         $this->assertStringContainsString('Henk dit is jouw moment', $response->json('lyrics'));
 
+        Http::assertSentCount(3);
+
         Http::assertSent(fn ($request) =>
             $request['model'] === 'deepseek-chat'
             && str_contains($request['messages'][0]['content'], 'Gelegenheid: Pensioen')
+            && str_contains($request['messages'][0]['content'], 'Verbeteringsronde')
         );
+
+        $requests = Http::recorded();
+        $secondPrompt = $requests[1][0]['messages'][0]['content'];
+        $this->assertStringContainsString('Verbeteringsronde 2 van 3', $secondPrompt);
+        $this->assertStringContainsString('Henk dit is jouw moment', $secondPrompt);
+    }
+
+    public function test_general_moments_have_a_large_local_base_library(): void
+    {
+        config(['ai.providers.deepseek.key' => null]);
+
+        $generator = app(LyricsGenerator::class);
+        $preview = $generator->previewCategory('anders');
+
+        $this->assertGreaterThanOrEqual(20, $preview['verse1']['count']);
+        $this->assertGreaterThanOrEqual(20, $preview['verse2']['count']);
+        $this->assertGreaterThanOrEqual(12, $preview['chorus']['count']);
+        $this->assertGreaterThanOrEqual(12, $preview['bridge']['count']);
+
+        $result = $generator->generateGeneral([
+            'occasion' => 'Afscheid',
+            'recipientName' => 'Sophie',
+            'fromName' => 'het team',
+            'anecdotes' => 'Sophie stond altijd als eerste klaar met koffie.',
+        ]);
+
+        $this->assertFalse($result['used_ai']);
+        $this->assertCount(5, $result['sections']);
+        $this->assertStringNotContainsString('{{', $result['lyrics']);
     }
 }

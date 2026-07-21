@@ -60,7 +60,7 @@ return [
     */
     'lyrics_attempts' => (int) env('LYRICS_AI_ATTEMPTS', env('DEEPSEEK_LYRICS_ATTEMPTS', 5)),
     'lyrics_fallback_after_attempt' => (int) env('LYRICS_AI_FALLBACK_AFTER_ATTEMPT', 3),
-    'general_lyrics_attempts' => (int) env('GENERAL_LYRICS_ATTEMPTS', 3),
+    'general_lyrics_rotations' => (int) env('GENERAL_LYRICS_ROTATIONS', env('GENERAL_LYRICS_ATTEMPTS', 3)),
 
     /*
     | Per-categorie override van provider en/of model. Voorbeeld:

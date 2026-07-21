@@ -1,0 +1,19 @@
+{
+  "section": "chorus",
+  "category": "anders",
+  "description": "Universele refreinen voor vrije momenten. NAME=hoofdpersoon, FROM=afzender",
+  "couplets": [
+    { "id": 1, "lines": ["{{NAME}}, dit is jouw moment", "Een lied waarin je ieder woord herkent", "Vandaag klinkt jouw verhaal dichtbij", "En zingt iedereen het mee met mij"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Dit is jouw lied, dit is jouw dag", "Vol herinneringen en die bekende lach", "{{NAME}}, luister en zing maar mee", "Dit moment nemen we voor altijd met ons mee"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Voor {{NAME}} klinkt vandaag dit lied", "Omdat niemand jouw verhaal ooit vergeet", "Van {{FROM}}, met een hart vol trots", "Voor alles wat je was en alles wat nog komt"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Hé {{NAME}}, hoor je wat er klinkt", "Een lied dat al jouw mooie mensen verbindt", "Van toen tot nu, van klein tot groot", "Jouw verhaal leeft verder in iedere noot"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["Dit moment is helemaal van jou", "Met alle mensen van wie je houdt", "{{NAME}}, vandaag staan wij hier", "Met jouw eigen verhaal en jouw eigen plezier"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Zing het luid voor {{NAME}} vandaag", "Een eigen nummer omdat iedereen je graag mag", "Bewaar dit lied en dit moment", "Zodat je later ieder woord nog herkent"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Voor jou, voor nu, voor deze tijd", "Voor alles wat ons met elkaar verbindt", "{{NAME}}, dit refrein blijft van jou", "Een muzikaal verhaal, persoonlijk en vertrouwd"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Vandaag zetten wij {{NAME}} vooraan", "En laten we de muziek voor jou aangaan", "Iedere naam en ieder verhaal", "Klinkt in dit refrein voor ons allemaal"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["{{NAME}}, neem dit lied met je mee", "Naar morgen en naar alles hierna", "Wat er ook verandert met de tijd", "Dit moment raak je nooit meer kwijt"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["Hier is jouw verhaal in muziek", "Persoonlijk, herkenbaar en uniek", "{{NAME}}, dit is speciaal voor jou", "Van iedereen die oprecht van je houdt"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Laat dit lied nog één keer gaan", "Voor {{NAME}}, die vandaag vooraan mag staan", "Met de mensen die het meeste geven", "Klinkt jouw verhaal nog lang door in het leven"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["Dit is het moment dat bij ons blijft", "Omdat jouw naam in elke regel staat", "{{NAME}}, wij zingen dit voor jou", "Een eigen refrein, warm en vertrouwd"], "rhyme_scheme": "AABB" }
+  ]
+}

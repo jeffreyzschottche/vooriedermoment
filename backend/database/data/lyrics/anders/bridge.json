@@ -1,0 +1,19 @@
+{
+  "section": "bridge",
+  "category": "anders",
+  "description": "Universele bruggen voor vrije momenten. NAME=hoofdpersoon, FROM=afzender",
+  "couplets": [
+    { "id": 1, "lines": ["Even wordt het stil om ons heen", "Want een moment als dit komt maar één keer", "{{NAME}}, voel hoe iedereen hier staat", "En hoeveel jouw verhaal voor ons betekent"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Later klinkt dit nummer weer", "En brengt het je terug naar deze keer", "Naar de mensen, woorden en de tijd", "Naar een moment dat altijd bij je blijft"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Van {{FROM}} voor jou dit gebaar", "Geen groot cadeau, maar een verhaal", "{{NAME}}, bewaar het dicht bij jou", "Als herinnering aan iedereen die van je houdt"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["Sommige woorden zeg je veel te weinig", "Sommige mensen zijn vanzelf bijzonder", "Vandaag krijgt alles eindelijk geluid", "En spreken wij het zingend voor je uit"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["Wat achter ons ligt nemen we mee", "Wat voor ons ligt begint vanaf hier", "{{NAME}}, met jouw mensen aan je zij", "Wordt ieder volgend hoofdstuk weer van jou"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Kijk eens om je heen en zie", "Wie vandaag jouw verhaal met je deelt", "Al die mensen zingen voor jou", "Omdat jij meer betekent dan je zelf soms weet"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Geen foto vangt precies dit gevoel", "Geen kaart vertelt wat iedereen bedoelt", "Daarom klinkt jouw naam nu in dit lied", "Een herinnering die niemand meer verliest"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Vandaag bewaren we in muziek", "Wat dit verhaal herkenbaar maakt en uniek", "{{NAME}}, als de laatste noot straks gaat", "Blijft alles wat hier klinkt nog lang bestaan"], "rhyme_scheme": "AABB" },
+    { "id": 9, "lines": ["Dank je voor de tijd en het vertrouwen", "Voor de kleine dingen waarop wij konden bouwen", "Van {{FROM}} klinkt dit recht uit het hart", "Voor alles wat vandaag een nieuw begin markeert"], "rhyme_scheme": "AABB" },
+    { "id": 10, "lines": ["De wereld draait na vandaag weer door", "Maar dit ene lied klinkt altijd nog na", "{{NAME}}, waar je morgen ook zult zijn", "Dit verhaal brengt ons opnieuw bij elkaar"], "rhyme_scheme": "AABB" },
+    { "id": 11, "lines": ["Voor één moment valt alles op zijn plek", "De namen, de verhalen en het gevoel", "Wij zingen wat soms moeilijk is te zeggen", "En geven het voor altijd aan je mee"], "rhyme_scheme": "AABB" },
+    { "id": 12, "lines": ["{{NAME}}, dit is meer dan een refrein", "Het zijn jouw mensen die vandaag hier zijn", "Een lied dat zegt wat iedereen al wist", "Dat jij in onze mooiste verhalen zit"], "rhyme_scheme": "AABB" }
+  ]
+}
