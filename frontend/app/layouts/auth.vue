@@ -1,11 +1,12 @@
 <template>
   <div class="min-h-screen bg-[var(--color-surface)]">
     <div class="site-container py-8">
-      <NuxtLink to="/" class="inline-flex items-center gap-3">
-        <span class="logo-card">
-          <img src="/logozwart.png" alt="Voor Ieder Moment" class="h-8 w-auto" />
-        </span>
-        <span class="font-display text-xl font-bold text-[var(--color-primary)]">Voor Ieder Moment</span>
+      <NuxtLink to="/" aria-label="Voor Ieder Moment — naar home" class="inline-block">
+        <img
+          src="/logowit.png"
+          alt="Voor Ieder Moment"
+          class="h-20 w-48 object-cover sm:h-24 sm:w-60"
+        />
       </NuxtLink>
     </div>
 

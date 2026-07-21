@@ -226,12 +226,6 @@
     color: var(--color-ink);
   }
 
-  .logo-card {
-    @apply inline-flex items-center justify-center rounded-xl px-3 py-2;
-    background: linear-gradient(135deg, var(--color-ink), #1e3a34);
-    box-shadow: 0 4px 16px rgba(13, 21, 18, 0.2);
-  }
-
   /* Knoppen */
   .stitch-button {
     @apply accent-gradient inline-flex items-center justify-center rounded-xl px-7 py-3.5 text-sm font-bold transition-all duration-300;

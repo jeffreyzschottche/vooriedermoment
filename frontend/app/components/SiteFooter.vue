@@ -12,12 +12,13 @@ const year = new Date().getFullYear();
         <div class="grid gap-14 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
           <!-- Left: CTA -->
           <div v-reveal>
-            <div class="flex items-center gap-4">
-              <img src="/logowit.png" alt="" class="h-12 w-auto" />
-              <span class="font-display text-xl font-semibold text-white sm:text-2xl">
-                Voor Ieder Moment
-              </span>
-            </div>
+            <NuxtLink to="/" aria-label="Voor Ieder Moment — naar home" class="inline-block">
+              <img
+                src="/logowit.png"
+                alt="Voor Ieder Moment"
+                class="h-28 w-64 object-cover sm:h-32 sm:w-80"
+              />
+            </NuxtLink>
 
             <h2 class="mt-10 max-w-xl font-display text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
               Klaar om van een verhaal een nummer te maken?

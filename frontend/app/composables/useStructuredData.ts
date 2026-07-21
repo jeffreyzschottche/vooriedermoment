@@ -13,7 +13,7 @@ export const organizationSchema = {
   '@type': 'Organization',
   name: 'Voor Ieder Moment',
   url: SITE_URL,
-  logo: `${SITE_URL}/faviconzwart.png`,
+  logo: `${SITE_URL}/logowit.png`,
   email: 'info@vooriedermoment.nl',
   description:
     'Persoonlijke nummers op basis van jouw verhaal, uitgebracht op Spotify en Apple Music.',

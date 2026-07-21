@@ -29,13 +29,18 @@ watch(
       background: 'rgba(248,250,246,0.85)',
     }"
   >
-    <div class="hero-inner flex min-h-[4.5rem] items-center justify-between gap-6 py-3">
+    <div class="hero-inner flex min-h-[5.5rem] items-center justify-between gap-6 py-2">
       <!-- Logo -->
-      <NuxtLink to="/" class="flex min-w-0 items-center gap-3 transition-transform duration-200 hover:scale-[1.02]">
-        <img src="/logozwart.png" alt="" class="h-9 w-auto sm:h-10" />
-        <span class="hidden truncate font-display text-lg font-semibold sm:block" :style="{ color: 'var(--color-ink)' }">
-          Voor Ieder Moment
-        </span>
+      <NuxtLink
+        to="/"
+        aria-label="Voor Ieder Moment — naar home"
+        class="block shrink-0 transition-transform duration-200 hover:scale-[1.02]"
+      >
+        <img
+          src="/logowit.png"
+          alt="Voor Ieder Moment"
+          class="h-20 w-48 object-cover sm:h-24 sm:w-60"
+        />
       </NuxtLink>
 
       <!-- Desktop nav -->

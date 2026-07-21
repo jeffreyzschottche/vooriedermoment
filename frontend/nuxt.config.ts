@@ -41,7 +41,7 @@ export default defineNuxtConfig({
         { name: 'twitter:image', content: 'https://vooriedermoment.nl/hero-studio.png' },
       ],
       link: [
-        { rel: 'icon', type: 'image/png', href: '/faviconzwart.png' },
+        { rel: 'icon', type: 'image/png', href: '/favicon-wit.png' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
