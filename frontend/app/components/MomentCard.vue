@@ -2,7 +2,12 @@
 import type { Category } from '~/data/categories';
 import { categoryPath, categoryImage } from '~/data/categories';
 
-const props = defineProps<{ category: Category }>();
+const props = withDefaults(defineProps<{
+  category: Category;
+  otherMomentSpan?: 'full' | 'remainder';
+}>(), {
+  otherMomentSpan: 'full',
+});
 const href = computed(() => categoryPath(props.category));
 const t = computed(() => props.category.theme);
 const cover = computed(() => categoryImage(props.category));
@@ -13,7 +18,10 @@ const cover = computed(() => categoryImage(props.category));
     :to="href"
     class="group relative overflow-hidden border bg-white transition-all duration-500"
     :class="category.slug === 'anders'
-      ? 'flex flex-col sm:col-span-2 sm:grid sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:col-span-full'
+      ? [
+          'flex flex-col sm:col-span-2 sm:grid sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]',
+          otherMomentSpan === 'remainder' ? 'lg:col-span-3' : 'lg:col-span-full',
+        ]
       : 'flex flex-col'"
     :style="{
       borderColor: 'var(--color-line)',

@@ -72,8 +72,11 @@ const proof = [
 
 const faqPreview = [
   { q: 'Hoe werkt het precies?', a: 'Je kiest een moment en vult stap voor stap ons formulier in met namen, herinneringen en de gewenste sfeer. Na betaling sturen we je verschillende muzikale opties. Jij kiest je favoriet; wij maken het nummer compleet en publiceren het voor je op Spotify en Apple Music.' },
-  { q: 'Waarom zoveel context in het formulier?', a: 'Omdat goede persoonlijke nummers draaien om specifieke details: namen, plekken, zinnen, grappen en sfeer. Hoe concreter, hoe unieker jouw nummer.' },
-  { q: 'Wat kost het?', a: offer.hasDiscount.value ? `Normaal ${offer.formattedRegular}, nu ${offer.formattedSale}. Je kiest uit verschillende opties; wij maken één favoriet compleet en verzorgen de publicatie.` : `${offer.formattedRegular}. Je kiest uit verschillende opties; wij maken één favoriet compleet en verzorgen de publicatie.` },
+  { q: 'Moet ik zelf iets regelen voor Spotify?', a: 'Nee. Wij verzorgen de volledige publicatie op Spotify en Apple Music. Je hebt geen artiestenaccount of technische kennis nodig. Zodra jouw nummer live staat, ontvang je de directe luisterlinks per e-mail.' },
+  { q: 'Hoe snel staat mijn nummer online?', a: 'Binnen 24–72 uur na betaling ontvang je de muzikale opties. Na jouw keuze maken we de favoriet compleet en staat het nummer meestal binnen nog eens 24–72 uur op Spotify en Apple Music.' },
+  { q: 'Kan ik mijn nummer later opnieuw beluisteren?', a: 'Ja. Jouw nummer wordt als een echte release gepubliceerd. Voeg het toe aan je Spotify- of Apple Music-bibliotheek en luister er zo vaak naar als je wilt.' },
+  { q: 'Kan ik het nummer met anderen delen?', a: 'Zeker. Deel de luisterlink eenvoudig via WhatsApp, e-mail of social media met familie, vrienden, collega’s of het hele team.' },
+  { q: 'Wat als mijn moment er niet tussen staat?', a: 'Kies dan “Een ander moment”. Van pensioen, jubileum en afscheid tot een bedankje of een herinnering die alleen voor jullie betekenis heeft: jij vertelt het verhaal, wij maken het nummer.' },
 ];
 </script>
 
@@ -253,7 +256,12 @@ const faqPreview = [
         </div>
 
         <div v-reveal-stagger data-stagger="0.08" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <MomentCard v-for="c in requestCategories" :key="c.slug" :category="c" />
+          <MomentCard
+            v-for="c in requestCategories"
+            :key="c.slug"
+            :category="c"
+            other-moment-span="remainder"
+          />
         </div>
       </div>
     </section>
