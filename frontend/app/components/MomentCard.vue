@@ -11,7 +11,10 @@ const cover = computed(() => categoryImage(props.category));
 <template>
   <NuxtLink
     :to="href"
-    class="group relative flex flex-col overflow-hidden border bg-white transition-all duration-500"
+    class="group relative overflow-hidden border bg-white transition-all duration-500"
+    :class="category.slug === 'anders'
+      ? 'flex flex-col sm:col-span-2 sm:grid sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:col-span-full'
+      : 'flex flex-col'"
     :style="{
       borderColor: 'var(--color-line)',
       borderRadius: '18px',
@@ -26,7 +29,10 @@ const cover = computed(() => categoryImage(props.category));
     />
 
     <!-- Cover (categorie-specifiek) -->
-    <div class="relative aspect-[16/9] w-full overflow-hidden">
+    <div
+      class="relative aspect-[16/9] w-full overflow-hidden"
+      :class="category.slug === 'anders' ? 'sm:aspect-auto sm:min-h-72' : ''"
+    >
       <img
         :src="cover"
         :alt="`${category.title} — persoonlijk nummer`"
