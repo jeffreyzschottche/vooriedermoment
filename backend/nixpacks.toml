@@ -1,2 +1,8 @@
-[variables]
-NIXPACKS_NODE_VERSION = "23"
+[phases.install]
+cmds = [
+    "mkdir -p /var/log/nginx /var/cache/nginx",
+    "composer install --no-dev --optimize-autoloader --no-interaction",
+]
+
+[phases.build]
+cmds = ["php artisan package:discover --ansi"]
