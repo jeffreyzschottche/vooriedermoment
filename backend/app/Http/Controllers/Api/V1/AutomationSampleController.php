@@ -36,7 +36,6 @@ class AutomationSampleController extends Controller
             'samples.*.title' => ['required', 'string', 'max:255'],
             'samples.*.suno_source_url' => ['required', 'url', 'max:2000'],
             'samples.*.preview' => ['required', 'file', 'mimes:mp3', 'max:20480'],
-            'samples.*.original' => ['required', 'file', 'mimes:mp3,wav,m4a', 'max:102400'],
             'samples.*.cover' => ['required', 'file', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
         ]);
 
@@ -62,13 +61,6 @@ class AutomationSampleController extends Controller
                     'preview.mp3',
                     $disk,
                 );
-                $original = $request->file("samples.{$index}.original");
-                $originalPath = $this->storeFile(
-                    $original,
-                    $directory,
-                    'original.'.strtolower($original->getClientOriginalExtension()),
-                    $disk,
-                );
                 $cover = $request->file("samples.{$index}.cover");
                 $coverPath = $this->storeFile(
                     $cover,
@@ -77,13 +69,12 @@ class AutomationSampleController extends Controller
                     $disk,
                 );
 
-                array_push($storedPaths, $previewPath, $originalPath, $coverPath);
+                array_push($storedPaths, $previewPath, $coverPath);
                 $rows[] = [
                     'position' => $position,
                     'title' => $sample['title'],
                     'storage_disk' => $disk,
                     'preview_path' => $previewPath,
-                    'original_audio_path' => $originalPath,
                     'cover_path' => $coverPath,
                     'suno_source_url' => $sample['suno_source_url'],
                     'expires_at' => now()->addDays((int) config('orders.sample_retention_days', 14)),

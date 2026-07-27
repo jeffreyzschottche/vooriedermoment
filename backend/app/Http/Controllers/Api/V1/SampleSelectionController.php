@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\DeleteOrderSamples;
 use App\Models\SongRequest;
 use App\Services\Orders\SamplePayloadFactory;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ class SampleSelectionController extends Controller
             return response()->json([
                 'already_chosen' => true,
                 'chosen_sample_id' => $songRequest->chosen_sample_id,
+                'chosen_sample_title' => $songRequest->chosen_sample_title,
                 'message' => 'Je hebt al een keuze gemaakt',
             ]);
         }
@@ -88,20 +90,23 @@ class SampleSelectionController extends Controller
 
             abort_if($lockedOrder->chosen_sample_id, 409, 'Er is al een sample gekozen.');
 
-            $lockedOrder->songSamples()
+            $chosenSample = $lockedOrder->songSamples()
                 ->where('position', $request->integer('sample_id'))
-                ->update(['is_chosen' => true]);
+                ->firstOrFail();
 
             $lockedOrder->forceFill([
                 'chosen_sample_id' => (string) $request->integer('sample_id'),
+                'chosen_sample_position' => $chosenSample->position,
+                'chosen_sample_title' => $chosenSample->title,
+                'chosen_suno_source_url' => $chosenSample->suno_source_url,
                 'status' => 'sample_chosen',
             ])->save();
+
+            DeleteOrderSamples::dispatch($lockedOrder->id)->afterCommit();
         });
 
-        // TODO: Notify admin that sample was chosen
-
         return response()->json([
-            'message' => 'Bedankt voor je keuze! We gaan aan de slag met de volledige versie.',
+            'message' => 'Bedankt voor je keuze! De tijdelijke previews worden nu verwijderd.',
             'chosen_sample_id' => $request->sample_id,
         ]);
     }

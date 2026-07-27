@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('storage_disk')->default('local');
             $table->string('preview_path');
             $table->string('cover_path');
-            $table->string('original_audio_path');
+            // Alleen gebruikt door een eventuele oude upload; nieuwe uploads
+            // bewaren uitsluitend de tijdelijke preview en cover.
+            $table->string('original_audio_path')->nullable();
             $table->text('suno_source_url');
             $table->boolean('is_chosen')->default(false);
             $table->timestamp('expires_at')->nullable();

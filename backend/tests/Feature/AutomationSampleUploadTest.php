@@ -54,7 +54,6 @@ class AutomationSampleUploadTest extends TestCase
                 'title' => "Versie {$position}",
                 'suno_source_url' => "https://suno.com/song/{$position}",
                 'preview' => UploadedFile::fake()->create("preview-{$position}.mp3", 100, 'audio/mpeg'),
-                'original' => UploadedFile::fake()->create("original-{$position}.mp3", 1000, 'audio/mpeg'),
                 'cover' => UploadedFile::fake()->image("cover-{$position}.jpg"),
             ];
         }
@@ -77,9 +76,27 @@ class AutomationSampleUploadTest extends TestCase
         ]);
 
         Storage::disk('local')->assertExists("orders/{$songRequest->id}/samples/1/preview.mp3");
-        Storage::disk('local')->assertExists("orders/{$songRequest->id}/samples/1/original.mp3");
         Storage::disk('local')->assertExists("orders/{$songRequest->id}/samples/1/cover.jpg");
         Mail::assertSent(SamplesReadyMail::class, 1);
         $this->assertNotNull($songRequest->refresh()->samples_email_sent_at);
+
+        $this->postJson("/api/v1/select/{$songRequest->selection_token}", [
+            'sample_id' => 3,
+        ])->assertOk()
+            ->assertJsonPath('chosen_sample_id', 3);
+
+        $songRequest->refresh();
+
+        $this->assertSame('3', $songRequest->chosen_sample_id);
+        $this->assertSame(3, $songRequest->chosen_sample_position);
+        $this->assertSame('Versie 3', $songRequest->chosen_sample_title);
+        $this->assertSame('https://suno.com/song/3', $songRequest->chosen_suno_source_url);
+        $this->assertNotNull($songRequest->samples_deleted_at);
+        $this->assertDatabaseCount('song_samples', 0);
+
+        foreach (range(1, 4) as $position) {
+            Storage::disk('local')->assertMissing("orders/{$songRequest->id}/samples/{$position}/preview.mp3");
+            Storage::disk('local')->assertMissing("orders/{$songRequest->id}/samples/{$position}/cover.jpg");
+        }
     }
 }

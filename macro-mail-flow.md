@@ -13,8 +13,9 @@ op de tijdelijke containerdisk gezet.
 6. De aanvraag krijgt `automation_status=ready`.
 7. `ORDERS_NOTIFY_EMAIL` ontvangt één mail met samenvatting en JSON-bijlage.
 8. De Mac claimt één order en maakt vier nummers in Suno.
-9. De Mac uploadt vier previews, volledige audiobestanden, covers en Suno-URL's.
-10. De backend slaat alles op, zet de order op `samples_ready` en mailt de klant één keer.
+9. De Mac bewaart de vier volledige nummers lokaal en uploadt alleen vier previews van 15 seconden, covers en Suno-URL's.
+10. De backend slaat die tijdelijke previews op, zet de order op `samples_ready` en mailt de klant één keer.
+11. Na de keuze verwijdert de backend alle vier previews en covers. Alleen positie, titel en Suno-URL van de keuze blijven in de database staan.
 
 ## Live Stripe-configuratie
 
@@ -86,8 +87,9 @@ AWS_ENDPOINT=https://...
 AWS_USE_PATH_STYLE_ENDPOINT=true
 ```
 
-Zonder persistent volume of S3/R2 verdwijnen audiobestanden bij een nieuwe
-deployment.
+Zonder persistent volume of S3/R2 kunnen de tijdelijke previews bij een nieuwe
+deployment verdwijnen voordat de klant gekozen heeft. De volledige nummers
+blijven altijd uitsluitend lokaal op de Mac.
 
 ## Automation-authenticatie
 
@@ -163,8 +165,7 @@ Per positie 1 tot en met 4 zijn verplicht:
 - `samples[n][position]`
 - `samples[n][title]`
 - `samples[n][suno_source_url]`
-- `samples[n][preview]` — mp3, maximaal 20 MB
-- `samples[n][original]` — mp3/wav/m4a, maximaal 100 MB
+- `samples[n][preview]` — mp3 van 15 seconden, maximaal 20 MB
 - `samples[n][cover]` — jpg/png/webp, maximaal 10 MB
 
 Voorbeeld met `curl`:
@@ -177,25 +178,21 @@ curl -fsS -X POST \
   -F 'samples[0][title]=Versie 1' \
   -F 'samples[0][suno_source_url]=https://suno.com/song/...' \
   -F 'samples[0][preview]=@preview-1.mp3' \
-  -F 'samples[0][original]=@original-1.mp3' \
   -F 'samples[0][cover]=@cover-1.jpg' \
   -F 'samples[1][position]=2' \
   -F 'samples[1][title]=Versie 2' \
   -F 'samples[1][suno_source_url]=https://suno.com/song/...' \
   -F 'samples[1][preview]=@preview-2.mp3' \
-  -F 'samples[1][original]=@original-2.mp3' \
   -F 'samples[1][cover]=@cover-2.jpg' \
   -F 'samples[2][position]=3' \
   -F 'samples[2][title]=Versie 3' \
   -F 'samples[2][suno_source_url]=https://suno.com/song/...' \
   -F 'samples[2][preview]=@preview-3.mp3' \
-  -F 'samples[2][original]=@original-3.mp3' \
   -F 'samples[2][cover]=@cover-3.jpg' \
   -F 'samples[3][position]=4' \
   -F 'samples[3][title]=Versie 4' \
   -F 'samples[3][suno_source_url]=https://suno.com/song/...' \
   -F 'samples[3][preview]=@preview-4.mp3' \
-  -F 'samples[3][original]=@original-4.mp3' \
   -F 'samples[3][cover]=@cover-4.jpg' \
   "https://api.vooriedermoment.nl/api/v1/automation/orders/$ORDER_ID/samples"
 ```
@@ -209,7 +206,20 @@ Alleen nadat database-opslag en alle bestanden zijn gelukt:
 Een retry met dezelfde claimtoken na een al geslaagde upload geeft de bestaande
 vier samples terug en verstuurt geen tweede klantmail.
 
-## 3. Een mislukte run vrijgeven
+## 3. Keuze en automatische verwijdering
+
+Wanneer de klant positie 1, 2, 3 of 4 kiest, bewaart de backend op de order:
+
+- `chosen_sample_position`
+- `chosen_sample_title`
+- `chosen_suno_source_url`
+- `samples_deleted_at`
+
+Daarna verwijdert een herstartbare queue-job alle vier previews en covers en
+verwijdert hij de vier tijdelijke `song_samples`-records. Geen volledig
+audiobestand wordt naar de backend geüpload.
+
+## 4. Een mislukte run vrijgeven
 
 ```http
 POST /api/v1/automation/orders/{id}/fail
@@ -222,7 +232,7 @@ X-Claim-Token: ...
 
 De order wordt weer `ready` en kan bij de volgende run opnieuw worden geclaimd.
 
-## 4. Zonder bestanden handmatig afronden
+## 5. Zonder bestanden handmatig afronden
 
 `POST /api/v1/automation/orders/{id}/complete` bestaat voor een toekomstige
 workflow zonder sample-upload. In de normale Suno-flow is dit endpoint niet
