@@ -36,38 +36,30 @@ export function useSongRequest() {
     const { theme: payloadTheme, ...apiPayload } = payload;
     theme.value = payloadTheme ?? null;
     lastPayload.value = payload;
-    try {
-      const res = await api.post<{ data: SongRequestResult }>('/song-requests', apiPayload);
-      current.value = res.data ?? (res as any);
-    } catch (e) {
-      // Backend offline? Laat de funnel doorlopen met een lokale fallback,
-      // zodat de frontend zelfstandig demonstreerbaar blijft.
-      current.value = {
-        id: 0,
-        category: payload.category,
-        status: 'draft',
-        price_cents: 0,
-        lyrics_preview: null,
-      };
-    }
+    current.value = null;
+
+    const res = await api.post<{ data: SongRequestResult }>('/song-requests', apiPayload);
+    current.value = res.data ?? (res as any);
+
     return current.value;
   }
 
   async function checkout(): Promise<SongRequestResult | null> {
-    if (!current.value) return null;
-    if (current.value.id > 0) {
-      try {
-        const res = await api.post<{ data: SongRequestResult }>(
-          `/song-requests/${current.value.id}/checkout`,
-          {},
-        );
-        current.value = res.data ?? (res as any);
-      } catch (error) {
-        throw error;
-      }
-    } else {
+    // Herstel oude browsersessies waarin de eerdere demo-fallback id 0 opsloeg.
+    if ((!current.value || current.value.id <= 0) && lastPayload.value) {
+      await create(lastPayload.value);
+    }
+
+    if (!current.value || current.value.id <= 0) {
       throw new Error('De aanvraag kon niet met de backend worden gekoppeld.');
     }
+
+    const res = await api.post<{ data: SongRequestResult }>(
+      `/song-requests/${current.value.id}/checkout`,
+      {},
+    );
+    current.value = res.data ?? (res as any);
+
     return current.value;
   }
 

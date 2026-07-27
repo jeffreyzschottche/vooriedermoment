@@ -20,6 +20,7 @@ const errors = reactive<Record<string, boolean>>({});
 const started = ref(false);
 const currentIndex = ref(0);
 const preparing = ref(false);
+const submitError = ref('');
 
 const nameDetails = reactive({
   recipient: [] as Array<{ name: string; role: string }>,
@@ -187,32 +188,38 @@ async function onSubmit() {
   }
 
   preparing.value = true;
+  submitError.value = '';
 
   const additionalRecipientNames = filledNameRows(nameDetails.recipient);
   const additionalSenderNames = filledNameRows(nameDetails.from);
   const anecdotesItems = filledItems('anecdotes');
   const mustMentionItems = filledItems('mustMention');
 
-  await Promise.all([
-    create({
-      category: props.category.slug,
-      categoryTitle: props.category.title,
-      theme: props.category.theme,
-      intake: {
-        ...values,
-        anecdotes: anecdotesItems.join('\n'),
-        mustMention: mustMentionItems.join('\n'),
-        ...(anecdotesItems.length ? { anecdotesItems } : {}),
-        ...(mustMentionItems.length ? { mustMentionItems } : {}),
-        ...(additionalRecipientNames ? { additionalRecipientNames } : {}),
-        ...(additionalSenderNames ? { additionalSenderNames } : {}),
-      },
-    }),
-    delay(2200),
-  ]);
+  try {
+    await Promise.all([
+      create({
+        category: props.category.slug,
+        categoryTitle: props.category.title,
+        theme: props.category.theme,
+        intake: {
+          ...values,
+          anecdotes: anecdotesItems.join('\n'),
+          mustMention: mustMentionItems.join('\n'),
+          ...(anecdotesItems.length ? { anecdotesItems } : {}),
+          ...(mustMentionItems.length ? { mustMentionItems } : {}),
+          ...(additionalRecipientNames ? { additionalRecipientNames } : {}),
+          ...(additionalSenderNames ? { additionalSenderNames } : {}),
+        },
+      }),
+      delay(2200),
+    ]);
 
-  preparing.value = false;
-  await navigateTo('/checkout');
+    await navigateTo('/checkout');
+  } catch {
+    submitError.value = 'Je aanvraag kon niet worden opgeslagen. Probeer het opnieuw.';
+  } finally {
+    preparing.value = false;
+  }
 }
 
 function addNameDetail(kind: 'recipient' | 'from') {
@@ -432,6 +439,9 @@ function removeItem(fieldName: 'anecdotes' | 'mustMention', index: number) {
 
             <p v-if="errors[activeField.name]" class="mt-3 text-sm font-semibold" :style="{ color: '#c0392b' }">
               Vul dit veld in om verder te gaan.
+            </p>
+            <p v-if="submitError" class="mt-3 text-sm font-semibold" :style="{ color: '#c0392b' }">
+              {{ submitError }}
             </p>
 
             <div class="mt-10 flex flex-col-reverse gap-3 border-t pt-6 sm:flex-row sm:items-center sm:justify-between" :style="{ borderColor: 'var(--color-line)' }">

@@ -26,10 +26,6 @@ class SampleSelectionController extends Controller
             return response()->json(['error' => 'Aanvraag niet gevonden'], 404);
         }
 
-        if (! $songRequest->hasSamples()) {
-            return response()->json(['error' => 'Samples zijn nog niet klaar'], 400);
-        }
-
         if ($songRequest->chosen_sample_id) {
             return response()->json([
                 'already_chosen' => true,
@@ -37,6 +33,10 @@ class SampleSelectionController extends Controller
                 'chosen_sample_title' => $songRequest->chosen_sample_title,
                 'message' => 'Je hebt al een keuze gemaakt',
             ]);
+        }
+
+        if (! $songRequest->hasSamples()) {
+            return response()->json(['error' => 'Samples zijn nog niet klaar'], 400);
         }
 
         return response()->json([

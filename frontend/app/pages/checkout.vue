@@ -54,13 +54,6 @@ async function pay() {
   }
 }
 
-function fallbackLine(value: unknown, fallback: string) {
-  const text = Array.isArray(value)
-    ? value.filter(Boolean).join(', ')
-    : String(value ?? '').trim();
-  return text || fallback;
-}
-
 function shouldShowIntakeField(key: string) {
   return !['anecdotes', 'mustMention'].includes(key)
     || !Array.isArray(lastPayload.value?.intake?.[`${key}Items`]);
@@ -77,60 +70,9 @@ function formatIntakeValue(value: unknown) {
 
 const lyricsLines = computed(() => {
   const preview = current.value?.lyrics_preview?.trim();
-  if (preview) {
-    const lines = preview.split('\n').filter((line) => line.trim());
-    return [
-      ...lines,
-      '[Pre-chorus]',
-      'We bouwen de spanning op met jullie eigen woorden',
-      'De melodie tilt het moment naar voren',
-      '[Refrein]',
-      'Een herkenbare hook met naam, verhaal en gevoel',
-      'Groot genoeg om mee te zingen, persoonlijk genoeg voor kippenvel',
-      '[Couplet 2]',
-      'Hier komen de extra herinneringen en inside jokes terug',
-      'Met details die alleen jullie groep meteen herkent',
-      '[Bridge]',
-      'Een kort rustpunt voordat het laatste refrein groter terugkomt',
-      '[Laatste refrein]',
-      'De belangrijkste zin komt nog een keer helder naar voren',
-      'Het nummer eindigt met warmte, energie en herkenning',
-    ];
-  }
-
-  const intake = lastPayload.value?.intake ?? {};
-  const name = fallbackLine(intake.recipientName, 'de hoofdnaam');
-  const from = fallbackLine(intake.fromName, 'de mensen eromheen');
-  const extraNames = fallbackLine(intake.additionalRecipientNames, 'extra namen, rollen en relaties');
-  const story = fallbackLine(intake.anecdotesItems ?? intake.anecdotes, 'jullie verhaal, anekdotes en inside jokes');
-  const must = fallbackLine(intake.mustMentionItems ?? intake.mustMention, 'wat absoluut in het nummer moet');
-  const tone = fallbackLine(intake.tone, 'de gekozen sfeer');
-  const genre = fallbackLine(intake.musicStyle, 'het gekozen genre');
-  const tempo = fallbackLine(intake.tempo, 'het gekozen tempo');
-
-  return [
-    '[Intro]',
-    `Voor ${name}, van ${from}`,
-    `Een ${tone.toLowerCase()} begin in ${genre.toLowerCase()}`,
-    '[Couplet 1]',
-    `We starten bij ${name} en het moment dat iedereen herkent`,
-    `Met woorden van ${from}, recht uit het hart en niet generiek`,
-    story,
-    '[Pre-chorus]',
-    `Het tempo voelt ${tempo.toLowerCase()}, met ruimte voor elk detail`,
-    'De melodie maakt het persoonlijk zonder te zwaar te worden',
-    '[Refrein]',
-    must,
-    `Een hook waarin ${name} blijft hangen`,
-    '[Couplet 2]',
-    `Hier komen ${extraNames} terug`,
-    'Een tweede laag met herinneringen die de tekst eigen maken',
-    '[Bridge]',
-    'Even kleiner, dichterbij, alsof iemand het persoonlijk vertelt',
-    '[Laatste refrein]',
-    `Nog een keer groot voor ${name}, klaar om te delen`,
-    'Met een einde dat voelt als jullie moment',
-  ];
+  return preview
+    ? preview.split('\n').filter((line) => line.trim())
+    : [];
 });
 
 function isVisibleLyricLine(index: number) {
@@ -203,10 +145,11 @@ function isVisibleLyricLine(index: number) {
                   Bekijk de opbouw en enkele persoonlijke regels. De rest gebruiken we om jouw vier samples te maken.
                 </p>
               </div>
-              <span class="chip shrink-0">{{ lyricsLines.length }} regels</span>
+              <span v-if="lyricsLines.length" class="chip shrink-0">{{ lyricsLines.length }} regels</span>
             </div>
 
             <div
+              v-if="lyricsLines.length"
               class="mt-5 max-h-[520px] overflow-hidden rounded-xl border p-5 font-sans text-sm leading-7"
               :style="{ borderColor: 'var(--color-line)', background: 'var(--color-surface-soft)', color: 'var(--color-ink-soft)' }"
             >
@@ -220,6 +163,9 @@ function isVisibleLyricLine(index: number) {
                 {{ line }}
               </p>
             </div>
+            <p v-else class="mt-5 rounded-xl border p-5 text-sm" :style="{ borderColor: 'var(--color-line)', color: 'var(--color-ink-soft)' }">
+              De echte voorproef kon nog niet worden geladen. Probeer de aanvraag opnieuw voordat je betaalt.
+            </p>
           </section>
 
           <section v-reveal class="soft-card p-7">

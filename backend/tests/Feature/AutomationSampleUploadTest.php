@@ -98,5 +98,11 @@ class AutomationSampleUploadTest extends TestCase
             Storage::disk('local')->assertMissing("orders/{$songRequest->id}/samples/{$position}/preview.mp3");
             Storage::disk('local')->assertMissing("orders/{$songRequest->id}/samples/{$position}/cover.jpg");
         }
+
+        $this->getJson("/api/v1/select/{$songRequest->selection_token}")
+            ->assertOk()
+            ->assertJsonPath('already_chosen', true)
+            ->assertJsonPath('chosen_sample_id', '3')
+            ->assertJsonPath('chosen_sample_title', 'Versie 3');
     }
 }
