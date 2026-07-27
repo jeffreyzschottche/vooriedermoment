@@ -10,34 +10,16 @@ WORKDIR /var/www/html
 
 RUN apk add --no-cache \
     bash \
-    curl-dev \
     fcgi \
-    freetype-dev \
     git \
-    icu-dev \
-    libjpeg-turbo-dev \
-    libpng-dev \
     libzip-dev \
-    linux-headers \
     nginx \
-    oniguruma-dev \
-    postgresql-dev \
-    sqlite-dev \
     supervisor \
     unzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install \
-    bcmath \
-    curl \
-    exif \
-    gd \
-    intl \
+    && docker-php-ext-install -j"$(nproc)" \
     opcache \
     pcntl \
-    pdo \
     pdo_mysql \
-    pdo_pgsql \
-    pdo_sqlite \
     zip \
     && rm -rf /var/cache/apk/*
 
