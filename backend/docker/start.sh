@@ -23,10 +23,10 @@ if [ "${WAIT_FOR_DATABASE:-true}" = "true" ] && [ "${DB_CONNECTION:-}" != "sqlit
   sleep_seconds="${DB_WAIT_SLEEP_SECONDS:-2}"
   attempt=1
 
-  until php artisan db:show --no-interaction > /dev/null 2>&1; do
+  until php artisan tinker --execute="Illuminate\Support\Facades\DB::select('select 1');" > /dev/null 2>&1; do
     if [ "$attempt" -ge "$retries" ]; then
       echo "Database is unavailable after ${retries} attempts."
-      php artisan db:show --no-interaction
+      php artisan tinker --execute="Illuminate\Support\Facades\DB::select('select 1');"
       exit 1
     fi
 
