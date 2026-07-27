@@ -20,7 +20,8 @@ Route::prefix('v1')->group(function () {
 
     // Aanvragen voor nummers (intake -> concept-lyrics -> gestubde checkout)
     Route::post('/song-requests', [SongRequestController::class, 'store']);
-    Route::post('/song-requests/{songRequest}/checkout', [SongRequestController::class, 'checkout']);
+    Route::post('/song-requests/{songRequest}/checkout', [SongRequestController::class, 'checkout'])
+        ->middleware('throttle:10,1');
     Route::get('/payments/stripe/session/{sessionId}', [SongRequestController::class, 'checkoutStatus']);
     Route::post('/payments/stripe/webhook', StripeWebhookController::class);
 

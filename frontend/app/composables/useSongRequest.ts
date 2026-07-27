@@ -23,6 +23,7 @@ export interface SongRequestResult {
   production_steps?: Record<string, unknown> | null;
   music_reference?: string | null;
   checkout_url?: string | null;
+  discount_applied?: boolean;
 }
 
 export function useSongRequest() {
@@ -44,7 +45,7 @@ export function useSongRequest() {
     return current.value;
   }
 
-  async function checkout(): Promise<SongRequestResult | null> {
+  async function checkout(discountCode = ''): Promise<SongRequestResult | null> {
     // Herstel oude browsersessies waarin de eerdere demo-fallback id 0 opsloeg.
     if ((!current.value || current.value.id <= 0) && lastPayload.value) {
       await create(lastPayload.value);
@@ -56,7 +57,7 @@ export function useSongRequest() {
 
     const res = await api.post<{ data: SongRequestResult }>(
       `/song-requests/${current.value.id}/checkout`,
-      {},
+      discountCode.trim() ? { discount_code: discountCode.trim() } : {},
     );
     current.value = res.data ?? (res as any);
 

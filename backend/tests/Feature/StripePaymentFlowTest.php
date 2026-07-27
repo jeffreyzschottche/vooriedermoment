@@ -46,6 +46,75 @@ class StripePaymentFlowTest extends TestCase
         ]);
     }
 
+    public function test_valid_discount_code_marks_order_paid_and_queues_fulfillment_without_stripe(): void
+    {
+        Queue::fake();
+        config()->set('payment.discount_code', 'GEHEIME-CODE-123');
+
+        $this->app->instance(PaymentProvider::class, new class implements PaymentProvider
+        {
+            public function createCheckout(SongRequest $request): array
+            {
+                throw new \RuntimeException('Stripe mag niet worden aangeroepen voor een geldige kortingscode.');
+            }
+        });
+
+        $songRequest = $this->songRequest();
+
+        $this->postJson("/api/v1/song-requests/{$songRequest->id}/checkout", [
+            'discount_code' => 'GEHEIME-CODE-123',
+        ])
+            ->assertOk()
+            ->assertJsonPath('data.status', 'paid')
+            ->assertJsonPath('data.price_cents', 0)
+            ->assertJsonPath('data.checkout_url', null)
+            ->assertJsonPath('data.discount_applied', true);
+
+        $this->assertDatabaseHas('song_requests', [
+            'id' => $songRequest->id,
+            'status' => 'paid',
+            'price_cents' => 0,
+            'payment_provider' => 'discount_code',
+        ]);
+
+        $songRequest->refresh();
+        $this->assertNotNull($songRequest->paid_at);
+        $this->assertNotNull($songRequest->payment_fulfillment_queued_at);
+        $this->assertStringStartsWith('discount:', $songRequest->payment_reference);
+        Queue::assertPushed(ProcessPaidSongRequest::class, 1);
+    }
+
+    public function test_invalid_discount_code_does_not_start_payment_or_fulfillment(): void
+    {
+        Queue::fake();
+        config()->set('payment.discount_code', 'GEHEIME-CODE-123');
+
+        $this->app->instance(PaymentProvider::class, new class implements PaymentProvider
+        {
+            public function createCheckout(SongRequest $request): array
+            {
+                throw new \RuntimeException('Stripe mag niet worden aangeroepen voor een ongeldige kortingscode.');
+            }
+        });
+
+        $songRequest = $this->songRequest();
+
+        $this->postJson("/api/v1/song-requests/{$songRequest->id}/checkout", [
+            'discount_code' => 'VERKEERD',
+        ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('discount_code');
+
+        $this->assertDatabaseHas('song_requests', [
+            'id' => $songRequest->id,
+            'status' => 'draft',
+            'price_cents' => 999,
+            'payment_provider' => null,
+        ]);
+
+        Queue::assertNothingPushed();
+    }
+
     public function test_paid_webhook_is_idempotent_and_queues_fulfillment_once(): void
     {
         Queue::fake();

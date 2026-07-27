@@ -5,12 +5,14 @@ useSeoMeta({
 });
 
 import { themeVars } from '~/data/categories';
+import { ApiError } from '~/services/ApiError';
 
 const offer = useOffer();
 const { current, lastPayload, checkout, theme } = useSongRequest();
 
 const processing = ref(false);
 const paymentError = ref('');
+const discountCode = ref('');
 
 // Houd dezelfde categoriekleur vast als in het formulier.
 const themeStyle = computed(() => themeVars(theme.value));
@@ -39,7 +41,7 @@ async function pay() {
   paymentError.value = '';
 
   try {
-    const result = await checkout();
+    const result = await checkout(discountCode.value);
 
     if (result?.checkout_url) {
       await navigateTo(result.checkout_url, { external: true });
@@ -47,8 +49,12 @@ async function pay() {
     }
 
     await navigateTo('/bedankt');
-  } catch {
-    paymentError.value = 'Betalen kon niet worden gestart. Probeer het opnieuw of neem contact met ons op.';
+  } catch (error) {
+    if (error instanceof ApiError && error.data?.errors?.discount_code?.[0]) {
+      paymentError.value = error.data.errors.discount_code[0];
+    } else {
+      paymentError.value = 'Betalen kon niet worden gestart. Probeer het opnieuw of neem contact met ons op.';
+    }
   } finally {
     processing.value = false;
   }
@@ -238,6 +244,29 @@ function isVisibleLyricLine(index: number) {
               </div>
             </div>
 
+            <div class="mt-7">
+              <label
+                for="discount-code"
+                class="text-xs font-bold uppercase tracking-[0.14em]"
+                :style="{ color: 'var(--color-ink-faint)' }"
+              >
+                Kortingscode <span class="normal-case tracking-normal">(optioneel)</span>
+              </label>
+              <input
+                id="discount-code"
+                v-model="discountCode"
+                type="text"
+                name="discount-code"
+                autocomplete="off"
+                spellcheck="false"
+                class="mt-2 w-full rounded-xl border bg-white px-4 py-3 text-sm outline-none transition focus:ring-2"
+                :style="{ borderColor: 'var(--color-line)', color: 'var(--color-ink)', '--tw-ring-color': 'var(--accent-soft)' }"
+                placeholder="Vul je code in"
+                :disabled="processing"
+                @keydown.enter.prevent="pay"
+              >
+            </div>
+
             <button
               class="stitch-button mt-8 w-full py-5 text-base"
               :disabled="processing"
@@ -247,7 +276,7 @@ function isVisibleLyricLine(index: number) {
                 <span class="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                 Bezig met verwerken...
               </span>
-              <span v-else>Bestellen en betalen →</span>
+              <span v-else>{{ discountCode.trim() ? 'Code toepassen →' : 'Bestellen en betalen →' }}</span>
             </button>
 
             <p
@@ -261,7 +290,7 @@ function isVisibleLyricLine(index: number) {
               class="mt-4 rounded-xl px-4 py-3 text-center text-xs leading-relaxed"
               :style="{ background: 'var(--color-surface-soft)', color: 'var(--color-ink-faint)' }"
             >
-              Je betaalt veilig via Stripe. Na betaling ontvang je binnen 24–72 uur 4 samples per mail.
+              Na je bestelling ontvang je binnen 24–72 uur 4 samples per mail.
             </p>
           </div>
         </aside>

@@ -9,6 +9,10 @@ use App\Models\SongRequest;
 use App\Services\Lyrics\LyricsGenerator;
 use App\Services\Payment\PaymentProvider;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class SongRequestController extends Controller
 {
@@ -42,12 +46,23 @@ class SongRequestController extends Controller
      * Maak een checkout aan. Bij Stripe start uitsluitend de ondertekende
      * webhook de productiepipeline.
      */
-    public function checkout(SongRequest $songRequest, PaymentProvider $payment): JsonResponse
+    public function checkout(Request $request, SongRequest $songRequest): JsonResponse
     {
+        $validated = $request->validate([
+            'discount_code' => ['nullable', 'string', 'max:128'],
+        ]);
+
         if ($songRequest->isPaid()) {
             return response()->json(['data' => $this->present($songRequest)]);
         }
 
+        $discountCode = trim((string) ($validated['discount_code'] ?? ''));
+
+        if ($discountCode !== '') {
+            return $this->checkoutWithDiscount($songRequest, $discountCode);
+        }
+
+        $payment = app(PaymentProvider::class);
         $result = $payment->createCheckout($songRequest);
 
         $songRequest->forceFill([
@@ -66,6 +81,52 @@ class SongRequestController extends Controller
         return response()->json([
             'data' => $this->present($songRequest) + [
                 'checkout_url' => $result['checkout_url'],
+            ],
+        ]);
+    }
+
+    private function checkoutWithDiscount(SongRequest $songRequest, string $discountCode): JsonResponse
+    {
+        $configuredCode = trim((string) config('payment.discount_code'));
+
+        if ($configuredCode === '' || ! hash_equals($configuredCode, $discountCode)) {
+            throw ValidationException::withMessages([
+                'discount_code' => 'Deze kortingscode is ongeldig.',
+            ]);
+        }
+
+        $songRequest = DB::transaction(function () use ($songRequest): SongRequest {
+            $lockedSongRequest = SongRequest::whereKey($songRequest->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($lockedSongRequest->isPaid()) {
+                return $lockedSongRequest;
+            }
+
+            $lockedSongRequest->forceFill([
+                'status' => 'paid',
+                'price_cents' => 0,
+                'payment_reference' => 'discount:'.Str::uuid(),
+                'payment_provider' => 'discount_code',
+                'paid_at' => now(),
+            ])->save();
+
+            if (! $lockedSongRequest->payment_fulfillment_queued_at) {
+                ProcessPaidSongRequest::dispatch($lockedSongRequest->id)->afterCommit();
+
+                $lockedSongRequest->forceFill([
+                    'payment_fulfillment_queued_at' => now(),
+                ])->save();
+            }
+
+            return $lockedSongRequest->refresh();
+        });
+
+        return response()->json([
+            'data' => $this->present($songRequest) + [
+                'checkout_url' => null,
+                'discount_applied' => true,
             ],
         ]);
     }
