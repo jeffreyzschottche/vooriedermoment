@@ -1,12 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\AuthController;
-use App\Http\Controllers\Api\V1\SongRequestController;
 use App\Http\Controllers\Api\V1\AdminController;
-use App\Http\Controllers\Api\V1\SampleSelectionController;
+use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\AutomationOrderController;
+use App\Http\Controllers\Api\V1\AutomationSampleController;
 use App\Http\Controllers\Api\V1\LyricsController;
-use App\Http\Controllers\Api\V1\OrderExportController;
+use App\Http\Controllers\Api\V1\SampleAssetController;
+use App\Http\Controllers\Api\V1\SampleSelectionController;
+use App\Http\Controllers\Api\V1\SongRequestController;
+use App\Http\Controllers\Api\V1\StripeWebhookController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     // Public routes
@@ -18,15 +21,21 @@ Route::prefix('v1')->group(function () {
     // Aanvragen voor nummers (intake -> concept-lyrics -> gestubde checkout)
     Route::post('/song-requests', [SongRequestController::class, 'store']);
     Route::post('/song-requests/{songRequest}/checkout', [SongRequestController::class, 'checkout']);
+    Route::get('/payments/stripe/session/{sessionId}', [SongRequestController::class, 'checkoutStatus']);
+    Route::post('/payments/stripe/webhook', StripeWebhookController::class);
 
     // Sample selection (public, token-based)
     Route::get('/select/{token}', [SampleSelectionController::class, 'getSamples']);
     Route::post('/select/{token}', [SampleSelectionController::class, 'chooseSample']);
+    Route::get('/select/{token}/samples/{songSample}/preview', [SampleAssetController::class, 'preview']);
+    Route::get('/select/{token}/samples/{songSample}/cover', [SampleAssetController::class, 'cover']);
 
-    // Order-export voor de lokale Suno-macro (key-beveiligd via X-Export-Key)
-    Route::prefix('orders')->middleware('export.key')->group(function () {
-        Route::get('/export', [OrderExportController::class, 'index']);
-        Route::post('/export/ack', [OrderExportController::class, 'ack']);
+    // Eén order tegelijk claimen voor de lokale Suno-macro.
+    Route::prefix('automation/orders')->middleware('export.key')->group(function () {
+        Route::post('/claim', [AutomationOrderController::class, 'claim']);
+        Route::post('/{songRequest}/samples', [AutomationSampleController::class, 'store']);
+        Route::post('/{songRequest}/complete', [AutomationOrderController::class, 'complete']);
+        Route::post('/{songRequest}/fail', [AutomationOrderController::class, 'fail']);
     });
 
     // Lyrics generator (public)

@@ -10,6 +10,7 @@ const offer = useOffer();
 const { current, lastPayload, checkout, theme } = useSongRequest();
 
 const processing = ref(false);
+const paymentError = ref('');
 
 // Houd dezelfde categoriekleur vast als in het formulier.
 const themeStyle = computed(() => themeVars(theme.value));
@@ -35,9 +36,22 @@ const fieldLabels: Record<string, string> = {
 
 async function pay() {
   processing.value = true;
-  await checkout();
-  processing.value = false;
-  await navigateTo('/bedankt');
+  paymentError.value = '';
+
+  try {
+    const result = await checkout();
+
+    if (result?.checkout_url) {
+      await navigateTo(result.checkout_url, { external: true });
+      return;
+    }
+
+    await navigateTo('/bedankt');
+  } catch {
+    paymentError.value = 'Betalen kon niet worden gestart. Probeer het opnieuw of neem contact met ons op.';
+  } finally {
+    processing.value = false;
+  }
 }
 
 function fallbackLine(value: unknown, fallback: string) {
@@ -291,10 +305,17 @@ function isVisibleLyricLine(index: number) {
             </button>
 
             <p
+              v-if="paymentError"
+              class="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-700"
+            >
+              {{ paymentError }}
+            </p>
+
+            <p
               class="mt-4 rounded-xl px-4 py-3 text-center text-xs leading-relaxed"
               :style="{ background: 'var(--color-surface-soft)', color: 'var(--color-ink-faint)' }"
             >
-              Demo: betaling is gestubd. Na betaling ontvang je binnen 24–72 uur 4 samples per mail.
+              Je betaalt veilig via Stripe. Na betaling ontvang je binnen 24–72 uur 4 samples per mail.
             </p>
           </div>
         </aside>

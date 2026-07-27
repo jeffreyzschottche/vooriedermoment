@@ -2,7 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Mail\NewOrderMail;
+use App\Models\SongRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class SongRequestProductionTest extends TestCase
@@ -11,6 +14,9 @@ class SongRequestProductionTest extends TestCase
 
     public function test_checkout_generates_final_lyrics_and_music_prompt(): void
     {
+        Mail::fake();
+        config()->set('orders.notify_email', 'orders@example.com');
+
         $create = $this->postJson('/api/v1/song-requests', [
             'category' => 'bouwbedrijven',
             'categoryTitle' => 'Bouwbedrijven',
@@ -44,6 +50,12 @@ class SongRequestProductionTest extends TestCase
         ]);
 
         $this->assertNotEmpty($checkout->json('data.production_steps'));
+        $this->assertNotNull(
+            SongRequest::findOrFail($id)->order_notification_sent_at
+        );
+        Mail::assertSent(NewOrderMail::class, 1);
+
+        $this->postJson("/api/v1/song-requests/{$id}/checkout")->assertOk();
+        Mail::assertSent(NewOrderMail::class, 1);
     }
 }
-

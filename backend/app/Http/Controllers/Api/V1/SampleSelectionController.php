@@ -4,22 +4,28 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\SongRequest;
+use App\Services\Orders\SamplePayloadFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SampleSelectionController extends Controller
 {
+    public function __construct(private SamplePayloadFactory $payloads) {}
+
     /**
      * Get samples for selection (public, uses token)
      */
     public function getSamples(string $token)
     {
-        $songRequest = SongRequest::where('selection_token', $token)->first();
+        $songRequest = SongRequest::with('songSamples')
+            ->where('selection_token', $token)
+            ->first();
 
-        if (!$songRequest) {
+        if (! $songRequest) {
             return response()->json(['error' => 'Aanvraag niet gevonden'], 404);
         }
 
-        if (!$songRequest->hasSamples()) {
+        if (! $songRequest->hasSamples()) {
             return response()->json(['error' => 'Samples zijn nog niet klaar'], 400);
         }
 
@@ -34,7 +40,9 @@ class SampleSelectionController extends Controller
         return response()->json([
             'recipient_name' => $songRequest->recipient_name,
             'category_title' => $songRequest->category_title,
-            'samples' => $songRequest->samples,
+            'samples' => $songRequest->songSamples->isNotEmpty()
+                ? $this->payloads->forSelection($songRequest)
+                : $songRequest->samples,
             'created_at' => $songRequest->samples_generated_at?->toISOString(),
         ]);
     }
@@ -48,13 +56,15 @@ class SampleSelectionController extends Controller
             'sample_id' => 'required|integer|min:1|max:4',
         ]);
 
-        $songRequest = SongRequest::where('selection_token', $token)->first();
+        $songRequest = SongRequest::with('songSamples')
+            ->where('selection_token', $token)
+            ->first();
 
-        if (!$songRequest) {
+        if (! $songRequest) {
             return response()->json(['error' => 'Aanvraag niet gevonden'], 404);
         }
 
-        if (!$songRequest->hasSamples()) {
+        if (! $songRequest->hasSamples()) {
             return response()->json(['error' => 'Samples zijn nog niet klaar'], 400);
         }
 
@@ -65,16 +75,28 @@ class SampleSelectionController extends Controller
             ], 400);
         }
 
-        // Validate sample exists
-        $sampleIds = array_column($songRequest->samples, 'id');
-        if (!in_array($request->sample_id, $sampleIds)) {
+        $sampleIds = $songRequest->songSamples->isNotEmpty()
+            ? $songRequest->songSamples->pluck('position')->all()
+            : array_column($songRequest->samples, 'id');
+
+        if (! in_array($request->sample_id, $sampleIds, true)) {
             return response()->json(['error' => 'Ongeldige sample'], 400);
         }
 
-        $songRequest->update([
-            'chosen_sample_id' => $request->sample_id,
-            'status' => 'sample_chosen',
-        ]);
+        DB::transaction(function () use ($songRequest, $request): void {
+            $lockedOrder = SongRequest::whereKey($songRequest->id)->lockForUpdate()->firstOrFail();
+
+            abort_if($lockedOrder->chosen_sample_id, 409, 'Er is al een sample gekozen.');
+
+            $lockedOrder->songSamples()
+                ->where('position', $request->integer('sample_id'))
+                ->update(['is_chosen' => true]);
+
+            $lockedOrder->forceFill([
+                'chosen_sample_id' => (string) $request->integer('sample_id'),
+                'status' => 'sample_chosen',
+            ])->save();
+        });
 
         // TODO: Notify admin that sample was chosen
 

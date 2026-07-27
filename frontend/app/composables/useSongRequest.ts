@@ -22,6 +22,7 @@ export interface SongRequestResult {
   lyrics_preview?: string | null;
   production_steps?: Record<string, unknown> | null;
   music_reference?: string | null;
+  checkout_url?: string | null;
 }
 
 export function useSongRequest() {
@@ -61,12 +62,11 @@ export function useSongRequest() {
           {},
         );
         current.value = res.data ?? (res as any);
-      } catch {
-        current.value = { ...current.value, status: 'paid' };
+      } catch (error) {
+        throw error;
       }
     } else {
-      // Lokale fallback-stub
-      current.value = { ...current.value, status: 'paid' };
+      throw new Error('De aanvraag kon niet met de backend worden gekoppeld.');
     }
     return current.value;
   }

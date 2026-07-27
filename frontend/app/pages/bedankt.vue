@@ -7,7 +7,42 @@ useSeoMeta({
 import { themeVars } from '~/data/categories';
 
 const { current, lastPayload, theme } = useSongRequest();
-const paid = computed(() => ['paid', 'producing', 'music_prompt_ready', 'production_ready'].includes(current.value?.status ?? ''));
+const route = useRoute();
+const api = useApi();
+const returnedPaid = ref(false);
+const returnedCategoryTitle = ref('');
+const paymentPending = ref(Boolean(route.query.session_id));
+
+const paid = computed(() =>
+  returnedPaid.value
+  || ['paid', 'producing', 'music_prompt_ready', 'production_ready'].includes(current.value?.status ?? ''),
+);
+const categoryTitle = computed(() => lastPayload.value?.categoryTitle || returnedCategoryTitle.value);
+
+onMounted(async () => {
+  const sessionId = typeof route.query.session_id === 'string' ? route.query.session_id : '';
+  if (!sessionId) return;
+
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    try {
+      const response = await api.get<{
+        data: { paid: boolean; status: string; category_title?: string | null };
+      }>(`/payments/stripe/session/${encodeURIComponent(sessionId)}`);
+
+      returnedPaid.value = response.data.paid;
+      returnedCategoryTitle.value = response.data.category_title ?? '';
+
+      if (response.data.paid) {
+        paymentPending.value = false;
+        break;
+      }
+    } catch {
+      break;
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+});
 
 // Zelfde categoriekleur als in de rest van de funnel.
 const themeStyle = computed(() => themeVars(theme.value));
@@ -44,7 +79,7 @@ const themeStyle = computed(() => themeVars(theme.value));
           :style="{ color: 'var(--color-ink-soft)' }"
         >
           Je betaling is gelukt. We hebben je aanvraag voor
-          <strong :style="{ color: 'var(--accent-strong)' }">{{ lastPayload?.categoryTitle }}</strong>
+          <strong :style="{ color: 'var(--accent-strong)' }">{{ categoryTitle }}</strong>
           ontvangen. Binnen 24–72 uur staan vier samples voor je klaar.
         </p>
         <p
@@ -54,7 +89,12 @@ const themeStyle = computed(() => themeVars(theme.value));
           class="mt-6 text-lg leading-relaxed sm:text-xl"
           :style="{ color: 'var(--color-ink-soft)' }"
         >
-          Je aanvraag is ontvangen. We nemen contact met je op om hem af te ronden.
+          <template v-if="paymentPending">
+            We controleren je betaling. Dit duurt meestal maar enkele seconden.
+          </template>
+          <template v-else>
+            Je aanvraag is ontvangen. We nemen contact met je op om hem af te ronden.
+          </template>
         </p>
 
         <!-- CTA buttons -->

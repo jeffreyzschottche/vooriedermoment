@@ -12,11 +12,12 @@ use Illuminate\Support\Str;
  */
 class StubPaymentProvider implements PaymentProvider
 {
-    public function charge(SongRequest $request): array
+    public function createCheckout(SongRequest $request): array
     {
         return [
             'status' => 'paid',
-            'reference' => 'stub_' . Str::lower(Str::random(16)),
+            'reference' => 'stub_'.Str::lower(Str::random(16)),
+            'checkout_url' => null,
         ];
     }
 }

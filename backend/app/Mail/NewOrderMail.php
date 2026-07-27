@@ -21,7 +21,7 @@ class NewOrderMail extends Mailable
     public function __construct(
         public SongRequest $songRequest,
         public array $payload,
-        public string $jsonPath,
+        public string $jsonFilename,
     ) {}
 
     public function envelope(): Envelope
@@ -49,7 +49,7 @@ class NewOrderMail extends Mailable
         return [
             Attachment::fromData(
                 fn () => json_encode($this->payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-                basename($this->jsonPath),
+                $this->jsonFilename,
             )->withMime('application/json'),
         ];
     }

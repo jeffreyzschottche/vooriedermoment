@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class SongRequest extends Model
@@ -23,9 +24,15 @@ class SongRequest extends Model
         'status',
         'price_cents',
         'payment_reference',
+        'payment_provider',
+        'payment_intent_reference',
+        'paid_at',
+        'payment_fulfillment_queued_at',
+        'order_notification_sent_at',
         // Sample fields
         'samples',
         'samples_generated_at',
+        'samples_email_sent_at',
         'chosen_sample_id',
         'selection_token',
         // Final song
@@ -38,6 +45,14 @@ class SongRequest extends Model
         // Pull-export naar Suno-macro
         'export_path',
         'exported_at',
+        // Automation queue lease
+        'automation_status',
+        'automation_claimed_by',
+        'automation_claim_token_hash',
+        'automation_claimed_at',
+        'automation_claim_expires_at',
+        'automation_attempts',
+        'automation_last_error',
     ];
 
     protected $casts = [
@@ -47,8 +62,15 @@ class SongRequest extends Model
         'production_started_at' => 'datetime',
         'production_finished_at' => 'datetime',
         'samples_generated_at' => 'datetime',
+        'samples_email_sent_at' => 'datetime',
         'released_at' => 'datetime',
         'exported_at' => 'datetime',
+        'paid_at' => 'datetime',
+        'payment_fulfillment_queued_at' => 'datetime',
+        'order_notification_sent_at' => 'datetime',
+        'automation_claimed_at' => 'datetime',
+        'automation_claim_expires_at' => 'datetime',
+        'automation_attempts' => 'integer',
         'price_cents' => 'integer',
     ];
 
@@ -77,6 +99,16 @@ class SongRequest extends Model
 
     public function hasSamples(): bool
     {
-        return !empty($this->samples) && count($this->samples) > 0;
+        if ($this->relationLoaded('songSamples') && $this->songSamples->isNotEmpty()) {
+            return true;
+        }
+
+        return $this->songSamples()->exists()
+            || (! empty($this->samples) && count($this->samples) > 0);
+    }
+
+    public function songSamples(): HasMany
+    {
+        return $this->hasMany(SongSample::class)->orderBy('position');
     }
 }

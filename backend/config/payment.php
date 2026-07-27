@@ -7,14 +7,18 @@ return [
     | Betaalprovider
     |--------------------------------------------------------------------------
     |
-    | Voorlopig 'stub': betaling wordt direct als geslaagd gemarkeerd zonder
-    | externe call. Later plug je hier Mollie of Stripe in door een nieuwe
-    | PaymentProvider-implementatie te registreren in AppServiceProvider.
+    | Gebruik 'stripe' in productie. De stub is uitsluitend bedoeld voor
+    | lokale ontwikkeling en tests.
     |
     */
 
     'default' => env('PAYMENT_PROVIDER', 'stub'),
 
     'currency' => 'EUR',
+
+    'stripe' => [
+        'secret_key' => env('STRIPE_SECRET_KEY'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
 
 ];

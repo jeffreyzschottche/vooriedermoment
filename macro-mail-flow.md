@@ -1,143 +1,229 @@
-# Macro + mail-flow (betaalde aanvraag → Suno → release)
+# Stripe + macro + mail-flow
 
-Hoe een betaalde aanvraag bij jou terechtkomt en hoe je macro de nummers genereert.
-Er wordt **niets naar je computer geschreven** — alles staat op de server en je
-**haalt het op via de API**.
+De database en API zijn de bron van waarheid. Er worden geen queue-JSON-bestanden
+op de tijdelijke containerdisk gezet.
 
-## De flow in het kort
+## Productieflow
 
-1. **Klant vult formulier in en betaalt** (betaling is nu gestubd → altijd "geslaagd").
-2. **Server maakt de aanvraag klaar**: genereert lyrics + muziekstijl en bouwt een
-   **Suno-klare JSON** (`{categorie}-voor-{naam}-{id}.json`). Die JSON staat op de
-   server in `storage/app/orders/` en is ook opvraagbaar via de API.
-3. **Jij krijgt een mail-seintje** (naar `ORDERS_NOTIFY_EMAIL`) met de samenvatting +
-   de JSON als bijlage. Dat is je signaal: *er staat werk klaar, run de macro.*
-4. **Je macro draait** en doet 3 dingen:
-   - **Ophalen**: `GET /api/v1/orders/export` → alle betaalde, nog niet opgehaalde aanvragen.
-   - **Genereren**: voor elke aanvraag op suno.com `suno.title`, `suno.style` en
-     `suno.lyrics` invullen en 4 samples maken.
-   - **Bevestigen**: `POST /api/v1/orders/export/ack` met de opgehaalde id's →
-     server markeert ze als opgehaald en **verwijdert ze** uit de wachtrij.
-5. **4 samples → klant** (binnen 48 uur), klant kiest er 1.
-6. **Release**: het gekozen nummer komt binnen 72 uur op **Spotify én Apple Music**
-   (beide via DistroKid).
+1. De frontend maakt een aanvraag aan.
+2. `POST /api/v1/song-requests/{id}/checkout` maakt een Stripe Checkout Session.
+3. De browser gaat naar de beveiligde Stripe-betaalpagina.
+4. Alleen een geldig ondertekend Stripe-webhook markeert de aanvraag als betaald.
+5. Een queue-job maakt de definitieve lyrics en Suno-payload.
+6. De aanvraag krijgt `automation_status=ready`.
+7. `ORDERS_NOTIFY_EMAIL` ontvangt één mail met samenvatting en JSON-bijlage.
+8. De Mac claimt één order en maakt vier nummers in Suno.
+9. De Mac uploadt vier previews, volledige audiobestanden, covers en Suno-URL's.
+10. De backend slaat alles op, zet de order op `samples_ready` en mailt de klant één keer.
 
-## Endpoints
+## Live Stripe-configuratie
 
-Alles onder `/api/v1`. Beveiligd met header **`X-Export-Key`** (= `ORDERS_API_KEY` uit `.env`).
-Zonder/foute key → `401`.
+Zet in Coolify:
 
-### 1. Openstaande aanvragen ophalen
-
-```
-GET /api/v1/orders/export
-Header: X-Export-Key: <ORDERS_API_KEY>
+```env
+PAYMENT_PROVIDER=stripe
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+FRONTEND_URL=https://vooriedermoment.nl
+APP_URL=https://api.vooriedermoment.nl
 ```
 
-Antwoord:
+Voeg in Stripe een webhookbestemming toe:
+
+```text
+https://api.vooriedermoment.nl/api/v1/payments/stripe/webhook
+```
+
+Selecteer deze events:
+
+- `checkout.session.completed`
+- `checkout.session.async_payment_succeeded`
+
+Kopieer daarna de signing secret van de webhookbestemming naar
+`STRIPE_WEBHOOK_SECRET`. De browser krijgt nooit de geheime Stripe-key en kan
+zelf geen order als betaald markeren.
+
+## Live mail-, queue- en automation-configuratie
+
+```env
+MAIL_MAILER=resend
+RESEND_API_KEY=re_...
+MAIL_FROM_ADDRESS=noreply@vooriedermoment.nl
+MAIL_FROM_NAME="Voor Ieder Moment"
+ORDERS_NOTIFY_EMAIL=orders@voorbeeld.nl
+
+QUEUE_CONNECTION=database
+AUTOMATION_API_KEY=een-lang-uniek-geheim
+AUTOMATION_CLAIM_TTL_MINUTES=60
+```
+
+De Dockercontainer start zelf een Laravel queue worker.
+
+## Persistente sample-opslag
+
+Optie 1, lokale opslag:
+
+```env
+SAMPLES_STORAGE_DISK=local
+SAMPLES_RETENTION_DAYS=14
+```
+
+Koppel dan in Coolify een persistent volume aan:
+
+```text
+/var/www/html/storage/app/private
+```
+
+Optie 2, S3/R2:
+
+```env
+SAMPLES_STORAGE_DISK=s3
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_DEFAULT_REGION=auto
+AWS_BUCKET=...
+AWS_ENDPOINT=https://...
+AWS_USE_PATH_STYLE_ENDPOINT=true
+```
+
+Zonder persistent volume of S3/R2 verdwijnen audiobestanden bij een nieuwe
+deployment.
+
+## Automation-authenticatie
+
+Alle automation-routes gebruiken:
+
+```text
+X-Automation-Key: <AUTOMATION_API_KEY>
+```
+
+Een geclaimde order krijgt daarnaast een tijdelijke `claim_token`. Stuur die bij
+vervolgrequests mee als:
+
+```text
+X-Claim-Token: <claim_token>
+```
+
+Bewaar `AUTOMATION_API_KEY` in macOS Keychain, niet hardcoded in de macro.
+
+## 1. Eén order claimen
+
+```http
+POST /api/v1/automation/orders/claim
+Content-Type: application/json
+X-Automation-Key: ...
+
+{"worker_id":"studio-mac"}
+```
+
+Voorbeeld:
 
 ```json
 {
-  "count": 1,
-  "orders": [
-    {
+  "data": {
+    "order": {
       "order_id": 12,
-      "filename": "moederdag-voor-anna-12.json",
-      "created_at": "2026-06-17T19:56:42+00:00",
+      "filename": "verjaardag-voor-anna-12.json",
       "status": "music_prompt_ready",
-      "category": "moederdag",
-      "category_title": "Moederdag",
-      "customer_email": "klant@voorbeeld.nl",
+      "category": "verjaardag",
+      "category_title": "Verjaardag",
+      "customer_email": "klant@example.nl",
       "recipient_name": "Anna",
       "price_eur": "9.99",
       "suno": {
-        "title": "Moederdag - Anna",
-        "style": "dutch party schlager, upbeat, sing-along, festive, female vocals, dutch lyrics, professional production",
-        "lyrics": "Lieve mama\nDank voor alles\nJij bent de beste",
+        "title": "Verjaardag - Anna",
+        "style": "dutch pop, catchy, radio-friendly, female vocals, dutch lyrics, professional production",
+        "lyrics": "...",
         "make_instrumental": false
       },
-      "intake": { "recipientName": "Anna", "musicStyle": "Feest / meezinger", "vocals": "Vrouwenstem", "tone": "Warm & persoonlijk" }
-    }
-  ]
+      "intake": {}
+    },
+    "claim_token": "...",
+    "claimed_by": "studio-mac",
+    "claim_expires_at": "2026-07-27T21:30:00+00:00"
+  }
 }
 ```
 
-Voor de macro tellen vooral: `suno.title`, `suno.style`, `suno.lyrics`.
+Als er niets klaarstaat is `data` gelijk aan `null`. Een actieve claim voorkomt
+dat een tweede Mac dezelfde order krijgt. Na het verlopen van de claim kan de
+order opnieuw worden opgepakt.
 
-### 2. Bevestigen dat je ze hebt opgehaald
+## 2. Vier samples uploaden
 
-```
-POST /api/v1/orders/export/ack
-Header: X-Export-Key: <ORDERS_API_KEY>
-Body:   { "ids": [12, 13] }
-```
-
-Antwoord:
-
-```json
-{ "acknowledged": [12, 13], "count": 2 }
+```http
+POST /api/v1/automation/orders/{id}/samples
+Content-Type: multipart/form-data
+X-Automation-Key: ...
+X-Claim-Token: ...
 ```
 
-Hierna verschijnen die aanvragen **niet meer** bij `GET /orders/export` en is het
-JSON-bestand op de server verwijderd. Roep `ack` pas aan **nadat** je macro de
-nummers daadwerkelijk heeft aangemaakt — zo raak je niets kwijt als de macro halverwege stopt.
+Per positie 1 tot en met 4 zijn verplicht:
 
-## Kant-en-klaar macro-script (curl + jq)
+- `samples[n][position]`
+- `samples[n][title]`
+- `samples[n][suno_source_url]`
+- `samples[n][preview]` — mp3, maximaal 20 MB
+- `samples[n][original]` — mp3/wav/m4a, maximaal 100 MB
+- `samples[n][cover]` — jpg/png/webp, maximaal 10 MB
 
-Keysmith kan een shell-stap draaien. Dit script haalt alles op, schrijft elke JSON
-lokaal weg (in een tijdelijke werkmap), en bevestigt daarna. Voeg tussen ophalen en
-ack je eigen Suno-stappen toe.
+Voorbeeld met `curl`:
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-BASE="https://JOUW-DOMEIN.nl/api/v1"     # of http://127.0.0.1:8000 lokaal
-KEY="zet-hier-je-ORDERS_API_KEY"
-WORKDIR="$HOME/vim-macro-werk"            # tijdelijke werkmap voor de macro
-mkdir -p "$WORKDIR"
-
-# 1. Ophalen
-RESP="$(curl -fsS -H "X-Export-Key: $KEY" "$BASE/orders/export")"
-COUNT="$(echo "$RESP" | jq '.count')"
-echo "Openstaand: $COUNT"
-[ "$COUNT" -eq 0 ] && exit 0
-
-# 2. Elke aanvraag wegschrijven als los bestand
-echo "$RESP" | jq -c '.orders[]' | while read -r order; do
-  fname="$(echo "$order" | jq -r '.filename')"
-  echo "$order" > "$WORKDIR/$fname"
-  echo "→ $fname"
-  # HIER: open suno.com en vul in:
-  #   titel  = $(echo "$order" | jq -r '.suno.title')
-  #   stijl  = $(echo "$order" | jq -r '.suno.style')
-  #   lyrics = $(echo "$order" | jq -r '.suno.lyrics')
-done
-
-# 3. Bevestigen (verwijdert ze op de server)
-IDS="$(echo "$RESP" | jq -c '[.orders[].order_id]')"
-curl -fsS -X POST -H "X-Export-Key: $KEY" -H "Content-Type: application/json" \
-  -d "{\"ids\": $IDS}" "$BASE/orders/export/ack"
+curl -fsS -X POST \
+  -H "X-Automation-Key: $AUTOMATION_KEY" \
+  -H "X-Claim-Token: $CLAIM_TOKEN" \
+  -F 'samples[0][position]=1' \
+  -F 'samples[0][title]=Versie 1' \
+  -F 'samples[0][suno_source_url]=https://suno.com/song/...' \
+  -F 'samples[0][preview]=@preview-1.mp3' \
+  -F 'samples[0][original]=@original-1.mp3' \
+  -F 'samples[0][cover]=@cover-1.jpg' \
+  -F 'samples[1][position]=2' \
+  -F 'samples[1][title]=Versie 2' \
+  -F 'samples[1][suno_source_url]=https://suno.com/song/...' \
+  -F 'samples[1][preview]=@preview-2.mp3' \
+  -F 'samples[1][original]=@original-2.mp3' \
+  -F 'samples[1][cover]=@cover-2.jpg' \
+  -F 'samples[2][position]=3' \
+  -F 'samples[2][title]=Versie 3' \
+  -F 'samples[2][suno_source_url]=https://suno.com/song/...' \
+  -F 'samples[2][preview]=@preview-3.mp3' \
+  -F 'samples[2][original]=@original-3.mp3' \
+  -F 'samples[2][cover]=@cover-3.jpg' \
+  -F 'samples[3][position]=4' \
+  -F 'samples[3][title]=Versie 4' \
+  -F 'samples[3][suno_source_url]=https://suno.com/song/...' \
+  -F 'samples[3][preview]=@preview-4.mp3' \
+  -F 'samples[3][original]=@original-4.mp3' \
+  -F 'samples[3][cover]=@cover-4.jpg' \
+  "https://api.vooriedermoment.nl/api/v1/automation/orders/$ORDER_ID/samples"
 ```
 
-## Instellingen (`.env`)
+Alleen nadat database-opslag en alle bestanden zijn gelukt:
 
+- krijgt de order `status=samples_ready`;
+- krijgt automation `status=completed`;
+- wordt één `SamplesReadyMail` voor de klant in de queue gezet.
+
+Een retry met dezelfde claimtoken na een al geslaagde upload geeft de bestaande
+vier samples terug en verstuurt geen tweede klantmail.
+
+## 3. Een mislukte run vrijgeven
+
+```http
+POST /api/v1/automation/orders/{id}/fail
+Content-Type: application/json
+X-Automation-Key: ...
+X-Claim-Token: ...
+
+{"error":"Suno was tijdelijk niet bereikbaar"}
 ```
-ORDERS_EXPORT_ENABLED=true            # export aan/uit
-ORDERS_PATH=                          # leeg = storage/app/orders op de server
-ORDERS_NOTIFY_EMAIL=jij@voorbeeld.nl  # mail-seintje per aanvraag (leeg = geen mail)
-ORDERS_API_KEY=een-lang-uniek-geheim  # = X-Export-Key voor de macro
-```
 
-> Let op: `ORDERS_API_KEY` moet in `.env` op de server hetzelfde zijn als in je macro.
-> Voor echte mail (i.p.v. de Mailtrap-sandbox) moet je de `MAIL_*`-gegevens in `.env`
-> nog naar een echte SMTP zetten.
+De order wordt weer `ready` en kan bij de volgende run opnieuw worden geclaimd.
 
-## Relevante code
+## 4. Zonder bestanden handmatig afronden
 
-- `app/Services/Orders/OrderExporter.php` — bouwt de JSON, schrijft 'm weg, stuurt de mail.
-- `app/Http/Controllers/Api/V1/OrderExportController.php` — `index()` (ophalen) + `ack()` (bevestigen/opruimen).
-- `app/Http/Middleware/ExportKeyMiddleware.php` — controleert `X-Export-Key`.
-- `app/Mail/NewOrderMail.php` + `resources/views/emails/new-order.blade.php` — het mail-seintje.
-- `routes/api.php` — de twee `orders/export`-routes.
-- Aangeroepen vanuit `SongRequestController::checkout()` na (stub-)betaling.
+`POST /api/v1/automation/orders/{id}/complete` bestaat voor een toekomstige
+workflow zonder sample-upload. In de normale Suno-flow is dit endpoint niet
+nodig: een succesvolle upload rondt de claim automatisch af.

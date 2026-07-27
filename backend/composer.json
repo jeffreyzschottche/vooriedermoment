@@ -10,7 +10,9 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.2",
         "laravel/tinker": "^2.10.1",
-        "resend/resend-php": "^1.0"
+        "league/flysystem-aws-s3-v3": "^3.35",
+        "resend/resend-php": "^1.0",
+        "stripe/stripe-php": "^21.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

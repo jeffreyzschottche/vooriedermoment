@@ -7,9 +7,9 @@ use App\Models\SongRequest;
 interface PaymentProvider
 {
     /**
-     * Verwerk de betaling voor een aanvraag.
+     * Maak een betaalcheckout voor een aanvraag.
      *
-     * @return array{status: string, reference: string}
+     * @return array{status: string, reference: string, checkout_url: ?string}
      */
-    public function charge(SongRequest $request): array;
+    public function createCheckout(SongRequest $request): array;
 }

@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSongRequest;
+use App\Jobs\ProcessPaidSongRequest;
 use App\Models\SongRequest;
 use App\Services\Lyrics\LyricsGenerator;
-use App\Services\Orders\OrderExporter;
 use App\Services\Payment\PaymentProvider;
-use App\Services\Production\SongProductionPipeline;
 use Illuminate\Http\JsonResponse;
 
 class SongRequestController extends Controller
@@ -40,28 +39,52 @@ class SongRequestController extends Controller
     }
 
     /**
-     * Reken af en start daarna de productiepipeline.
+     * Maak een checkout aan. Bij Stripe start uitsluitend de ondertekende
+     * webhook de productiepipeline.
      */
-    public function checkout(SongRequest $songRequest, PaymentProvider $payment, SongProductionPipeline $production, OrderExporter $orders): JsonResponse
+    public function checkout(SongRequest $songRequest, PaymentProvider $payment): JsonResponse
     {
-        if ($songRequest->status !== 'paid') {
-            $result = $payment->charge($songRequest);
-            $songRequest->update([
-                'status' => $result['status'],
-                'payment_reference' => $result['reference'],
-            ]);
-        }
-
-        if (in_array($songRequest->status, ['paid', 'production_failed'], true)) {
-            $songRequest = $production->run($songRequest->refresh());
-        }
-
-        // Betaalde aanvraag wegschrijven als Suno-klare JSON (lokaal) + notificatie.
         if ($songRequest->isPaid()) {
-            $orders->export($songRequest);
+            return response()->json(['data' => $this->present($songRequest)]);
         }
 
-        return response()->json(['data' => $this->present($songRequest)]);
+        $result = $payment->createCheckout($songRequest);
+
+        $songRequest->forceFill([
+            'status' => $result['status'],
+            'payment_reference' => $result['reference'],
+            'payment_provider' => config('payment.default', 'stub'),
+            'paid_at' => $result['status'] === 'paid' ? now() : null,
+        ])->save();
+
+        // De stub blijft synchroon, uitsluitend om lokaal en in tests te werken.
+        if ($result['status'] === 'paid') {
+            ProcessPaidSongRequest::dispatchSync($songRequest->id);
+            $songRequest->refresh();
+        }
+
+        return response()->json([
+            'data' => $this->present($songRequest) + [
+                'checkout_url' => $result['checkout_url'],
+            ],
+        ]);
+    }
+
+    public function checkoutStatus(string $sessionId): JsonResponse
+    {
+        $songRequest = SongRequest::where('payment_provider', 'stripe')
+            ->where('payment_reference', $sessionId)
+            ->firstOrFail();
+
+        return response()->json([
+            'data' => [
+                'id' => $songRequest->id,
+                'category' => $songRequest->category,
+                'category_title' => $songRequest->category_title,
+                'status' => $songRequest->status,
+                'paid' => (bool) $songRequest->paid_at,
+            ],
+        ]);
     }
 
     private function priceCents(): int

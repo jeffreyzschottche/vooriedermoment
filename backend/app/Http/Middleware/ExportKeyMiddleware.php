@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Beveiligt de order-export-endpoints met een geheime sleutel.
+ * Beveiligt de automation-endpoints met een geheime sleutel.
  *
- * Gebruik: stuur header "X-Export-Key: <ORDERS_API_KEY>" mee.
+ * Gebruik: stuur header "X-Automation-Key: <AUTOMATION_API_KEY>" mee.
  */
 class ExportKeyMiddleware
 {
@@ -19,11 +19,12 @@ class ExportKeyMiddleware
 
         if (! $validKey) {
             return response()->json([
-                'error' => 'Export niet geconfigureerd. Zet ORDERS_API_KEY in .env',
+                'error' => 'Automation niet geconfigureerd. Zet AUTOMATION_API_KEY in .env',
             ], 500);
         }
 
-        $key = $request->header('X-Export-Key') ?: $request->query('key');
+        $key = $request->header('X-Automation-Key')
+            ?: $request->header('X-Export-Key');
 
         if (! $key || ! hash_equals($validKey, (string) $key)) {
             return response()->json(['error' => 'Unauthorized'], 401);

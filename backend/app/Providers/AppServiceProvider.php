@@ -2,21 +2,26 @@
 
 namespace App\Providers;
 
-use App\Services\Payment\PaymentProvider;
-use App\Services\Payment\StubPaymentProvider;
 use App\Services\Music\MusicProvider;
 use App\Services\Music\StubMusicProvider;
+use App\Services\Payment\PaymentProvider;
+use App\Services\Payment\StripePaymentProvider;
+use App\Services\Payment\StubPaymentProvider;
 use Illuminate\Support\ServiceProvider;
+use RuntimeException;
+use Stripe\StripeClient;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // Betaalprovider. Voorlopig de stub; later Mollie/Stripe inpluggen
-        // op basis van config('payment.default').
         $this->app->bind(PaymentProvider::class, function () {
             return match (config('payment.default', 'stub')) {
-                default => new StubPaymentProvider(),
+                'stripe' => new StripePaymentProvider(new StripeClient(
+                    config('payment.stripe.secret_key')
+                        ?: throw new RuntimeException('STRIPE_SECRET_KEY is niet ingesteld.')
+                )),
+                default => new StubPaymentProvider,
             };
         });
 

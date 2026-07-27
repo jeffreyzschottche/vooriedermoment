@@ -1,0 +1,100 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\SongRequest;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class AutomationOrderClaimTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config()->set('orders.api_key', 'automation-test-key');
+        config()->set('orders.claim_ttl_minutes', 60);
+    }
+
+    public function test_an_order_can_only_be_claimed_by_one_worker_at_a_time(): void
+    {
+        $songRequest = $this->readyOrder();
+
+        $claim = $this->withHeader('X-Automation-Key', 'automation-test-key')
+            ->postJson('/api/v1/automation/orders/claim', [
+                'worker_id' => 'studio-mac',
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.order.order_id', $songRequest->id)
+            ->assertJsonPath('data.claimed_by', 'studio-mac');
+
+        $claimToken = $claim->json('data.claim_token');
+
+        $this->withHeader('X-Automation-Key', 'automation-test-key')
+            ->postJson('/api/v1/automation/orders/claim', [
+                'worker_id' => 'second-mac',
+            ])
+            ->assertOk()
+            ->assertJsonPath('data', null);
+
+        $this->withHeaders([
+            'X-Automation-Key' => 'automation-test-key',
+            'X-Claim-Token' => $claimToken,
+        ])->postJson("/api/v1/automation/orders/{$songRequest->id}/fail", [
+            'error' => 'Suno was tijdelijk niet bereikbaar.',
+        ])->assertOk()
+            ->assertJsonPath('data.automation_status', 'ready')
+            ->assertJsonPath('data.retryable', true);
+
+        $retry = $this->withHeader('X-Automation-Key', 'automation-test-key')
+            ->postJson('/api/v1/automation/orders/claim', [
+                'worker_id' => 'second-mac',
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.order.order_id', $songRequest->id);
+
+        $this->withHeaders([
+            'X-Automation-Key' => 'automation-test-key',
+            'X-Claim-Token' => $retry->json('data.claim_token'),
+        ])->postJson("/api/v1/automation/orders/{$songRequest->id}/complete")
+            ->assertOk()
+            ->assertJsonPath('data.automation_status', 'completed');
+
+        $this->assertDatabaseHas('song_requests', [
+            'id' => $songRequest->id,
+            'automation_status' => 'completed',
+            'automation_attempts' => 2,
+        ]);
+    }
+
+    public function test_claim_endpoint_requires_the_automation_key(): void
+    {
+        $this->postJson('/api/v1/automation/orders/claim', [
+            'worker_id' => 'studio-mac',
+        ])->assertUnauthorized();
+    }
+
+    private function readyOrder(): SongRequest
+    {
+        return SongRequest::create([
+            'category' => 'verjaardag',
+            'category_title' => 'Verjaardag',
+            'email' => 'klant@example.com',
+            'intake' => [
+                'recipientName' => 'Anna',
+                'musicStyle' => 'Nederlandstalige pop',
+                'vocals' => 'Vrouwenstem',
+            ],
+            'lyrics' => 'Concepttekst',
+            'final_lyrics' => 'Definitieve tekst',
+            'status' => 'music_prompt_ready',
+            'price_cents' => 999,
+            'payment_provider' => 'stripe',
+            'payment_reference' => 'cs_test_ready',
+            'paid_at' => now(),
+            'automation_status' => 'ready',
+        ]);
+    }
+}

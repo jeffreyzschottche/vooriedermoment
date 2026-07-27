@@ -4,41 +4,41 @@ namespace App\Services\Orders;
 
 use App\Mail\NewOrderMail;
 use App\Models\SongRequest;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Throwable;
 
 /**
- * Schrijft per betaalde aanvraag een Suno-klare JSON weg naar een lokale map
- * (config orders.path) en stuurt optioneel een notificatiemail. De JSON is zo
- * opgebouwd dat een lokale macro (Keysmith) er direct titel/stijl/lyrics uit
- * kan plukken om een nummer te genereren op suno.com.
- *
- * Mag de checkout nooit laten falen: alle fouten worden gelogd, niet gegooid.
+ * Bouwt de macro-payload vanuit de database en verstuurt één notificatiemail.
+ * De API is de bron van waarheid; er is geen lokaal JSON-bestand nodig.
  */
 class OrderExporter
 {
-    public function export(SongRequest $songRequest): ?string
+    public function export(SongRequest $songRequest): bool
     {
-        if (! config('orders.enabled', true)) {
-            return null;
+        if (! config('orders.enabled', true) || $songRequest->order_notification_sent_at) {
+            return false;
         }
 
         try {
             $payload = $this->buildPayload($songRequest);
-            $path = $this->writeFile($songRequest, $payload);
-            $this->notify($songRequest, $payload, $path);
+            $sent = $this->notify($songRequest, $payload);
 
-            return $path;
+            if ($sent) {
+                $songRequest->forceFill([
+                    'order_notification_sent_at' => now(),
+                ])->save();
+            }
+
+            return $sent;
         } catch (Throwable $e) {
             Log::error('Order export failed', [
                 'song_request_id' => $songRequest->id,
                 'error' => $e->getMessage(),
             ]);
 
-            return null;
+            throw $e;
         }
     }
 
@@ -53,7 +53,7 @@ class OrderExporter
         return [
             'order_id' => $songRequest->id,
             'filename' => $this->filename($songRequest),
-            'created_at' => now()->toIso8601String(),
+            'created_at' => $songRequest->created_at?->toIso8601String() ?? now()->toIso8601String(),
             'status' => $songRequest->status,
             'category' => $songRequest->category,
             'category_title' => $songRequest->category_title,
@@ -72,21 +72,6 @@ class OrderExporter
         ];
     }
 
-    private function writeFile(SongRequest $songRequest, array $payload): string
-    {
-        $dir = (string) config('orders.path');
-        File::ensureDirectoryExists($dir);
-
-        $path = rtrim($dir, '/').'/'.$this->filename($songRequest);
-
-        File::put($path, json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-
-        // Onthoud het pad zodat de ack-endpoint het bestand later kan opruimen.
-        $songRequest->forceFill(['export_path' => $path])->saveQuietly();
-
-        return $path;
-    }
-
     /**
      * Bestandsnaam: categorie + naam, bv. moederdag-voor-anna-12.json.
      * Het id achteraan houdt 'm uniek bij dezelfde categorie/naam.
@@ -99,14 +84,24 @@ class OrderExporter
         return "{$category}-voor-{$name}-{$songRequest->id}.json";
     }
 
-    private function notify(SongRequest $songRequest, array $payload, string $path): void
+    private function notify(SongRequest $songRequest, array $payload): bool
     {
         $to = config('orders.notify_email');
         if (! $to) {
-            return;
+            Log::warning('ORDERS_NOTIFY_EMAIL ontbreekt; ordermail niet verstuurd.', [
+                'song_request_id' => $songRequest->id,
+            ]);
+
+            return false;
         }
 
-        Mail::to($to)->send(new NewOrderMail($songRequest, $payload, $path));
+        Mail::to($to)->send(new NewOrderMail(
+            $songRequest,
+            $payload,
+            $this->filename($songRequest),
+        ));
+
+        return true;
     }
 
     private function title(SongRequest $songRequest, array $intake): string
