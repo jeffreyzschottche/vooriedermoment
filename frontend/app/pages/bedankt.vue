@@ -143,7 +143,7 @@ const themeStyle = computed(() => themeVars(theme.value));
                     Stap 2
                   </p>
                   <p class="mt-2 font-display text-xl font-semibold" :style="{ color: 'var(--color-ink)' }">
-                    Spotify &amp; Apple Music
+                    Spotify &amp; YouTube Music
                   </p>
                   <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
                     Na jouw keuze maken we de favoriet af. Binnen 24–72 uur staat je nummer op beide platforms.

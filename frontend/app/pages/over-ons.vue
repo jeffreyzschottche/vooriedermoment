@@ -2,7 +2,7 @@
 useSeoMeta({
   title: 'Over ons',
   description:
-    'Voor Ieder Moment maakt van echte verhalen persoonlijke nummers voor Spotify en Apple Music. Persoonlijk, betaalbaar en snel geregeld.',
+    'Voor Ieder Moment maakt van echte verhalen persoonlijke nummers voor Spotify en YouTube Music. Persoonlijk, betaalbaar en snel geregeld.',
 });
 
 useJsonLd(breadcrumbSchema([
@@ -14,7 +14,7 @@ const steps = [
   { n: '01', t: 'Jij vertelt wat telt', d: 'Via een korte briefing deel je namen, herinneringen, inside jokes en jouw gewenste sfeer.' },
   { n: '02', t: 'Wij maken verschillende opties', d: 'We vertalen jouw verhaal naar korte muzikale opties om uit te kiezen.' },
   { n: '03', t: 'Jij kiest de favoriet', d: 'Luister thuis of samen en kies de versie die het moment het beste vangt.' },
-  { n: '04', t: 'Wij regelen de release', d: 'We maken jouw keuze compleet voor Spotify, Apple Music en social media.' },
+  { n: '04', t: 'Wij regelen de release', d: 'We maken jouw keuze compleet voor Spotify, YouTube Music en social media.' },
 ];
 </script>
 

@@ -263,12 +263,12 @@ export const categories: Category[] = [
     heroLead:
       'Eindelijk dat roze pasje op zak. Ons feestnummer bevat al duizenden namen. Staat die van jou er niet bij? Dan maken we een eigen versie met jouw rijverhaal.',
     intro:
-      'Ons rijbewijsnummer staat al op Spotify en Apple Music. Mist jouw naam, of wil je iemand verrassen met een eigen verhaal? Vraag dan een persoonlijke versie aan.',
+      'Ons rijbewijsnummer staat al op Spotify en YouTube Music. Mist jouw naam, of wil je iemand verrassen met een eigen verhaal? Vraag dan een persoonlijke versie aan.',
     whatYouGet: [
       'Verschillende muzikale opties om uit te kiezen',
       'Eén complete versie van jouw favoriet',
       'Met jouw naam (of die van de geslaagde) erin verwerkt',
-      'Release op Spotify en Apple Music inbegrepen',
+      'Release op Spotify en YouTube Music inbegrepen',
     ],
     playlistEmbed: null,
     existingHook: 'Staat jouw naam al in het nummer?',
@@ -285,7 +285,7 @@ export const categories: Category[] = [
       { question: 'Het rijbewijs-nummer bestaat toch al?', answer: 'Klopt — er staat een versie op Spotify met heel veel namen. Zit jouw naam er niet bij, of wil je een eigen variant met je eigen verhaal? Dan maken we die op aanvraag.' },
       { question: 'Welke details kunnen jullie verwerken?', answer: 'Denk aan de rijschool of instructeur, het aantal pogingen, een droomauto, de eerste rit en alles wat er op de examendag gebeurde.' },
       { question: 'Kan ik dit als verrassing voor iemand anders bestellen?', answer: 'Ja. Vul de naam en het rijverhaal van de geslaagde in en gebruik je eigen e-mailadres om de samples te ontvangen.' },
-      { question: 'Hoe snel heb ik mijn versie?', answer: 'Binnen 24–72 uur na betaling ontvang je de muzikale opties. Na jouw keuze staat de complete versie binnen 24–72 uur op Spotify en Apple Music.' },
+      { question: 'Hoe snel heb ik mijn versie?', answer: 'Binnen 24–72 uur na betaling ontvang je de muzikale opties. Na jouw keuze staat de complete versie binnen 24–72 uur op Spotify en YouTube Music.' },
     ],
     seoTitle: 'Rijbewijs gehaald? Een persoonlijk feestnummer',
     seoDescription: 'Geslaagd voor je rijbewijs — vier het met een persoonlijk nummer met jouw naam erin. Al op Spotify, of vraag je eigen versie aan.',
@@ -302,12 +302,12 @@ export const categories: Category[] = [
     heroLead:
       'De vlag mag uit. Ons geslaagd-nummer bevat meer dan 10.000 namen. Grote kans dat die van jou ertussen staat — en anders maken we een persoonlijke versie.',
     intro:
-      'Ons geslaagd-nummer staat al op Spotify en Apple Music, met meer dan 10.000 namen erin. Zoek hieronder of jouw naam erbij staat. Mist hij? Vraag dan je eigen versie aan.',
+      'Ons geslaagd-nummer staat al op Spotify en YouTube Music, met meer dan 10.000 namen erin. Zoek hieronder of jouw naam erbij staat. Mist hij? Vraag dan je eigen versie aan.',
     whatYouGet: [
       'Verschillende muzikale opties om uit te kiezen',
       'Eén compleet nummer in jouw favoriete uitvoering',
       'Jouw naam in de tekst',
-      'Release op Spotify en Apple Music inbegrepen',
+      'Release op Spotify en YouTube Music inbegrepen',
     ],
     playlistEmbed: null,
     existingHook: 'Staat jouw naam tussen de 10.000?',
@@ -341,12 +341,12 @@ export const categories: Category[] = [
     heroLead:
       'De sleutel in handen, dozen in de gang en een plek die écht van jullie is. Maak van dat verhaal een nummer voor de housewarming en lang daarna.',
     intro:
-      'Ons nummer over een eigen huis staat al op Spotify en Apple Music. Wil je een versie met jullie namen, nieuwe plek en mooiste verhuisverhalen? Vraag hem hieronder aan.',
+      'Ons nummer over een eigen huis staat al op Spotify en YouTube Music. Wil je een versie met jullie namen, nieuwe plek en mooiste verhuisverhalen? Vraag hem hieronder aan.',
     whatYouGet: [
       'Verschillende muzikale opties om uit te kiezen',
       'Eén compleet nummer over jullie nieuwe huis',
       'Namen en details uit jullie verhaal erin',
-      'Release op Spotify en Apple Music inbegrepen',
+      'Release op Spotify en YouTube Music inbegrepen',
     ],
     playlistEmbed: null,
     existingHook: 'Maak er jullie eigen versie van',
@@ -381,7 +381,7 @@ export const categories: Category[] = [
     heroTitle: 'Een Vaderdag-nummer dat hij nooit vergeet',
     heroLead: 'Geen sokken of een mok dit jaar. Geef je vader een eigen nummer — over hém, met jullie verhaal erin.',
     intro: 'Vertel ons over je vader: zijn gewoontes, jullie grapjes, dat ene moment. Wij maken er een persoonlijk nummer van.',
-    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet Vaderdag-nummer', 'Jullie verhaal en inside jokes erin', 'Publicatie op Spotify en Apple Music inbegrepen'],
+    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet Vaderdag-nummer', 'Jullie verhaal en inside jokes erin', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     intakeFields: baseFields([
       { name: 'nickname', label: 'Hoe noem je hem?', type: 'text', placeholder: 'Bijv. pap, papa, opa', span: 'half' },
       { name: 'hobby', label: 'Zijn hobby of typische dingen', type: 'text', placeholder: 'Bijv. BBQ, voetbal, klussen', span: 'half' },
@@ -408,7 +408,7 @@ export const categories: Category[] = [
     heroTitle: 'Een Moederdag-nummer recht uit het hart',
     heroLead: 'Zeg met muziek wat niet altijd in een kaartje past. Een persoonlijk nummer vol herinneringen, dankbaarheid en jullie eigen woorden.',
     intro: 'Deel jullie mooiste herinneringen en typische momenten. Wij maken er een nummer van dat ze steeds opnieuw kan beluisteren.',
-    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet Moederdag-nummer', 'Jullie herinneringen verwerkt in de tekst', 'Publicatie op Spotify en Apple Music inbegrepen'],
+    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet Moederdag-nummer', 'Jullie herinneringen verwerkt in de tekst', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     intakeFields: baseFields([
       { name: 'nickname', label: 'Hoe noem je haar?', type: 'text', placeholder: 'Bijv. mam, mama, oma', span: 'half' },
       { name: 'memory', label: 'Een dierbare herinnering', type: 'text', placeholder: 'Bijv. zondagse pannenkoeken', span: 'half' },
@@ -435,7 +435,7 @@ export const categories: Category[] = [
     heroTitle: 'Een welkomstlied voor jullie kleintje',
     heroLead: 'Een nieuw leven, een nieuwe naam en een verhaal dat pas net begint. Vang dit moment in een persoonlijk geboortenummer.',
     intro: 'Vertel ons de naam, de geboortedatum en wat dit moment zo bijzonder maakt — wij maken er een teder nummer van.',
-    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet geboortenummer', 'De naam van je kindje in de tekst', 'Publicatie op Spotify en Apple Music inbegrepen'],
+    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet geboortenummer', 'De naam van je kindje in de tekst', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     intakeFields: baseFields([
       { name: 'babyName', label: 'Naam van het kindje', type: 'text', placeholder: 'Bijv. Liv', required: true, span: 'half' },
       { name: 'birthDate', label: 'Geboortedatum', type: 'date', span: 'half' },
@@ -462,7 +462,7 @@ export const categories: Category[] = [
     heroTitle: 'Een verjaardagsnummer op maat',
     heroLead: 'Niet zomaar "Lang zal ze leven". Een eigen verjaardagsnummer met naam, leeftijd en alle inside jokes.',
     intro: 'Vertel ons over de jarige: leeftijd, karakter en de grapjes die alleen jullie snappen. Wij maken er het muzikale hoogtepunt van.',
-    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet verjaardagsnummer', 'Naam, leeftijd en inside jokes erin', 'Publicatie op Spotify en Apple Music inbegrepen'],
+    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet verjaardagsnummer', 'Naam, leeftijd en inside jokes erin', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     intakeFields: baseFields([
       { name: 'age', label: 'Welke leeftijd?', type: 'text', placeholder: 'Bijv. 50', span: 'half' },
       { name: 'party', label: 'Soort feest', type: 'text', placeholder: 'Bijv. surprise, kroegavond', span: 'half' },
@@ -489,7 +489,7 @@ export const categories: Category[] = [
     heroTitle: 'Een meezinger voor je team of club',
     heroLead: 'Voor de hele ploeg: bij een kampioenschap, seizoensafsluiting, sponsoravond of gewoon omdat jullie een eigen kantinehit verdienen.',
     intro: 'Vertel ons over het team, de clubcultuur, de kleuren en de momenten die iedereen herkent. Wij maken er een meezingbaar teamlied van.',
-    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet team- of clublied', 'Teamnaam, clubcultuur en momenten in de tekst', 'Publicatie op Spotify en Apple Music inbegrepen'],
+    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet team- of clublied', 'Teamnaam, clubcultuur en momenten in de tekst', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     intakeFields: baseFields([
       { name: 'teamType', label: 'Waar gaat het over?', type: 'select', options: ['Hele club', 'Eén team', 'Kampioenswedstrijd', 'Seizoensafsluiting', 'Sponsor / businessclub', 'Supportersgroep'], required: true, span: 'half' },
       { name: 'clubName', label: 'Club- of teamnaam', type: 'text', placeholder: 'Bijv. VV De Spartaan JO17-1', required: true, span: 'half' },
@@ -526,7 +526,7 @@ export const categories: Category[] = [
     whatYouGet: [
       'Eén compleet bedrijfsnummer in de gekozen uitvoering',
       'Bedrijfsnaam, slogan en kernwaarden verwerkt in de tekst',
-      'Overal te delen op Spotify, Apple Music en social media',
+      'Overal te delen op Spotify, YouTube Music en social media',
       'Inzetbaar voor jubileum, recruitment, beurs of bedrijfsfeest',
     ],
     sampleTracks: [
@@ -555,7 +555,7 @@ export const categories: Category[] = [
       { question: 'Voor welke bouwbedrijven is dit geschikt?', answer: 'Voor onder meer aannemers, installateurs, renovatiebedrijven, infrabedrijven en dakdekkers. Jullie specialisme, mensen en projecten vormen de inhoud.' },
       { question: 'Waar kunnen we het bedrijfsnummer voor gebruiken?', answer: 'Bij een jubileum, bedrijfsfeest, beurs, open dag, recruitmentcampagne of als herkenbare track voor social media en de website.' },
       { question: 'Krijgen we verschillende muzikale opties?', answer: 'Ja. Binnen 24–72 uur ontvangen jullie verschillende korte voorproefjes. Daarna kiezen jullie welke uitvoering we compleet maken.' },
-      { question: 'Hoe snel is het klaar?', answer: 'Binnen 24–72 uur ontvang je de muzikale opties. Na je keuze staat de complete versie binnen 24–72 uur op Spotify en Apple Music. Voor een vaste deadline kun je het best vooraf contact opnemen.' },
+      { question: 'Hoe snel is het klaar?', answer: 'Binnen 24–72 uur ontvang je de muzikale opties. Na je keuze staat de complete versie binnen 24–72 uur op Spotify en YouTube Music. Voor een vaste deadline kun je het best vooraf contact opnemen.' },
     ],
     seoTitle: 'Bedrijfsnummer voor bouwbedrijven in Nederland',
     seoDescription: 'Een gepersonaliseerd bedrijfsnummer voor jouw bouwbedrijf — met bedrijfsnaam, slogan en kernwaarden. Voor jubileum, social media of bedrijfsfeest.',
@@ -578,7 +578,7 @@ export const otherMomentCategory: Category = {
     'Verschillende muzikale opties om uit te kiezen',
     'Eén compleet nummer over jouw eigen moment',
     'Jouw namen, herinneringen en uitspraken in de tekst',
-    'Publicatie op Spotify en Apple Music inbegrepen',
+    'Publicatie op Spotify en YouTube Music inbegrepen',
   ],
   intakeFields: [
     { name: 'occasion', label: 'Voor welke gelegenheid?', type: 'text', placeholder: 'Bijv. pensioen, jubileum, afscheid', required: true, span: 'half' },

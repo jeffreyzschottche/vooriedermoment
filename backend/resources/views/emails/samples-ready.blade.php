@@ -123,7 +123,7 @@
 
             <p>
                 Luister rustig naar alle vier en kies via de knop je favoriet.
-                Daarna maken wij die versie compleet. Binnen 24–72 uur staat je nummer op Spotify en Apple Music.
+                Daarna maken wij die versie compleet. Binnen 24–72 uur staat je nummer op Spotify en YouTube Music.
             </p>
 
             <div class="samples">
@@ -155,7 +155,7 @@
 
             <div class="footer">
                 <p>&copy; {{ date('Y') }} Voor Ieder Moment</p>
-                <p>Persoonlijke nummers op Spotify &amp; Apple Music</p>
+                <p>Persoonlijke nummers op Spotify &amp; YouTube Music</p>
             </div>
         </div>
     </div>

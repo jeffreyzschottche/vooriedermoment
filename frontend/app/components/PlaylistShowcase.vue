@@ -24,7 +24,7 @@ defineProps<{ embed?: string | null; title: string; subtitle?: string; cover?: s
         </p>
         <div class="mt-5 flex flex-wrap gap-2">
           <span class="chip">Spotify</span>
-          <span class="chip">Apple Music</span>
+          <span class="chip">YouTube Music</span>
           <span class="chip">Persoonlijke versie mogelijk</span>
         </div>
       </div>

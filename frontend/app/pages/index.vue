@@ -7,9 +7,9 @@ useSeoMeta({
   title: 'Een persoonlijk nummer voor elk moment',
   ogTitle: 'Voor Ieder Moment — een persoonlijk nummer voor elk moment',
   description:
-    'Laat voor € 9,99 een persoonlijk nummer maken voor ieder bijzonder moment. Kies uit verschillende muzikale opties; wij publiceren jouw favoriet op Spotify en Apple Music.',
+    'Laat voor € 9,99 een persoonlijk nummer maken voor ieder bijzonder moment. Kies uit verschillende muzikale opties; wij publiceren jouw favoriet op Spotify en YouTube Music.',
   ogDescription:
-    'Vertel jouw verhaal, kies de muzikale optie die raakt en luister naar je eigen nummer op Spotify en Apple Music.',
+    'Vertel jouw verhaal, kies de muzikale optie die raakt en luister naar je eigen nummer op Spotify en YouTube Music.',
   ogUrl: 'https://vooriedermoment.nl/',
   ogImage: 'https://vooriedermoment.nl/hero-studio.png',
   twitterTitle: 'Voor Ieder Moment — een persoonlijk nummer voor elk moment',
@@ -20,7 +20,7 @@ useJsonLd([
   productSchema({
     name: 'Persoonlijk nummer',
     description:
-      'Eén persoonlijk nummer op basis van jouw verhaal, met keuze uit verschillende muzikale opties en publicatie op Spotify en Apple Music.',
+      'Eén persoonlijk nummer op basis van jouw verhaal, met keuze uit verschillende muzikale opties en publicatie op Spotify en YouTube Music.',
     price: offer.currentPrice.value,
     url: '/aanvraag',
   }),
@@ -36,7 +36,7 @@ const pipeline = [
   { n: '01', title: 'Moment kiezen', text: 'Geslaagd, rijbewijs, teamlied, bouwbedrijf of een eigen gelegenheid.' },
   { n: '02', title: 'Vertel jouw verhaal', text: 'Deel namen, herinneringen, inside jokes en de sfeer die bij het moment past.' },
   { n: '03', title: 'Kies uit de opties', text: 'Binnen 24–72 uur ontvang je verschillende korte voorproefjes in je inbox.' },
-  { n: '04', title: 'Wij regelen de release', text: 'Wij maken jouw favoriet compleet en publiceren hem binnen 24–72 uur op Spotify en Apple Music.' },
+  { n: '04', title: 'Wij regelen de release', text: 'Wij maken jouw favoriet compleet en publiceren hem binnen 24–72 uur op Spotify en YouTube Music.' },
 ];
 
 const valueProps = [
@@ -53,7 +53,7 @@ const valueProps = [
   {
     icon: '🚀',
     title: 'Van sample naar streaming',
-    body: 'Kies het voorproefje dat het beste voelt. Wij maken die versie compleet en regelen de release op Spotify en Apple Music.',
+    body: 'Kies het voorproefje dat het beste voelt. Wij maken die versie compleet en regelen de release op Spotify en YouTube Music.',
   },
 ];
 
@@ -71,10 +71,10 @@ const proof = [
 ];
 
 const faqPreview = [
-  { q: 'Hoe werkt het precies?', a: 'Je kiest een moment en vult stap voor stap ons formulier in met namen, herinneringen en de gewenste sfeer. Na betaling sturen we je verschillende muzikale opties. Jij kiest je favoriet; wij maken het nummer compleet en publiceren het voor je op Spotify en Apple Music.' },
-  { q: 'Moet ik zelf iets regelen voor Spotify?', a: 'Nee. Wij verzorgen de volledige publicatie op Spotify en Apple Music. Je hebt geen artiestenaccount of technische kennis nodig. Zodra jouw nummer live staat, ontvang je de directe luisterlinks per e-mail.' },
-  { q: 'Hoe snel staat mijn nummer online?', a: 'Binnen 24–72 uur na betaling ontvang je de muzikale opties. Na jouw keuze maken we de favoriet compleet en staat het nummer meestal binnen nog eens 24–72 uur op Spotify en Apple Music.' },
-  { q: 'Kan ik mijn nummer later opnieuw beluisteren?', a: 'Ja. Jouw nummer wordt als een echte release gepubliceerd. Voeg het toe aan je Spotify- of Apple Music-bibliotheek en luister er zo vaak naar als je wilt.' },
+  { q: 'Hoe werkt het precies?', a: 'Je kiest een moment en vult stap voor stap ons formulier in met namen, herinneringen en de gewenste sfeer. Na betaling sturen we je verschillende muzikale opties. Jij kiest je favoriet; wij maken het nummer compleet en publiceren het voor je op Spotify en YouTube Music.' },
+  { q: 'Moet ik zelf iets regelen voor Spotify?', a: 'Nee. Wij verzorgen de volledige publicatie op Spotify en YouTube Music. Je hebt geen artiestenaccount of technische kennis nodig. Zodra jouw nummer live staat, ontvang je de directe luisterlinks per e-mail.' },
+  { q: 'Hoe snel staat mijn nummer online?', a: 'Binnen 24–72 uur na betaling ontvang je de muzikale opties. Na jouw keuze maken we de favoriet compleet en staat het nummer meestal binnen nog eens 24–72 uur op Spotify en YouTube Music.' },
+  { q: 'Kan ik mijn nummer later opnieuw beluisteren?', a: 'Ja. Jouw nummer wordt als een echte release gepubliceerd. Voeg het toe aan je Spotify- of YouTube Music-bibliotheek en luister er zo vaak naar als je wilt.' },
   { q: 'Kan ik het nummer met anderen delen?', a: 'Zeker. Deel de luisterlink eenvoudig via WhatsApp, e-mail of social media met familie, vrienden, collega’s of het hele team.' },
   { q: 'Wat als mijn moment er niet tussen staat?', a: 'Kies dan “Een ander moment”. Van pensioen, jubileum en afscheid tot een bedankje of een herinnering die alleen voor jullie betekenis heeft: jij vertelt het verhaal, wij maken het nummer.' },
 ];
@@ -281,7 +281,7 @@ const faqPreview = [
           </h2>
           <p class="mt-6 text-lg leading-relaxed text-white/60">
             Jij vertelt wat het nummer persoonlijk maakt en kiest uit verschillende muzikale opties.
-            Wij werken jouw favoriet uit en publiceren hem voor je op Spotify en Apple Music.
+            Wij werken jouw favoriet uit en publiceren hem voor je op Spotify en YouTube Music.
           </p>
         </div>
 

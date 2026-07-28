@@ -77,7 +77,7 @@ const year = new Date().getFullYear();
         <!-- Bottom bar -->
         <div class="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/35 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {{ year }} Voor Ieder Moment. Alle rechten voorbehouden.</p>
-          <p>Persoonlijke nummers op Spotify &amp; Apple Music.</p>
+          <p>Persoonlijke nummers op Spotify &amp; YouTube Music.</p>
         </div>
       </div>
     </div>

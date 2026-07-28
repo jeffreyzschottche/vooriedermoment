@@ -79,7 +79,7 @@ useSeoMeta({
           <h1 class="section-heading text-2xl sm:text-3xl">Je hebt al gekozen!</h1>
           <p class="mt-4 text-[var(--color-ink-soft)]">
             Sample {{ chosenSampleId }} is jouw favoriet. We maken die versie nu compleet.
-            Binnen 24–72 uur staat je nummer op Spotify en Apple Music.
+            Binnen 24–72 uur staat je nummer op Spotify en YouTube Music.
           </p>
           <NuxtLink to="/" class="stitch-button mt-8">
             Naar homepage
@@ -100,7 +100,7 @@ useSeoMeta({
           </h1>
           <p v-hero-reveal data-hero-delay="0.2" class="mt-6 text-lg text-[var(--color-ink-soft)]">
             Goede keuze! We maken sample {{ selectedSample }} nu compleet. Binnen 24–72 uur
-            staat je nummer op Spotify en Apple Music. Je ontvangt bericht zodra het live is.
+            staat je nummer op Spotify en YouTube Music. Je ontvangt bericht zodra het live is.
           </p>
           <NuxtLink v-hero-reveal data-hero-delay="0.3" to="/" class="stitch-button mt-10">
             Naar homepage

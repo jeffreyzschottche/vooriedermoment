@@ -30,7 +30,7 @@ export default defineNuxtConfig({
         {
           name: 'description',
           content:
-            'Een persoonlijk nummer voor elk moment: snel, betaalbaar en overal te beluisteren op Spotify en Apple Music.',
+            'Een persoonlijk nummer voor elk moment: snel, betaalbaar en overal te beluisteren op Spotify en YouTube Music.',
         },
         { name: 'theme-color', content: '#fdf8f0' },
         { property: 'og:type', content: 'website' },

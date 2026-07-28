@@ -1,5 +1,5 @@
 // Eén bron van waarheid voor de prijs: één persoonlijk nummer en één gedeelde
-// versie voor Spotify en Apple Music. Kortingsweergave blijft voorbereid voor
+// versie voor Spotify en YouTube Music. Kortingsweergave blijft voorbereid voor
 // een toekomstige aanbieding.
 
 const REGULAR_PRICE = 9.99;

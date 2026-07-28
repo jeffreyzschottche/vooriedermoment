@@ -16,7 +16,7 @@ const isB2b = computed(() => props.category.variant === 'b2b');
 const productionHighlights = [
   { title: 'Vertel wat het persoonlijk maakt', text: 'Deel namen, herinneringen, uitspraken en details die alleen jullie herkennen.' },
   { title: 'Kies uit verschillende opties', text: 'Binnen 24–72 uur sturen we verschillende korte muzikale voorproefjes naar je inbox.' },
-  { title: 'Kies en luister overal', text: 'Na jouw keuze maken we de favoriet af voor Spotify en Apple Music.' },
+  { title: 'Kies en luister overal', text: 'Na jouw keuze maken we de favoriet af voor Spotify en YouTube Music.' },
 ];
 </script>
 

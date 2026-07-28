@@ -198,7 +198,7 @@ function isVisibleLyricLine(index: number) {
                   Jouw favoriet wordt de complete versie
                 </p>
                 <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                  Na jouw keuze maken wij het nummer af. Binnen 24–72 uur staat het op Spotify en Apple Music.
+                  Na jouw keuze maken wij het nummer af. Binnen 24–72 uur staat het op Spotify en YouTube Music.
                 </p>
               </div>
             </div>
@@ -222,7 +222,7 @@ function isVisibleLyricLine(index: number) {
                 <span class="text-xs font-medium" :style="{ color: 'var(--accent-strong)' }">Inclusief</span>
               </div>
               <div class="flex justify-between">
-                <span>Release op Spotify &amp; Apple Music</span>
+                <span>Release op Spotify &amp; YouTube Music</span>
                 <span class="text-xs font-medium" :style="{ color: 'var(--accent-strong)' }">Inclusief</span>
               </div>
               <div
