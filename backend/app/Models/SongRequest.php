@@ -39,6 +39,8 @@ class SongRequest extends Model
         'chosen_suno_source_url',
         'samples_deleted_at',
         'selection_token',
+        'admin_upload_token',
+        'customer_password',
         // Final song
         'final_song_url',
         'final_song_duration',
@@ -86,7 +88,29 @@ class SongRequest extends Model
             if (empty($request->selection_token)) {
                 $request->selection_token = Str::random(32);
             }
+            if (empty($request->admin_upload_token)) {
+                $request->admin_upload_token = Str::random(32);
+            }
+            if (empty($request->customer_password)) {
+                $request->customer_password = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            }
         });
+    }
+
+    public function samplesExpired(): bool
+    {
+        $sample = $this->songSamples()->first();
+        if (! $sample || ! $sample->expires_at) {
+            return false;
+        }
+        return $sample->expires_at->isPast();
+    }
+
+    public function generateCustomerPassword(): string
+    {
+        $this->customer_password = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $this->save();
+        return $this->customer_password;
     }
 
     public function getRecipientNameAttribute(): string

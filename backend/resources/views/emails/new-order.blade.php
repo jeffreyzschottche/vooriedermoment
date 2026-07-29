@@ -13,13 +13,19 @@
         td { padding: 6px 0; vertical-align: top; font-size: 14px; }
         td.k { color: #5b6660; width: 140px; }
         .panel { background: #fff; border: 1px solid #e3e8e1; border-radius: 10px; padding: 16px; margin-top: 8px; font-size: 14px; }
-        pre { white-space: pre-wrap; font-family: inherit; margin: 0; }
+        .lyrics { white-space: pre-wrap; font-family: inherit; margin: 0; line-height: 1.8; }
+        .btn { display: inline-block; background: #16a34a; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; margin: 16px 0; }
+        .btn:hover { background: #15803d; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Nieuwe betaalde aanvraag #{{ $order['order_id'] }}</h1>
         <p class="muted">{{ $order['category_title'] }} — €{{ $order['price_eur'] }}</p>
+
+        @if(!empty($order['admin_upload_url']))
+        <a href="{{ $order['admin_upload_url'] }}" class="btn">4 Samples uploaden</a>
+        @endif
 
         <table>
             <tr><td class="k">Voor</td><td>{{ $order['recipient_name'] }}</td></tr>
@@ -30,7 +36,7 @@
         </table>
 
         <strong>Lyrics</strong>
-        <div class="panel"><pre>{{ $order['suno']['lyrics'] }}</pre></div>
+        <div class="panel"><div class="lyrics">{!! nl2br(e(str_replace(['\n', '\\n'], "\n", $order['suno']['lyrics']))) !!}</div></div>
 
         <p class="muted" style="margin-top:24px;">
             De volledige Suno-JSON zit als bijlage bij deze mail en staat lokaal in je orders-map.
