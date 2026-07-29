@@ -12,9 +12,7 @@
     { "id": 7, "lines": ["In {{DETAIL1}} verven wij het hele stadion", "Voor {{NAME}} is dat normaal, dat is onze ton"], "rhyme_scheme": "AA" },
     { "id": 8, "lines": ["Van {{FROM}} klinkt de steun, week in week uit", "Voor {{NAME}} zingen wij, en maken geluid"], "rhyme_scheme": "AA" },
     { "id": 9, "lines": ["De kantine na de wedstrijd, het bier vloeit rijk", "Voor {{NAME}} is de derde helft een klein koninkrijk"], "rhyme_scheme": "AA" },
-    { "id": 10, "lines": ["Een goal in de laatste minuut, de hel breekt los", "Voor {{NAME}} springen we op, met heel het bos"], "rhyme_scheme": "AA" },
     { "id": 11, "lines": ["De jeugd kijkt op tegen de helden van weleer", "Voor {{NAME}} dromen ze van later, van glorie en eer"], "rhyme_scheme": "AA" },
-    { "id": 12, "lines": ["Schouder aan schouder, niemand laat los", "Voor {{NAME}} zijn wij één, een hechte clan in het bos"], "rhyme_scheme": "AA" },
     { "id": 13, "lines": ["Het clubgevoel zit diep in ons bloed", "Voor {{NAME}} geven wij alles, met hart en met moed"], "rhyme_scheme": "AA" },
     { "id": 14, "lines": ["De vrijdagavond in de kantine, vaste prik", "Voor {{NAME}} hoort dat erbij, dat is onze stiek en klik"], "rhyme_scheme": "AA" },
     { "id": 15, "lines": ["Het doelpunt valt, en heel het stadion staat op", "Voor {{NAME}} barst de vreugde los, van top tot top"], "rhyme_scheme": "AA" },
@@ -32,6 +30,6 @@
     { "id": 27, "lines": ["Het shirt gaat over de kop bij de winst", "Voor {{NAME}} vieren we feest, tot op het minst"], "rhyme_scheme": "AA" },
     { "id": 28, "lines": ["De sjaal hoog gehouden, de vuist in de lucht", "Voor {{NAME}} klinkt onze strijdkreet, geen enkele zucht"], "rhyme_scheme": "AA" },
     { "id": 29, "lines": ["Voor al onze helden op het groene veld", "Voor {{NAME}} dit lied, met trots en geweld"], "rhyme_scheme": "AA" },
-    { "id": 30, "lines": ["Kom op mannen, kom op, geef alles wat je hebt", "Voor {{NAME}} gaan we knallen, tot het laatste rebt"], "rhyme_scheme": "AA" }
+    { "id": 30, "lines": ["Kom op mannen, kom op, geef alles wat je hebt", "Voor {{NAME}} gaan we knallen, tot de laatste step"], "rhyme_scheme": "AA" }
   ]
 }

@@ -16,7 +16,7 @@
     { "id": 11, "lines": ["Pak je glas, het feest gaat aan", "{{NAME}}, vandaag mag jij vooraan staan"], "rhyme_scheme": "AA" },
     { "id": 12, "lines": ["{{NAME}} is jarig, dus kom maar op", "We zingen voor jou, van onder tot top"], "rhyme_scheme": "AA" },
     { "id": 13, "lines": ["Op deze {{PLACE}} draait het om jou", "{{NAME}}, geniet ervan, oprecht en trouw"], "rhyme_scheme": "AA" },
-    { "id": 14, "lines": ["Weer een jaartje erbij op de teller", "Voor {{NAME}} gaat het leven steeds heller"], "rhyme_scheme": "AA" },
+    { "id": 14, "lines": ["Weer een jaartje erbij op de teller", "Voor {{NAME}} gaat het leven steeds sneller"], "rhyme_scheme": "AA" },
     { "id": 15, "lines": ["{{NAME}}, je bent een jaartje wijzer", "Maar van binnen nog steeds een echte feestreiziger"], "rhyme_scheme": "AA" },
     { "id": 16, "lines": ["De cadeaus liggen op een rij", "Maar het mooiste cadeau, {{NAME}}, dat ben jij"], "rhyme_scheme": "AA" },
     { "id": 17, "lines": ["{{NAME}} wordt vandaag {{DETAIL1}}", "Nog lang niet klaar, dat is wel duidelijk hier"], "rhyme_scheme": "AA" },

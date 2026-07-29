@@ -12,15 +12,14 @@
     { "id": 7, "lines": ["De jaren tikken, maar jij blijft pal staan", "{{NAME}}, jij blijft ons rustpunt, waar we altijd op aan kunnen gaan"], "rhyme_scheme": "AA" },
     { "id": 8, "lines": ["Bedankt voor {{DETAIL2}}, voor groot en voor klein", "{{NAME}}, jij wist altijd precies waar wij behoefte aan zouden zijn"], "rhyme_scheme": "AA" },
     { "id": 9, "lines": ["Een arm om ons heen als het even niet ging", "{{NAME}}, jij was de rust in elk moeilijk ding"], "rhyme_scheme": "AA" },
-    { "id": 10, "lines": ["We lachen om jouw flauwe grappen nog steeds", "{{NAME}}, jij maakt ons aan het lachen, telkens, alreeds"], "rhyme_scheme": "AA" },
+    { "id": 10, "lines": ["We lachen nog steeds om jouw flauwe grappen", "{{NAME}}, jij laat ons het leven met een glimlach pakken"], "rhyme_scheme": "AA" },
     { "id": 11, "lines": ["Van {{FROM}} een dikke knuffel voor jou", "{{NAME}}, omdat geen woord beschrijft hoeveel we van je hou'"], "rhyme_scheme": "AA" },
     { "id": 12, "lines": ["Je deur staat open, je tafel is gedekt", "{{NAME}}, bij jou voelt iedereen zich altijd perfect"], "rhyme_scheme": "AA" },
     { "id": 13, "lines": ["Geen berg te hoog, geen klus te zwaar", "{{NAME}}, voor je gezin stond jij altijd klaar"], "rhyme_scheme": "AA" },
-    { "id": 14, "lines": ["Vandaag zetten wij jou eens in het zonnetje", "{{NAME}}, geen sokken, maar een liedje en een kroontje"], "rhyme_scheme": "AA" },
     { "id": 15, "lines": ["Je leerde ons doorzetten, niet opgeven, gaan", "{{NAME}}, dankzij jou durven wij overal te staan"], "rhyme_scheme": "AA" },
     { "id": 16, "lines": ["Een echte {{NAME}}, daar is er maar één van", "En die ben jij, de allerbeste man"], "rhyme_scheme": "AA" },
     { "id": 17, "lines": ["Of we nou ver weg zijn of dichtbij", "{{NAME}}, jij bent altijd in ons hart erbij"], "rhyme_scheme": "AA" },
-    { "id": 18, "lines": ["De zaterdag, jij en je {{DETAIL1}}, vast ritueel", "{{NAME}}, dat hoort bij jou, dat is heilig, geheel"], "rhyme_scheme": "AA" },
+    { "id": 18, "lines": ["De zaterdag, jij en je {{DETAIL1}}, vast ritueel", "{{NAME}}, dat hoort bij jou, dat is een geheel"], "rhyme_scheme": "AA" },
     { "id": 19, "lines": ["Je hebt nooit gemopperd als het tegenzat", "{{NAME}}, jij ploeterde door, recht over het pad"], "rhyme_scheme": "AA" },
     { "id": 20, "lines": ["Het mooiste cadeau heb jij ons al gegeven", "{{NAME}}, gewoon een fijn en warm en veilig leven"], "rhyme_scheme": "AA" },
     { "id": 21, "lines": ["Vandaag de barbecue, jij aan het roer", "{{NAME}}, niemand bakt het zo lekker, geen boer"], "rhyme_scheme": "AA" },
@@ -32,6 +31,6 @@
     { "id": 27, "lines": ["De stoere buitenkant, het zachte hart", "{{NAME}}, wij kennen jou, en houden van elk part"], "rhyme_scheme": "AA" },
     { "id": 28, "lines": ["Voor elke knuffel en elk wijs woord", "{{NAME}}, jij hebt ons leven mooi gestoord"], "rhyme_scheme": "AA" },
     { "id": 29, "lines": ["Vandaag mag jij eens lekker niks doen", "{{NAME}}, wij regelen het, geef ons maar een zoen"], "rhyme_scheme": "AA" },
-    { "id": 30, "lines": ["Bedankt dat jij gewoon onze {{NAME}} bent", "Een betere vader is er nergens bekend"], "rhyme_scheme": "AA" }
+    { "id": 30, "lines": ["Bedankt dat jij gewoon onze {{NAME}} bent", "Een betere vader is ons niet bekend"], "rhyme_scheme": "AA" }
   ]
 }
