@@ -60,8 +60,10 @@ return [
     */
     'lyrics_attempts' => (int) env('LYRICS_AI_ATTEMPTS', env('DEEPSEEK_LYRICS_ATTEMPTS', 5)),
     'lyrics_fallback_after_attempt' => (int) env('LYRICS_AI_FALLBACK_AFTER_ATTEMPT', 3),
-    'general_lyrics_rotations' => (int) env('GENERAL_LYRICS_ROTATIONS', env('GENERAL_LYRICS_ATTEMPTS', 3)),
-    'song_lyrics_rotations' => (int) env('SONG_LYRICS_ROTATIONS', 3),
+    // LyricsGenerator handhaaft minimaal vier schrijf-/controlerondes, ook als
+    // een oude productie-env hier nog 2 of 3 bevat.
+    'general_lyrics_rotations' => (int) env('GENERAL_LYRICS_ROTATIONS', env('GENERAL_LYRICS_ATTEMPTS', 4)),
+    'song_lyrics_rotations' => (int) env('SONG_LYRICS_ROTATIONS', 4),
     'lyrics_critic_enabled' => (bool) env('LYRICS_CRITIC_ENABLED', true),
     'lyrics_min_words' => (int) env('LYRICS_MIN_WORDS', 110),
     'lyrics_max_words' => (int) env('LYRICS_MAX_WORDS', 180),

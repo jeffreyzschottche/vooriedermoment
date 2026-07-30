@@ -19,34 +19,36 @@ class GeneralLyricsRouteTest extends TestCase
         ]);
 
         $lyrics = implode("\n", [
-                        '[Verse 1]',
-                        'Pensioen na jaren bouwen',
-                        'Iedereen kon op Henk vertrouwen',
-                        'De helm mag nu voorgoed aan de kant',
-                        'Vandaag heft de ploeg samen het glas in de hand',
-                        '[Chorus]',
-                        'Henk dit is jouw moment',
-                        'Een feest waarop iedereen je kent',
-                        'De bouwplaats zingt vandaag voor jou',
-                        'Omdat de hele ploeg van je houdt',
-                        '[Verse 2]',
-                        'Elke ochtend stond de koffie klaar',
-                        'Met sterke verhalen jaar na jaar',
-                        'Nu wacht er tijd voor fiets en reis',
-                        'Maar jouw naam blijft hier een bewijs',
-                        '[Bridge]',
-                        'Nog één keer klinkt jouw vaste lach',
-                        'Zoals op elke vrijdagmiddagdag',
-                        'We vergeten nooit wat jij hier deed',
-                        'Omdat de hele ploeg dat weet',
-                        '[Final Chorus]',
-                        'Henk dit is jouw moment',
-                        'Een feest waarop iedereen je kent',
-                        'De bouwplaats zingt vandaag voor jou',
-                        'Omdat de hele ploeg van je houdt',
+            '[Verse 1]',
+            'Pensioen na jaren bouwen',
+            'Iedereen kon op Henk vertrouwen',
+            'De helm mag nu voorgoed aan de kant',
+            'Vandaag heft de ploeg samen het glas in de hand',
+            '[Chorus]',
+            'Henk dit is jouw moment',
+            'Een feest waarop iedereen je kent',
+            'De bouwplaats zingt vandaag voor jou',
+            'Omdat de hele ploeg van je houdt',
+            '[Verse 2]',
+            'Elke ochtend stond de koffie klaar',
+            'Met sterke verhalen jaar na jaar',
+            'Nu wacht er tijd voor fiets en reis',
+            'Maar jouw naam blijft hier een bewijs',
+            '[Bridge]',
+            'Nog één keer klinkt jouw vaste lach',
+            'Zoals op elke vrijdagmiddagdag',
+            'We vergeten nooit wat jij hier deed',
+            'Omdat de hele ploeg dat weet',
+            '[Final Chorus]',
+            'Henk dit is jouw moment',
+            'Een feest waarop iedereen je kent',
+            'De bouwplaats zingt vandaag voor jou',
+            'Omdat de hele ploeg van je houdt',
         ]);
 
         Http::fakeSequence()
+            ->push(['choices' => [['message' => ['content' => $lyrics]]]])
+            ->push(['choices' => [['message' => ['content' => 'GOED']]]])
             ->push(['choices' => [['message' => ['content' => $lyrics]]]])
             ->push(['choices' => [['message' => ['content' => 'GOED']]]])
             ->push(['choices' => [['message' => ['content' => $lyrics]]]])
@@ -73,17 +75,16 @@ class GeneralLyricsRouteTest extends TestCase
 
         $this->assertStringContainsString('Henk dit is jouw moment', $response->json('lyrics'));
 
-        Http::assertSentCount(6);
+        Http::assertSentCount(8);
 
-        Http::assertSent(fn ($request) =>
-            $request['model'] === 'deepseek-chat'
+        Http::assertSent(fn ($request) => $request['model'] === 'deepseek-chat'
             && str_contains($request['messages'][0]['content'], 'Gelegenheid: Pensioen')
             && str_contains($request['messages'][0]['content'], 'Verbeteringsronde')
         );
 
         $requests = Http::recorded();
         $secondPrompt = $requests[2][0]['messages'][0]['content'];
-        $this->assertStringContainsString('Verbeteringsronde 2 van 3', $secondPrompt);
+        $this->assertStringContainsString('Verbeteringsronde 2 van 4', $secondPrompt);
         $this->assertStringContainsString('Henk dit is jouw moment', $secondPrompt);
     }
 

@@ -8,6 +8,147 @@ use Tests\TestCase;
 
 class LyricsQualityTest extends TestCase
 {
+    public function test_every_category_turns_all_lyric_relevant_form_data_into_required_facts(): void
+    {
+        $generator = new class extends LyricsGenerator
+        {
+            public function requiredFacts(string $category, array $intake): array
+            {
+                return $this->intakeCoverageRequirements(
+                    $this->buildContext($category, $intake),
+                    $intake,
+                );
+            }
+
+            public function missingFacts(string $category, array $intake, string $lyrics): array
+            {
+                return $this->missingIntakeRequirements(
+                    $lyrics,
+                    $this->buildContext($category, $intake),
+                    $intake,
+                );
+            }
+        };
+
+        $categoryDetails = [
+            'rijbewijs' => [
+                'instructor' => 'Rijschool Orion',
+                'attempts' => 'derde poging',
+                'firstDrive' => 'meteen naar oma in Delft',
+                'drivingMoment' => 'examinator floot bij het parkeren',
+            ],
+            'geslaagd' => [
+                'school' => 'Stedelijk Lyceum',
+                'studyLevel' => 'VWO',
+                'nextStep' => 'biologie studeren in Leiden',
+                'examStory' => 'nachtwerk voor wiskunde',
+            ],
+            'eigen-huis' => [
+                'place' => 'Utrecht Oost',
+                'firstHome' => 'Ja de eerste',
+                'homeType' => 'jaren dertig kluswoning',
+                'favoriteRoom' => 'de zonnige daktuin',
+            ],
+            'vaderdag' => [
+                'nickname' => 'Pap Beer',
+                'hobby' => 'barbecueën met houtskool',
+                'dadQuote' => 'niet lullen maar poetsen',
+                'thanksFor' => 'alle nachtelijke autoritten',
+            ],
+            'moederdag' => [
+                'nickname' => 'Mams',
+                'memory' => 'zondagse kaneelpannenkoeken',
+                'momTrait' => 'chaotisch gezellig appen',
+                'thanksFor' => 'luisteren zonder oordeel',
+            ],
+            'kind-geboren' => [
+                'babyName' => 'Liv',
+                'birthDate' => '2026-06-14',
+                'parents' => 'Sam en Noor',
+                'birthDetails' => 'grote broer Mees woog de knuffels',
+            ],
+            'verjaardag' => [
+                'age' => 'vijftig',
+                'party' => 'surprise in de oude kroeg',
+                'personality' => 'familiemens en druktemaker',
+                'partyMoment' => 'binnenkomst met sterretjes',
+            ],
+            'voetbalclubs' => [
+                'teamType' => 'kampioenswedstrijd',
+                'clubName' => 'VV Orion JO17',
+                'colors' => 'groen wit',
+                'players' => 'keeper Sem, trainer Mo',
+                'clubCulture' => 'slechte warming-up en sterke derde helft',
+                'chant' => 'Orion vooruit',
+            ],
+            'bouwbedrijven' => [
+                'companyName' => 'Bouwbedrijf Atlas',
+                'contactName' => 'Jeff',
+                'discipline' => 'renovatie',
+                'foundingYear' => '1998',
+                'slogan' => 'bouwen op vertrouwen',
+                'occasion' => 'jubileum',
+            ],
+            'anders' => [
+                'occasion' => 'pensioen',
+            ],
+        ];
+
+        foreach ($categoryDetails as $category => $details) {
+            $intake = $details + [
+                'recipientName' => 'Robin',
+                'fromName' => 'familie Nova',
+                'additionalRecipientNames' => 'Saar (zus), Mo (vriend)',
+                'additionalSenderNames' => 'Team West (collega’s)',
+                'anecdotes' => "oude dubbele waarde die niet apart mag meetellen\nnog een dubbele waarde",
+                'anecdotesItems' => [
+                    'de lekke fiets bij station Zuid',
+                    'elke vrijdag appeltaart bakken',
+                ],
+                'mustMention' => 'oude dubbele must-have',
+                'mustMentionItems' => [
+                    'de rode koffiemok',
+                    'vakantie naar Texel',
+                ],
+                'tone' => 'warm en grappig',
+                'vocals' => 'duet',
+                'musicStyle' => 'Nederlandstalige pop',
+                'tempo' => 'medium tempo',
+                'avoid' => 'superhelden',
+                'email' => 'niet-in-de-lyrics@example.com',
+            ];
+
+            $facts = $generator->requiredFacts($category, $intake);
+            $values = array_column($facts, 'value');
+
+            foreach ($details as $value) {
+                foreach (preg_split('/\s*,\s*/u', $value) ?: [] as $part) {
+                    $this->assertContains($part, $values, "{$category} mist formulierwaarde {$part}");
+                }
+            }
+
+            foreach ([
+                'Robin',
+                'familie Nova',
+                'Saar (zus)',
+                'Mo (vriend)',
+                'Team West (collega’s)',
+                'de lekke fiets bij station Zuid',
+                'elke vrijdag appeltaart bakken',
+                'de rode koffiemok',
+                'vakantie naar Texel',
+            ] as $value) {
+                $this->assertContains($value, $values, "{$category} mist universele formulierwaarde {$value}");
+            }
+
+            $this->assertNotContains('niet-in-de-lyrics@example.com', $values);
+            $this->assertNotContains('oude dubbele waarde die niet apart mag meetellen', $values);
+            $this->assertNotContains('oude dubbele must-have', $values);
+            $this->assertCount(count($facts), $generator->missingFacts($category, $intake, ''));
+            $this->assertSame([], $generator->missingFacts($category, $intake, implode(' ', $values)));
+        }
+    }
+
     public function test_category_fallback_always_fills_required_song_sections(): void
     {
         config(['ai.default' => 'null']);
@@ -42,7 +183,7 @@ class LyricsQualityTest extends TestCase
         config([
             'ai.default' => 'deepseek',
             'ai.providers.deepseek.key' => 'test-key',
-            'ai.song_lyrics_rotations' => 2,
+            'ai.song_lyrics_rotations' => 4,
             'ai.lyrics_critic_enabled' => true,
             'ai.lyrics_min_words' => 100,
             'ai.lyrics_max_words' => 190,
@@ -51,6 +192,10 @@ class LyricsQualityTest extends TestCase
         Http::fakeSequence()
             ->push($this->deepSeekResponse($this->weakLyrics()))
             ->push($this->deepSeekResponse("AFKEUREN\n- De regels zijn te kort en te algemeen.\n- Gebruik de concrete examendetails."))
+            ->push($this->deepSeekResponse($this->strongLyrics()))
+            ->push($this->deepSeekResponse('GOED'))
+            ->push($this->deepSeekResponse($this->strongLyrics()))
+            ->push($this->deepSeekResponse('GOED'))
             ->push($this->deepSeekResponse($this->strongLyrics()))
             ->push($this->deepSeekResponse('GOED'));
 
@@ -71,7 +216,7 @@ class LyricsQualityTest extends TestCase
         $this->assertStringNotContainsString('Dit is jouw moment', $result['lyrics']);
         $this->assertGreaterThanOrEqual(100, str_word_count(strip_tags($result['lyrics'])));
 
-        Http::assertSentCount(4);
+        Http::assertSentCount(8);
         Http::assertSent(fn ($request) => str_contains(
             $request['messages'][0]['content'],
             'Je bent de strenge eindredacteur',
@@ -81,6 +226,14 @@ class LyricsQualityTest extends TestCase
         $this->assertStringContainsString(
             'De regels zijn te kort en te algemeen',
             $requests[2][0]['messages'][0]['content'],
+        );
+        $this->assertStringContainsString(
+            '[F',
+            $requests[0][0]['messages'][0]['content'],
+        );
+        $this->assertStringContainsString(
+            'Verplichte vermelding',
+            $requests[0][0]['messages'][0]['content'],
         );
     }
 
