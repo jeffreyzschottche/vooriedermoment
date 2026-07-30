@@ -11,6 +11,7 @@ WORKDIR /var/www/html
 RUN apk add --no-cache \
     bash \
     fcgi \
+    ffmpeg \
     git \
     libzip-dev \
     nginx \

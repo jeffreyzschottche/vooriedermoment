@@ -18,10 +18,7 @@ class GeneralLyricsRouteTest extends TestCase
             ],
         ]);
 
-        Http::fake([
-            'api.deepseek.com/*' => Http::response([
-                'choices' => [[
-                    'message' => ['content' => implode("\n", [
+        $lyrics = implode("\n", [
                         '[Verse 1]',
                         'Pensioen na jaren bouwen',
                         'Iedereen kon op Henk vertrouwen',
@@ -47,10 +44,15 @@ class GeneralLyricsRouteTest extends TestCase
                         'Een feest waarop iedereen je kent',
                         'De bouwplaats zingt vandaag voor jou',
                         'Omdat de hele ploeg van je houdt',
-                    ])],
-                ]],
-            ]),
         ]);
+
+        Http::fakeSequence()
+            ->push(['choices' => [['message' => ['content' => $lyrics]]]])
+            ->push(['choices' => [['message' => ['content' => 'GOED']]]])
+            ->push(['choices' => [['message' => ['content' => $lyrics]]]])
+            ->push(['choices' => [['message' => ['content' => 'GOED']]]])
+            ->push(['choices' => [['message' => ['content' => $lyrics]]]])
+            ->push(['choices' => [['message' => ['content' => 'GOED']]]]);
 
         $response = $this->postJson('/api/v1/lyrics/general', [
             'intake' => [
@@ -71,7 +73,7 @@ class GeneralLyricsRouteTest extends TestCase
 
         $this->assertStringContainsString('Henk dit is jouw moment', $response->json('lyrics'));
 
-        Http::assertSentCount(3);
+        Http::assertSentCount(6);
 
         Http::assertSent(fn ($request) =>
             $request['model'] === 'deepseek-chat'
@@ -80,7 +82,7 @@ class GeneralLyricsRouteTest extends TestCase
         );
 
         $requests = Http::recorded();
-        $secondPrompt = $requests[1][0]['messages'][0]['content'];
+        $secondPrompt = $requests[2][0]['messages'][0]['content'];
         $this->assertStringContainsString('Verbeteringsronde 2 van 3', $secondPrompt);
         $this->assertStringContainsString('Henk dit is jouw moment', $secondPrompt);
     }

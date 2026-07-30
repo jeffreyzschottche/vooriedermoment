@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Mail\SamplesAvailableMail;
 use App\Models\SongRequest;
-use App\Models\SongSample;
+use App\Services\Audio\AudioPreviewClipper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use RuntimeException;
+use Throwable;
 
 class AdminUploadController extends Controller
 {
@@ -21,7 +25,7 @@ class AdminUploadController extends Controller
         ]);
     }
 
-    public function store(Request $request, string $token)
+    public function store(Request $request, string $token, AudioPreviewClipper $clipper)
     {
         $songRequest = SongRequest::where('admin_upload_token', $token)->firstOrFail();
 
@@ -33,50 +37,75 @@ class AdminUploadController extends Controller
             'samples.*.suno_url' => 'required|url',
         ]);
 
-        // Verwijder bestaande samples
-        foreach ($songRequest->songSamples as $sample) {
-            if ($sample->preview_path && Storage::disk($sample->storage_disk)->exists($sample->preview_path)) {
-                Storage::disk($sample->storage_disk)->delete($sample->preview_path);
+        $disk = Storage::disk('public');
+        $newPaths = [];
+        $rows = [];
+
+        try {
+            foreach ($validated['samples'] as $position => $sampleData) {
+                $pos = $position + 1;
+                $temporaryPreview = $clipper->clipToTemporaryFile($sampleData['audio']);
+                $audioPath = "samples/{$songRequest->id}/preview-{$pos}-".Str::random(12).'.mp3';
+                $previewStream = fopen($temporaryPreview, 'rb');
+
+                try {
+                    if ($previewStream === false || ! $disk->put($audioPath, $previewStream)) {
+                        throw new RuntimeException("Preview {$pos} kon niet worden opgeslagen.");
+                    }
+                } finally {
+                    if (is_resource($previewStream)) {
+                        fclose($previewStream);
+                    }
+                    @unlink($temporaryPreview);
+                }
+                $newPaths[] = $audioPath;
+
+                $coverFile = $sampleData['cover'];
+                $coverPath = $coverFile->store("samples/{$songRequest->id}/covers", 'public');
+                if (! $coverPath) {
+                    throw new RuntimeException("Cover {$pos} kon niet worden opgeslagen.");
+                }
+
+                $newPaths[] = $coverPath;
+                $rows[] = [
+                    'position' => $pos,
+                    'title' => $sampleData['title'],
+                    'storage_disk' => 'public',
+                    'preview_path' => $audioPath,
+                    'cover_path' => $coverPath,
+                    'suno_source_url' => $sampleData['suno_url'],
+                    'expires_at' => now()->addDays((int) config('orders.sample_retention_days', 14)),
+                ];
             }
-            if ($sample->cover_path && Storage::disk($sample->storage_disk)->exists($sample->cover_path)) {
-                Storage::disk($sample->storage_disk)->delete($sample->cover_path);
+
+            $oldSamples = $songRequest->songSamples()->get();
+
+            DB::transaction(function () use ($songRequest, $rows): void {
+                $songRequest->songSamples()->delete();
+
+                foreach ($rows as $row) {
+                    $songRequest->songSamples()->create($row);
+                }
+
+                $songRequest->forceFill([
+                    'samples_generated_at' => now(),
+                    'status' => 'samples_ready',
+                ])->save();
+            });
+
+            foreach ($oldSamples as $sample) {
+                Storage::disk($sample->storage_disk)->delete(array_filter([
+                    $sample->preview_path,
+                    $sample->cover_path,
+                ]));
             }
-            $sample->delete();
+        } catch (Throwable $exception) {
+            $disk->delete($newPaths);
+            throw $exception;
         }
-
-        $expiresAt = now()->addDays(14);
-
-        // Maak nieuwe samples aan
-        foreach ($validated['samples'] as $position => $sampleData) {
-            $pos = $position + 1;
-
-            // Upload audio preview
-            $audioFile = $sampleData['audio'];
-            $audioPath = $audioFile->store("samples/{$songRequest->id}", 'public');
-
-            // Upload cover
-            $coverFile = $sampleData['cover'];
-            $coverPath = $coverFile->store("samples/{$songRequest->id}/covers", 'public');
-
-            SongSample::create([
-                'song_request_id' => $songRequest->id,
-                'position' => $pos,
-                'title' => $sampleData['title'],
-                'storage_disk' => 'public',
-                'preview_path' => $audioPath,
-                'cover_path' => $coverPath,
-                'suno_source_url' => $sampleData['suno_url'],
-                'expires_at' => $expiresAt,
-            ]);
-        }
-
-        $songRequest->update([
-            'samples_generated_at' => now(),
-            'status' => 'samples_ready',
-        ]);
 
         return redirect()->route('admin.upload.show', ['token' => $token])
-            ->with('success', 'Samples opgeslagen! Klik op "Mail naar klant" om de klant te notificeren.');
+            ->with('success', 'Vier previews van 00:30–00:45 opgeslagen. Klik op "Mail naar klant" om de klant te notificeren.');
     }
 
     public function sendToCustomer(string $token)

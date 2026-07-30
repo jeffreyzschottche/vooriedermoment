@@ -7,6 +7,7 @@ use App\Services\Music\StubMusicProvider;
 use App\Services\Payment\PaymentProvider;
 use App\Services\Payment\StripePaymentProvider;
 use App\Services\Payment\StubPaymentProvider;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use RuntimeException;
 use Stripe\StripeClient;
@@ -34,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        //
+        if ($this->app->isProduction() || str_starts_with((string) config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
     }
 }

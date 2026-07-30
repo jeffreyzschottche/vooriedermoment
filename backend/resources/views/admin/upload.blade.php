@@ -75,7 +75,7 @@
                     </div>
                 @endforeach
 
-                <form action="{{ route('admin.upload.sendToCustomer', ['token' => $songRequest->admin_upload_token]) }}" method="POST" style="margin-top:20px;">
+                <form action="{{ route('admin.upload.send', ['token' => $songRequest->admin_upload_token], false) }}" method="POST" style="margin-top:20px;">
                     @csrf
                     <button type="submit" class="btn btn-secondary">
                         @if($songRequest->samples_email_sent_at)
@@ -102,7 +102,7 @@
                 @endif
             </h2>
 
-            <form action="{{ route('admin.upload.store', ['token' => $songRequest->admin_upload_token]) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.upload.store', ['token' => $songRequest->admin_upload_token], false) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="sample-grid">
                     @for($i = 0; $i < 4; $i++)
@@ -113,7 +113,7 @@
                             <input type="text" name="samples[{{ $i }}][title]" id="title_{{ $i }}" required
                                 value="{{ old("samples.{$i}.title", $existingSamples[$i]->title ?? '') }}">
 
-                            <label for="audio_{{ $i }}">Audio (mp3/wav)</label>
+                            <label for="audio_{{ $i }}">Volledig nummer (preview wordt automatisch 00:30–00:45)</label>
                             <input type="file" name="samples[{{ $i }}][audio]" id="audio_{{ $i }}" accept=".mp3,.wav,.m4a" {{ $existingSamples->count() !== 4 ? 'required' : '' }}>
 
                             <label for="cover_{{ $i }}">Cover (jpg/png)</label>
