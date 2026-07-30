@@ -9,7 +9,7 @@ Route::get('/', function () {
 });
 
 // Admin sample upload routes
-Route::get('/admin/upload/{token}', [AdminUploadController::class, 'show'])->name('admin.upload');
+Route::get('/admin/upload/{token}', [AdminUploadController::class, 'show'])->name('admin.upload.show');
 Route::post('/admin/upload/{token}', [AdminUploadController::class, 'store'])->name('admin.upload.store');
 Route::post('/admin/upload/{token}/send', [AdminUploadController::class, 'sendToCustomer'])->name('admin.upload.send');
 
