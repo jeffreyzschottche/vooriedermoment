@@ -26,7 +26,9 @@ class SongRequestController extends Controller
         $intake = $request->input('intake', []);
         $category = $request->input('category');
 
-        $generated = $this->lyrics->generate($category, $intake);
+        // Alleen een snelle lokale concepttekst tijdens de publieke request.
+        // De zware AI-rondes draaien na betaling in ProcessPaidSongRequest.
+        $generated = $this->lyrics->generateDraft($category, $intake);
 
         $song = SongRequest::create([
             'category' => $category,

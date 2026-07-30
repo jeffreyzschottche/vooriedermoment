@@ -16,7 +16,7 @@ class ProcessPaidSongRequest implements ShouldQueue
 
     public int $tries = 3;
 
-    public int $timeout = 300;
+    public int $timeout = 600;
 
     public function __construct(public int $songRequestId) {}
 
@@ -25,7 +25,7 @@ class ProcessPaidSongRequest implements ShouldQueue
         return [
             (new WithoutOverlapping('paid-song-request-'.$this->songRequestId))
                 ->releaseAfter(15)
-                ->expireAfter(360),
+                ->expireAfter(660),
         ];
     }
 

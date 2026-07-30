@@ -423,6 +423,35 @@ class LyricsGenerator
     }
 
     /**
+     * Bouw snel een lokaal concept voor de intake-response. De volledige
+     * AI-schrijf- en controlerondes draaien pas na betaling in de queue, zodat
+     * een trage AI-provider nooit de publieke aanvraag-POST kan laten time-outen.
+     */
+    public function generateDraft(string $category, array $intake): array
+    {
+        $context = $this->buildContext($category, $intake);
+        $sections = $category === 'anders'
+            ? $this->buildGeneralBaseLyrics($context)
+            : $this->buildCategoryBaseLyrics($category, $context);
+
+        if ($sections === []) {
+            $sections = $this->generalLyricsFallback($context, $intake);
+        }
+
+        $formatted = $this->formatLyrics($sections);
+
+        return [
+            'category' => $category,
+            'context' => $context,
+            'sections' => $sections,
+            'formatted' => $formatted,
+            'lyrics' => $formatted,
+            'preview' => $this->buildPreview($sections),
+            'used_ai' => false,
+        ];
+    }
+
+    /**
      * Bouw ook zonder AI altijd een volledig lied. Veel historische verse-
      * bouwstenen bevatten twee regels terwijl songform.json vier regels eist;
      * daarom combineren we unieke coupletten tot het ingestelde minimum.
