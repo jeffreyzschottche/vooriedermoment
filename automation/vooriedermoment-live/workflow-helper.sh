@@ -164,7 +164,7 @@ sample_value() {
 
 generate_cover() {
   local key_file=${1:?OpenAI-keybestand ontbreekt}
-  local order_dir response_file request_file curl_config prompt image_base64
+  local order_dir response_file request_file curl_config prompt image_base64 http_status api_error
   order_dir=$(current_order_dir)
   [[ -s "$key_file" ]] || die "OpenAI-keybestand is leeg."
   [[ -s "$order_dir/cover.png" ]] && {
@@ -193,22 +193,28 @@ generate_cover() {
   /bin/chmod 600 "$curl_config"
   trap '/bin/rm -f "$curl_config"' EXIT INT TERM
   /usr/bin/printf 'header = "Authorization: Bearer %s"\n' "$(/bin/cat "$key_file")" > "$curl_config"
-  response=$("$curl_bin" -fsS --max-time 300 \
+  http_status=$("$curl_bin" -sS --max-time 300 \
     --config "$curl_config" \
     -H 'Content-Type: application/json' \
     -X POST \
     --data-binary "@$request_file" \
+    --output "$response_file" \
+    --write-out '%{http_code}' \
     https://api.openai.com/v1/images/generations)
   /bin/rm -f "$curl_config"
   trap - EXIT INT TERM
 
-  image_base64=$(print -rn -- "$response" | "$jq_bin" -er '.data[0].b64_json') || {
-    print -rn -- "$response" | "$jq_bin" 'del(.data[]?.b64_json)' > "$response_file"
-    die "OpenAI heeft geen coverafbeelding teruggegeven."
-  }
+  if [[ "$http_status" != 2* ]]; then
+    api_error=$("$jq_bin" -r '.error.message // .error // "onbekende API-fout"' "$response_file" 2>/dev/null || print -r -- "onbekende API-fout")
+    die "OpenAI-cover mislukt (HTTP $http_status): $api_error"
+  fi
+
+  image_base64=$("$jq_bin" -er '.data[0].b64_json' "$response_file") ||
+    die "OpenAI heeft geen coverafbeelding teruggegeven. Zie $response_file"
   /usr/bin/printf '%s' "$image_base64" | /usr/bin/base64 -D > "$order_dir/cover.png"
   [[ -s "$order_dir/cover.png" ]] || die "De gegenereerde cover is leeg."
-  print -rn -- "$response" | "$jq_bin" 'del(.data[]?.b64_json)' > "$response_file"
+  "$jq_bin" 'del(.data[]?.b64_json)' "$response_file" > "$response_file.tmp"
+  /bin/mv "$response_file.tmp" "$response_file"
   set_step "$order_dir" cover_ready
   print -r -- "$order_dir/cover.png"
 }
