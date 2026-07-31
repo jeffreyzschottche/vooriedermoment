@@ -109,9 +109,10 @@ class AutomationOrderClaimTest extends TestCase
             ])
             ->assertOk()
             ->assertJsonPath('data.order.order_id', $selectedOrder->id)
-            ->assertJsonPath('data.order.admin_upload_url', route('admin.upload.show', [
-                'token' => $selectedOrder->admin_upload_token,
-            ]));
+            ->assertJsonPath(
+                'data.order.admin_upload_url',
+                url('/admin/upload/'.rawurlencode($selectedOrder->admin_upload_token)),
+            );
 
         $this->assertDatabaseHas('song_requests', [
             'id' => $selectedOrder->id,

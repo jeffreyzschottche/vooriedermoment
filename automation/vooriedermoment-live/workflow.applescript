@@ -13,21 +13,6 @@ on shellCommand(commandName, argumentList)
 	return shellResult
 end shellCommand
 
-on activeFirefoxURL()
-	set previousClipboard to the clipboard
-	tell application "Firefox" to activate
-	delay 0.5
-	tell application "System Events" to tell process "Firefox"
-		keystroke "l" using command down
-		delay 0.2
-		keystroke "c" using command down
-	end tell
-	delay 0.3
-	set pageURL to the clipboard as text
-	set the clipboard to previousClipboard
-	return pageURL
-end activeFirefoxURL
-
 on navigateFirefox(targetURL)
 	set previousClipboard to the clipboard
 	set the clipboard to targetURL
@@ -374,10 +359,9 @@ on run argv
 	if automationApiKey is "" then error "automationApiKey is leeg."
 	if chatGPTapiKey is "" then error "chatGPTapiKey is leeg."
 
-	set orderPageURL to my activeFirefoxURL()
 	my shellCommand("doctor", {})
 	my shellCommand("configure-key", {automationApiKey})
-	set orderDir to my shellCommand("claim-url", {orderPageURL})
+	set orderDir to my shellCommand("claim-next", {})
 	set currentStage to my shellCommand("stage", {})
 	if currentStage is "completed" then
 		display dialog "Deze order is al volledig verwerkt. De opgeslagen Suno-links staan in:" & return & orderDir & "/samples.json" buttons {"OK"} default button "OK" with title "VIM — al klaar"

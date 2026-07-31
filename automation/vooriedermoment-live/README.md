@@ -27,8 +27,8 @@ niet.
 
 ## De 15 stappen
 
-1. Lees de actieve Firefox-URL en accepteer alleen een URL onder `/admin/upload/{token}`.
-2. Claim via de API exact de geopende order en sla `order.json` en `claim.json` lokaal op.
+1. Vraag rechtstreeks via `/api/v1/automation/orders/claim` de eerstvolgende betaalde, beschikbare order op.
+2. Sla de geclaimde API-order op in `order.json` en `claim.json`; een geopende admin-tab is niet nodig.
 3. Maak of hervat de ordermap; een afgebroken run pakt nooit stilletjes een andere order.
 4. Genereer één vierkante gedeelde cover met OpenAI GPT Image 2 en bewaar `cover.png`.
 5. Open `https://suno.com/create` en schakel indien nodig naar Advanced.
@@ -68,8 +68,8 @@ niet.
 
 Een Suno-link wordt meteen na `Copy Link` atomair opgeslagen. Als een latere
 download of upload faalt, blijven de reeds gevonden links en bestanden dus
-staan. Bij opnieuw starten vanaf dezelfde admin-uploadpagina hervat de helper
-dezelfde lokale claim en slaat hij reeds voltooide link/downloadstappen over.
+staan. Bij opnieuw starten hervat de helper een nog geldige lokale claim. Is
+die run voltooid, dan haalt hij via de API automatisch de volgende order op.
 
 ## Veilige controles
 

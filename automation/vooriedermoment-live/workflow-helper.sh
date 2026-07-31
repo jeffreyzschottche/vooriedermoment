@@ -69,26 +69,16 @@ configure_key() {
   /bin/chmod 600 "$automation_key_file"
 }
 
-extract_upload_token() {
-  /usr/bin/printf '%s' "$1" |
-    /usr/bin/sed -nE 's|^https?://api\.vooriedermoment\.nl/admin/upload/([A-Za-z0-9]+)([/?#].*)?$|\1|p'
-}
-
-claim_url() {
-  local page_url=${1:-}
-  local upload_token key payload response order_id category recipient slug order_dir
-  upload_token=$(extract_upload_token "$page_url")
-  [[ -n "$upload_token" ]] || die "Open eerst de juiste api.vooriedermoment.nl/admin/upload/... pagina."
-
+claim_next() {
+  local key payload response order_id category recipient slug order_dir
   # Een afgebroken run moet dezelfde lokaal bewaarde claim kunnen hervatten
   # zonder opnieuw vier Suno-nummers te genereren.
   if [[ -s "$current_order_file" ]]; then
     order_dir=$(/bin/cat "$current_order_file")
-    if [[ -s "$order_dir/order.json" && -s "$order_dir/claim.json" ]] &&
-      "$jq_bin" -e --arg token "$upload_token" \
-        '(.admin_upload_url // "") | contains($token)' "$order_dir/order.json" >/dev/null &&
+    if [[ -s "$order_dir/order.json" && -s "$order_dir/claim.json" && -s "$order_dir/status.json" ]] &&
+      ! "$jq_bin" -e '.step == "completed"' "$order_dir/status.json" >/dev/null &&
       (( $("$jq_bin" -r '.claim_expires_at | sub("\\+00:00$"; "Z") | fromdateiso8601' "$order_dir/claim.json") > $(/bin/date +%s) )); then
-      log_line "$order_dir" "bestaande lokale claim hervat upload_token=$upload_token"
+      log_line "$order_dir" "bestaande actieve claim hervat"
       print -r -- "$order_dir"
       return
     fi
@@ -97,8 +87,7 @@ claim_url() {
   key=$(automation_key)
   payload=$("$jq_bin" -cn \
     --arg worker_id "$worker_id" \
-    --arg admin_upload_token "$upload_token" \
-    '{worker_id:$worker_id,admin_upload_token:$admin_upload_token}')
+    '{worker_id:$worker_id}')
   response=$("$curl_bin" -fsS --max-time 45 \
     -X POST \
     -H "X-Automation-Key: $key" \
@@ -112,7 +101,7 @@ claim_url() {
     .data.order.suno.style and
     .data.order.suno.lyrics and
     .data.claim_token
-  ' >/dev/null || die "Deze order is niet klaar, al geclaimd of al verwerkt."
+  ' >/dev/null || die "Er staat geen betaalde order klaar in de automation-wachtrij."
 
   order_id=$(print -rn -- "$response" | "$jq_bin" -r '.data.order.order_id')
   category=$(print -rn -- "$response" | "$jq_bin" -r '.data.order.category // "aanvraag"')
@@ -147,7 +136,7 @@ claim_url() {
   fi
 
   set_step "$order_dir" claimed
-  log_line "$order_dir" "order=$order_id upload_token=$upload_token geclaimd"
+  log_line "$order_dir" "eerstvolgende API-order geclaimd order=$order_id"
   print -r -- "$order_dir"
 }
 
@@ -364,7 +353,7 @@ shift || true
 case "$command" in
   doctor) doctor ;;
   configure-key) configure_key "$@" ;;
-  claim-url) claim_url "$@" ;;
+  claim-next) claim_next ;;
   current-order-dir) current_order_dir ;;
   value) value "$@" ;;
   stage) stage ;;

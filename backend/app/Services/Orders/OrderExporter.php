@@ -70,8 +70,9 @@ class OrderExporter
             ],
             // Ruwe intake voor context/handmatige tweaks.
             'intake' => $intake,
-            // Admin upload link
-            'admin_upload_url' => route('admin.upload.show', ['token' => $songRequest->admin_upload_token]),
+            // Bouw dit rechtstreeks op vanaf APP_URL. De automation-payload mag
+            // niet stukgaan door een verouderde route-cache op productie.
+            'admin_upload_url' => url('/admin/upload/'.rawurlencode((string) $songRequest->admin_upload_token)),
         ];
     }
 
