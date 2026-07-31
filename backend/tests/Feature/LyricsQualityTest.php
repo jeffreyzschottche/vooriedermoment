@@ -147,6 +147,24 @@ class LyricsQualityTest extends TestCase
             $this->assertCount(count($facts), $generator->missingFacts($category, $intake, ''));
             $this->assertSame([], $generator->missingFacts($category, $intake, implode(' ', $values)));
         }
+
+        $strictIntake = [
+            'recipientName' => 'Robin',
+            'fromName' => 'familie Nova',
+            'additionalRecipientNames' => 'Saar (zus), Mo (vriend)',
+            'mustMentionItems' => ['de rode koffiemok'],
+        ];
+        $missing = $generator->missingFacts(
+            'verjaardag',
+            $strictIntake,
+            'Robin krijgt dit lied van de familie, samen met zijn zus en vriend bij een koffiemok.',
+        );
+        $missingValues = array_column($missing, 'value');
+
+        $this->assertContains('familie Nova', $missingValues);
+        $this->assertContains('Saar (zus)', $missingValues);
+        $this->assertContains('Mo (vriend)', $missingValues);
+        $this->assertContains('de rode koffiemok', $missingValues);
     }
 
     public function test_category_fallback_always_fills_required_song_sections(): void
@@ -237,6 +255,49 @@ class LyricsQualityTest extends TestCase
         );
     }
 
+    public function test_missing_sender_and_extra_person_trigger_dedicated_coverage_repair(): void
+    {
+        config([
+            'ai.default' => 'deepseek',
+            'ai.providers.deepseek.key' => 'test-key',
+            'ai.song_lyrics_rotations' => 4,
+            'ai.lyrics_critic_enabled' => false,
+            'ai.lyrics_coverage_repair_attempts' => 2,
+            'ai.lyrics_min_words' => 100,
+            'ai.lyrics_max_words' => 190,
+        ]);
+
+        Http::fakeSequence()
+            ->push($this->deepSeekResponse($this->strongLyrics()))
+            ->push($this->deepSeekResponse($this->strongLyrics()))
+            ->push($this->deepSeekResponse($this->strongLyrics()))
+            ->push($this->deepSeekResponse($this->strongLyrics()))
+            ->push($this->deepSeekResponse($this->strongLyricsWithSenderAndExtraPerson()));
+
+        $result = app(LyricsGenerator::class)->generate('geslaagd', [
+            'recipientName' => 'Lara',
+            'fromName' => 'familie Nova',
+            'additionalRecipientNames' => 'Saar (zus)',
+            'studyLevel' => 'vwo',
+            'nextStep' => 'een tussenjaar',
+            'school' => 'Utrecht',
+            'examStory' => 'de laatste wiskundetoets',
+            'anecdotes' => 'Voor wiskunde sliep Lara nauwelijks en haar samenvattingen lagen door de kamer.',
+            'mustMention' => 'De trein naar het tussenjaar en haar fiets.',
+        ]);
+
+        $this->assertTrue($result['used_ai']);
+        $this->assertStringContainsString('Familie Nova', $result['lyrics']);
+        $this->assertStringContainsString('zus Saar', $result['lyrics']);
+        Http::assertSentCount(5);
+
+        $requests = Http::recorded();
+        $repairPrompt = $requests[4][0]['messages'][0]['content'];
+        $this->assertStringContainsString('laatste lyrics-reparateur', $repairPrompt);
+        $this->assertStringContainsString('familie Nova', $repairPrompt);
+        $this->assertStringContainsString('Saar (zus)', $repairPrompt);
+    }
+
     private function deepSeekResponse(string $content): array
     {
         return ['choices' => [['message' => ['content' => $content]]]];
@@ -302,5 +363,20 @@ class LyricsQualityTest extends TestCase
             'Van zenuwachtige nachten naar vrijheid vooraan',
             'Nu mag jouw volgende hoofdstuk echt opengaan',
         ]);
+    }
+
+    private function strongLyricsWithSenderAndExtraPerson(): string
+    {
+        return str_replace(
+            [
+                'Lara zet de vlag maar buiten vandaag',
+                'Neem mee hoe vaak je eigen twijfel kantelde',
+            ],
+            [
+                'Familie Nova zet de vlag maar buiten vandaag',
+                'Je zus Saar zag hoe vaak jouw twijfel kantelde',
+            ],
+            $this->strongLyrics(),
+        );
     }
 }

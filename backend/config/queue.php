@@ -42,7 +42,7 @@ return [
             'queue' => env('DB_QUEUE', 'default'),
             // Moet langer zijn dan ProcessPaidSongRequest::$timeout, anders kan
             // dezelfde langdurige AI-job dubbel worden opgepakt.
-            'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 660),
+            'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 960),
             'after_commit' => false,
         ],
 
