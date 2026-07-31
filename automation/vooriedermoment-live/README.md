@@ -1,91 +1,86 @@
 # Voor Ieder Moment — live aanvragen
 
-Deze map bevat de kleine, afzonderlijk testbare stappen achter de handmatig
-gestarte Keysmith-macro.
-De bestaande macro `Vim.nl > suno 4 samples` blijft ongewijzigd en wordt alleen
-gebruikt voor de reeds ingeregelde Firefox/Suno-invoer.
+Deze map bevat de zelfstandige Keysmith/Suno-flow voor Voor Ieder Moment. De
+DistroKid-macro en de oude macro `Vim.nl > suno 4 samples` worden niet gestart
+of aangepast.
 
-## Lokale opslag
+## Bestanden
 
-Elke aanvraag krijgt een eigen map:
+- `keysmith-launcher.applescript`: enige actie die in de Keysmith-macro nodig is;
+- `workflow.applescript`: bestuurt Firefox via dezelfde macOS Accessibility-aanpak als de werkende DistroKid-macro;
+- `workflow-helper.sh`: doet alleen deterministische taken: API, lokale status, OpenAI-cover, audio en upload;
+- `keysmith-steps/` en `runner.sh`: oude flow, alleen bewaard als naslag en niet meer gebruikt.
+
+## Lokale configuratie
+
+De eerste Keysmith-actie bevat lokaal deze twee properties:
+
+```applescript
+property automationApiKey : "vooriedermoment-pw"
+property chatGPTapiKey : "PLAK_HIER_JE_OPENAI_API_KEY"
+```
+
+De echte OpenAI-key hoort nooit in Git. De launcher geeft beide waarden via een
+tijdelijk bestand met mode `600` door en verwijdert dat bestand direct. De
+automation-key wordt lokaal in `.runner/automation-key` bewaard; de OpenAI-key
+niet.
+
+## De 15 stappen
+
+1. Lees de actieve Firefox-URL en accepteer alleen een URL onder `/admin/upload/{token}`.
+2. Claim via de API exact de geopende order en sla `order.json` en `claim.json` lokaal op.
+3. Maak of hervat de ordermap; een afgebroken run pakt nooit stilletjes een andere order.
+4. Genereer één vierkante gedeelde cover met OpenAI GPT Image 2 en bewaar `cover.png`.
+5. Open `https://suno.com/create` en schakel indien nodig naar Advanced.
+6. Vul de definitieve lyrics, Suno-style, unieke titel en — alleen bij expliciete keuze — Male/Female in.
+7. Toon een verplichte controle vóór er Suno-credits worden gebruikt.
+8. Klik Create, wacht 10 seconden en klik nogmaals Create.
+9. Wacht tot vier resultaten met de unieke ordertitel zichtbaar zijn.
+10. Open bij de bovenste vier resultaten Share → Copy Link en schrijf iedere link direct naar `samples.json` én `suno-links.json`.
+11. Open bij precies die vier resultaten Download → MP3 Audio en koppel iedere nieuwe download meteen aan positie 1–4.
+12. Controleer per MP3 bestandsgrootte en een speelduur van minimaal 45 seconden.
+13. Knip met ffmpeg vier previews van exact `00:30–00:45`.
+14. Upload één gedeelde cover, vier previews, vier titels en vier Suno-links naar de automation-API.
+15. Laat de backend de links in `song_samples.suno_source_url` bewaren, markeer de order als voltooid en zet de klantmail in de queue.
+
+## Lokale opslag en herstel
 
 ```text
 ~/Desktop/vooriedermoment-live-aanvragen/
-└── order-3-kind-geboren-voor-jeffrey/
+└── order-12-verjaardag-voor-anna/
     ├── order.json
     ├── claim.json
+    ├── cover.png
+    ├── cover-request.json
+    ├── cover-response.json
+    ├── samples.json
+    ├── suno-links.json
     ├── full/
     │   ├── 1.mp3
-    │   └── ...
-    ├── covers/
-    │   ├── 1.jpg
     │   └── ...
     ├── previews/
     │   ├── 1.mp3
     │   └── ...
-    ├── samples.json
+    ├── upload-response.json
+    ├── status.json
     └── run.log
 ```
 
-De vier volledige nummers blijven lokaal. Alleen de vier previews van
-`00:50–01:05`, covers, titels en Suno-URL's gaan naar de backend.
+Een Suno-link wordt meteen na `Copy Link` atomair opgeslagen. Als een latere
+download of upload faalt, blijven de reeds gevonden links en bestanden dus
+staan. Bij opnieuw starten vanaf dezelfde admin-uploadpagina hervat de helper
+dezelfde lokale claim en slaat hij reeds voltooide link/downloadstappen over.
 
-## Automation-key
+## Veilige controles
 
-Vul in de eerste AppleScript-actie van de Keysmith-macro alleen deze regel in:
-
-```applescript
-property automationApiKey : "PLAK_HIER_JE_AUTOMATION_API_KEY"
-```
-
-Bij het starten zet stap 1 deze waarde in een lokaal bestand met alleen
-lees- en schrijfrechten voor jouw macOS-account. Alle volgende losse acties
-gebruiken dat bestand. Je hoeft `install-key.sh` of Sleutelhanger daarom niet
-handmatig te gebruiken.
-
-## Runner testen zonder live order
+Deze checks gebruiken geen Suno-credits en versturen geen mail:
 
 ```bash
-./automation/vooriedermoment-live/runner.sh doctor
-./automation/vooriedermoment-live/runner.sh dry-run
+zsh -n automation/vooriedermoment-live/workflow-helper.sh
+automation/vooriedermoment-live/workflow-helper.sh doctor
+osacompile -o /tmp/vim-workflow.scpt automation/vooriedermoment-live/workflow.applescript
+osacompile -o /tmp/vim-launcher.scpt automation/vooriedermoment-live/keysmith-launcher.applescript
 ```
 
-`dry-run` claimt niets, gebruikt geen Suno-credits en verstuurt geen mail.
-
-## Productieflow
-
-De Keysmith-macro bestaat uit losse acties:
-
-1. de actieve Firefox-uploadpagina lezen en precies die order via de API claimen;
-2. de lokaal opgeslagen order controleren;
-3. lokale bridge voor de bestaande VIM/Firefox-macro;
-4. Firefox/Suno starten;
-5. 180 seconden wachten;
-6. vier downloads, covers en metadata controleren;
-7. vier previews van `00:50–01:05` maken;
-8. vier samples uploaden;
-9. dezelfde macro starten voor de volgende order.
-
-De AppleScripts staan afzonderlijk in `keysmith-steps/`. Daardoor is in
-Keysmith zichtbaar welke stap faalt en kan iedere stap los worden aangepast.
-
-Bij een fout wordt `/fail` aangeroepen. De order komt dan terug in de wachtrij
-en de lokale bestanden blijven staan voor diagnose of herstel.
-
-## Logs
-
-Centraal:
-
-```text
-~/Desktop/vooriedermoment-live-aanvragen/macro.log
-```
-
-Per order:
-
-```text
-~/Desktop/vooriedermoment-live-aanvragen/order-.../run.log
-~/Desktop/vooriedermoment-live-aanvragen/order-.../status.json
-```
-
-Elke AppleScript-stap logt zijn start/succes of fout. Een mislukte stap stopt de
-macro en geeft de live claim vrij.
+De echte run stopt vlak vóór de eerste Create-klik en vraagt dan expliciet om
+`Maak 4 nummers`.

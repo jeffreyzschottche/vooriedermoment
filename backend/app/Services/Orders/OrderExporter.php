@@ -65,6 +65,7 @@ class OrderExporter
                 'title' => $this->title($songRequest, $intake),
                 'style' => $this->style($intake),
                 'lyrics' => $lyrics,
+                'vocal_gender' => $this->vocalGender($intake),
                 'make_instrumental' => $this->isInstrumental($intake),
             ],
             // Ruwe intake voor context/handmatige tweaks.
@@ -187,5 +188,20 @@ class OrderExporter
     private function isInstrumental(array $intake): bool
     {
         return str_contains(Str::lower((string) ($intake['vocals'] ?? '')), 'instrumentaal');
+    }
+
+    private function vocalGender(array $intake): ?string
+    {
+        $vocals = Str::lower(trim((string) ($intake['vocals'] ?? '')));
+
+        if (str_contains($vocals, 'mannenstem')) {
+            return 'male';
+        }
+
+        if (str_contains($vocals, 'vrouwenstem')) {
+            return 'female';
+        }
+
+        return null;
     }
 }

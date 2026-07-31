@@ -36,7 +36,7 @@ class AutomationSampleController extends Controller
             'samples.*.title' => ['required', 'string', 'max:255'],
             'samples.*.suno_source_url' => ['required', 'url', 'max:2000'],
             'samples.*.preview' => ['required', 'file', 'mimes:mp3', 'max:20480'],
-            'samples.*.cover' => ['required', 'file', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
+            'cover' => ['required', 'file', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
         ]);
 
         $positions = collect($validated['samples'])->pluck('position')->sort()->values()->all();
@@ -51,6 +51,16 @@ class AutomationSampleController extends Controller
         $rows = [];
 
         try {
+            $cover = $request->file('cover');
+            $coverDirectory = "orders/{$songRequest->id}/samples";
+            $coverPath = $this->storeFile(
+                $cover,
+                $coverDirectory,
+                'cover.'.strtolower($cover->getClientOriginalExtension()),
+                $disk,
+            );
+            $storedPaths[] = $coverPath;
+
             foreach ($validated['samples'] as $index => $sample) {
                 $position = (int) $sample['position'];
                 $directory = "orders/{$songRequest->id}/samples/{$position}";
@@ -61,15 +71,7 @@ class AutomationSampleController extends Controller
                     'preview.mp3',
                     $disk,
                 );
-                $cover = $request->file("samples.{$index}.cover");
-                $coverPath = $this->storeFile(
-                    $cover,
-                    $directory,
-                    'cover.'.strtolower($cover->getClientOriginalExtension()),
-                    $disk,
-                );
-
-                array_push($storedPaths, $previewPath, $coverPath);
+                $storedPaths[] = $previewPath;
                 $rows[] = [
                     'position' => $position,
                     'title' => $sample['title'],

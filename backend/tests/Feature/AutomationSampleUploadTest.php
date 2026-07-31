@@ -54,7 +54,6 @@ class AutomationSampleUploadTest extends TestCase
                 'title' => "Versie {$position}",
                 'suno_source_url' => "https://suno.com/song/{$position}",
                 'preview' => UploadedFile::fake()->create("preview-{$position}.mp3", 100, 'audio/mpeg'),
-                'cover' => UploadedFile::fake()->image("cover-{$position}.jpg"),
             ];
         }
 
@@ -63,12 +62,14 @@ class AutomationSampleUploadTest extends TestCase
             'X-Claim-Token' => $claim->json('data.claim_token'),
         ])->post("/api/v1/automation/orders/{$songRequest->id}/samples", [
             'samples' => $samples,
+            'cover' => UploadedFile::fake()->image('cover.jpg'),
         ])->assertCreated()
             ->assertJsonPath('data.status', 'samples_ready')
             ->assertJsonPath('data.automation_status', 'completed')
             ->assertJsonCount(4, 'data.samples');
 
         $this->assertDatabaseCount('song_samples', 4);
+        $this->assertSame(1, $songRequest->songSamples()->pluck('cover_path')->unique()->count());
         $this->assertDatabaseHas('song_requests', [
             'id' => $songRequest->id,
             'status' => 'samples_ready',
@@ -76,7 +77,7 @@ class AutomationSampleUploadTest extends TestCase
         ]);
 
         Storage::disk('local')->assertExists("orders/{$songRequest->id}/samples/1/preview.mp3");
-        Storage::disk('local')->assertExists("orders/{$songRequest->id}/samples/1/cover.jpg");
+        Storage::disk('local')->assertExists("orders/{$songRequest->id}/samples/cover.jpg");
         Mail::assertSent(SamplesReadyMail::class, 1);
         $this->assertNotNull($songRequest->refresh()->samples_email_sent_at);
 
@@ -96,8 +97,9 @@ class AutomationSampleUploadTest extends TestCase
 
         foreach (range(1, 4) as $position) {
             Storage::disk('local')->assertMissing("orders/{$songRequest->id}/samples/{$position}/preview.mp3");
-            Storage::disk('local')->assertMissing("orders/{$songRequest->id}/samples/{$position}/cover.jpg");
         }
+
+        Storage::disk('local')->assertMissing("orders/{$songRequest->id}/samples/cover.jpg");
 
         $this->getJson("/api/v1/select/{$songRequest->selection_token}")
             ->assertOk()

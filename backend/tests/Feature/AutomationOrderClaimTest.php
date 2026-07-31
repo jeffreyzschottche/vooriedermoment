@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\SongRequest;
+use App\Services\Orders\OrderExporter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -28,6 +29,7 @@ class AutomationOrderClaimTest extends TestCase
             ])
             ->assertOk()
             ->assertJsonPath('data.order.order_id', $songRequest->id)
+            ->assertJsonPath('data.order.suno.vocal_gender', 'female')
             ->assertJsonPath('data.claimed_by', 'studio-mac');
 
         $claimToken = $claim->json('data.claim_token');
@@ -74,6 +76,24 @@ class AutomationOrderClaimTest extends TestCase
         $this->postJson('/api/v1/automation/orders/claim', [
             'worker_id' => 'studio-mac',
         ])->assertUnauthorized();
+    }
+
+    public function test_only_explicit_male_or_female_vocals_are_exported_to_suno(): void
+    {
+        $maleOrder = $this->readyOrder();
+        $maleOrder->forceFill([
+            'intake' => array_merge($maleOrder->intake, ['vocals' => 'Warme mannenstem']),
+        ])->save();
+
+        $payload = app(OrderExporter::class)->buildPayload($maleOrder->refresh());
+        $this->assertSame('male', $payload['suno']['vocal_gender']);
+
+        $maleOrder->forceFill([
+            'intake' => array_merge($maleOrder->intake, ['vocals' => 'Laat ons kiezen']),
+        ])->save();
+
+        $payload = app(OrderExporter::class)->buildPayload($maleOrder->refresh());
+        $this->assertNull($payload['suno']['vocal_gender']);
     }
 
     public function test_a_specific_order_can_be_claimed_by_its_admin_upload_token(): void

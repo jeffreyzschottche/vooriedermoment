@@ -543,6 +543,7 @@ export const categories: Category[] = [
       { name: 'slogan', label: 'Slogan of kernwaarden', type: 'text', placeholder: 'Bijv. "Bouwen op vertrouwen"', span: 'full' },
       { name: 'occasion', label: 'Waarvoor gebruik je het nummer?', type: 'select', span: 'half', options: ['Jubileum', 'Bedrijfsfeest', 'Social media / marketing', 'Recruitment', 'Beurs / open dag', 'Anders'] },
       { name: 'tone', label: 'Sfeer / toon', type: 'select', span: 'half', options: businessToneOptions },
+      { name: 'vocals', label: 'Stem / uitvoering', type: 'select', span: 'half', options: vocalOptions },
       { name: 'musicStyle', label: 'Genre kiezen', type: 'select', span: 'half', options: ['Nederlandstalige pop', 'Rock / anthem', 'Koor / stadion', 'Countrypop', 'Dancepop', 'Hiphop / rapcoupletten', 'Akoestisch en klein', 'Singer-songwriter', 'Popballad', 'Disco / funk', 'House', 'EDM / festival', 'Gospel / soulkoor', 'Orkestrale pop', 'Musical / theater', 'Laat ons kiezen'] },
       { name: 'tempo', label: 'Snelheid / tempo', type: 'select', span: 'half', options: tempoOptions },
       { name: 'anecdotes', label: 'Verhaal van het bedrijf', type: 'textarea', required: true, span: 'full', placeholder: 'Wat maakt jullie bijzonder? Mooiste projecten, het team, de oprichter, typische uitspraken op de bouwplaats...', help: 'Deze details verwerken we in de songtekst.' },
