@@ -91,6 +91,22 @@ set_step() {
 
 claim_order() {
   local key response data order_id category recipient slug order_dir
+
+  # Stap 1 van de Keysmith-macro kan een specifieke upload-URL al hebben
+  # geclaimd en lokaal klaargezet. Maak `claim` daarom idempotent: stap 2 mag
+  # nooit stilletjes de volgende order uit de wachtrij pakken.
+  if [[ -s "$state_dir/current-order-dir.txt" ]]; then
+    order_dir=$(/bin/cat "$state_dir/current-order-dir.txt")
+    if [[ -d "$order_dir" && -s "$order_dir/order.json" && -s "$order_dir/claim.json" ]]; then
+      order_id=$("$jq_bin" -er '.order_id' "$order_dir/order.json")
+      "$jq_bin" -cn \
+        --arg order_dir "$order_dir" \
+        --argjson order_id "$order_id" \
+        '{empty:false,order_id:$order_id,order_dir:$order_dir,reused:true}'
+      return
+    fi
+  fi
+
   key=$(automation_key) || die "Automation-key ontbreekt. Vul automationApiKey bovenaan AppleScript-stap 1 in."
   [[ -n "$key" ]] || die "Automation-key ontbreekt. Vul automationApiKey bovenaan AppleScript-stap 1 in."
 

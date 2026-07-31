@@ -16,10 +16,11 @@ class AutomationOrderController extends Controller
     {
         $validated = $request->validate([
             'worker_id' => ['required', 'string', 'max:100'],
+            'admin_upload_token' => ['nullable', 'string', 'max:64'],
         ]);
 
         $result = DB::transaction(function () use ($validated, $exporter): ?array {
-            $songRequest = SongRequest::query()
+            $query = SongRequest::query()
                 ->whereNotNull('paid_at')
                 ->whereIn('status', ['music_prompt_ready', 'production_ready'])
                 ->where(function ($query) {
@@ -30,11 +31,15 @@ class AutomationOrderController extends Controller
                                 ->where('automation_status', 'claimed')
                                 ->where('automation_claim_expires_at', '<=', now());
                         });
-                })
-                ->orderBy('paid_at')
-                ->orderBy('id')
-                ->lockForUpdate()
-                ->first();
+                });
+
+            if (! empty($validated['admin_upload_token'])) {
+                $query->where('admin_upload_token', $validated['admin_upload_token']);
+            } else {
+                $query->orderBy('paid_at')->orderBy('id');
+            }
+
+            $songRequest = $query->lockForUpdate()->first();
 
             if (! $songRequest) {
                 return null;

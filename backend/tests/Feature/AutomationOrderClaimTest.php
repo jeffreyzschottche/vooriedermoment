@@ -76,6 +76,51 @@ class AutomationOrderClaimTest extends TestCase
         ])->assertUnauthorized();
     }
 
+    public function test_a_specific_order_can_be_claimed_by_its_admin_upload_token(): void
+    {
+        $olderOrder = $this->readyOrder();
+        $olderOrder->forceFill(['paid_at' => now()->subMinute()])->save();
+        $selectedOrder = $this->readyOrder();
+
+        $this->withHeader('X-Automation-Key', 'automation-test-key')
+            ->postJson('/api/v1/automation/orders/claim', [
+                'worker_id' => 'studio-mac',
+                'admin_upload_token' => $selectedOrder->admin_upload_token,
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.order.order_id', $selectedOrder->id)
+            ->assertJsonPath('data.order.admin_upload_url', route('admin.upload.show', [
+                'token' => $selectedOrder->admin_upload_token,
+            ]));
+
+        $this->assertDatabaseHas('song_requests', [
+            'id' => $selectedOrder->id,
+            'automation_status' => 'claimed',
+        ]);
+        $this->assertDatabaseHas('song_requests', [
+            'id' => $olderOrder->id,
+            'automation_status' => 'ready',
+        ]);
+    }
+
+    public function test_an_unknown_admin_upload_token_does_not_claim_another_order(): void
+    {
+        $order = $this->readyOrder();
+
+        $this->withHeader('X-Automation-Key', 'automation-test-key')
+            ->postJson('/api/v1/automation/orders/claim', [
+                'worker_id' => 'studio-mac',
+                'admin_upload_token' => 'unknown-upload-token',
+            ])
+            ->assertOk()
+            ->assertJsonPath('data', null);
+
+        $this->assertDatabaseHas('song_requests', [
+            'id' => $order->id,
+            'automation_status' => 'ready',
+        ]);
+    }
+
     private function readyOrder(): SongRequest
     {
         return SongRequest::create([

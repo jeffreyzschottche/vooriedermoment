@@ -56,8 +56,8 @@ handmatig te gebruiken.
 
 De Keysmith-macro bestaat uit losse acties:
 
-1. lokale controle;
-2. één order claimen;
+1. de actieve Firefox-uploadpagina lezen en precies die order via de API claimen;
+2. de lokaal opgeslagen order controleren;
 3. lokale bridge voor de bestaande VIM/Firefox-macro;
 4. Firefox/Suno starten;
 5. 180 seconden wachten;
