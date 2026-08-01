@@ -39,7 +39,14 @@ class AutomationSampleController extends Controller
             'cover' => ['required', 'file', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
         ]);
 
-        $positions = collect($validated['samples'])->pluck('position')->sort()->values()->all();
+        // Multipart form fields arrive as strings, even after integer validation.
+        // Normalize them before the strict completeness check.
+        $positions = collect($validated['samples'])
+            ->pluck('position')
+            ->map(fn (mixed $position): int => (int) $position)
+            ->sort()
+            ->values()
+            ->all();
         if ($positions !== [1, 2, 3, 4]) {
             throw ValidationException::withMessages([
                 'samples' => 'De vier posities 1, 2, 3 en 4 zijn verplicht.',

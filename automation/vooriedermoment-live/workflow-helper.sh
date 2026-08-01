@@ -310,7 +310,8 @@ make_previews() {
 }
 
 upload_samples() {
-  local order_dir key order_id token cover position index title source_url preview response
+  local order_dir key order_id token cover position index title source_url preview
+  local response_file headers_file http_status content_type api_error body_preview
   local -a args
   order_dir=$(current_order_dir)
   key=$(automation_key)
@@ -321,9 +322,13 @@ upload_samples() {
   "$jq_bin" -e 'length == 4 and all(.suno_source_url and .preview_path)' "$order_dir/samples.json" >/dev/null ||
     die "Samples zijn nog niet compleet."
 
-  args=(-fsS --max-time 180 -X POST \
+  response_file="$order_dir/upload-response.raw"
+  headers_file="$order_dir/upload-response.headers"
+
+  args=(-sS --max-time 180 -X POST \
     -H "X-Automation-Key: $key" \
     -H "X-Claim-Token: $token" \
+    -H 'Accept: application/json' \
     -F "cover=@$cover;type=image/png")
   for position in 1 2 3 4; do
     index=$((position - 1))
@@ -337,10 +342,28 @@ upload_samples() {
       -F "samples[$index][preview]=@$preview;type=audio/mpeg"
     )
   done
-  response=$("$curl_bin" "${args[@]}" "$api_base/automation/orders/$order_id/samples")
-  print -rn -- "$response" | "$jq_bin" -e '.data.automation_status == "completed" and (.data.samples | length == 4)' >/dev/null ||
-    die "API heeft de vier samples niet bevestigd."
-  print -rn -- "$response" | "$jq_bin" . > "$order_dir/upload-response.json"
+  http_status=$("$curl_bin" "${args[@]}" \
+    -D "$headers_file" \
+    -o "$response_file" \
+    -w '%{http_code}' \
+    "$api_base/automation/orders/$order_id/samples")
+
+  content_type=$(/usr/bin/awk 'BEGIN{IGNORECASE=1} /^content-type:/ {sub(/^[^:]+:[[:space:]]*/, ""); gsub(/\r/, ""); value=$0} END {print value}' "$headers_file")
+
+  if [[ "$http_status" != 2* ]]; then
+    api_error=$("$jq_bin" -c '.message // .error // .errors // empty' "$response_file" 2>/dev/null || true)
+    if [[ -z "$api_error" ]]; then
+      api_error=$(/usr/bin/head -c 800 "$response_file" | /usr/bin/tr '\r\n' ' ')
+    fi
+    die "API-upload mislukt (HTTP $http_status, ${content_type:-onbekend}): ${api_error:-lege response}. Ruwe response: $response_file"
+  fi
+
+  if ! "$jq_bin" -e '.data.automation_status == "completed" and (.data.samples | length == 4)' "$response_file" >/dev/null 2>&1; then
+    body_preview=$(/usr/bin/head -c 800 "$response_file" | /usr/bin/tr '\r\n' ' ')
+    die "API antwoordde zonder geldige completed-bevestiging (HTTP $http_status, ${content_type:-onbekend}): ${body_preview:-lege response}. Ruwe response: $response_file"
+  fi
+
+  "$jq_bin" . "$response_file" > "$order_dir/upload-response.json"
   set_step "$order_dir" completed
   log_line "$order_dir" "vier samples geupload; mailtaak aangemaakt"
 }

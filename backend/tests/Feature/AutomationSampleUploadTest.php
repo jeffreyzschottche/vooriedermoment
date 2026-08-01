@@ -50,7 +50,8 @@ class AutomationSampleUploadTest extends TestCase
         $samples = [];
         foreach (range(1, 4) as $position) {
             $samples[] = [
-                'position' => $position,
+                // Browser/curl multipart fields are decoded by PHP as strings.
+                'position' => (string) $position,
                 'title' => "Versie {$position}",
                 'suno_source_url' => "https://suno.com/song/{$position}",
                 'preview' => UploadedFile::fake()->create("preview-{$position}.mp3", 100, 'audio/mpeg'),
