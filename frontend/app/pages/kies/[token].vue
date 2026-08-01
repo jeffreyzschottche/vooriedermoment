@@ -14,11 +14,13 @@ const submitError = ref('');
 interface Sample {
   id: number;
   url: string;
+  cover_url?: string;
   title?: string;
   duration?: number;
 }
 
 const samples = computed<Sample[]>(() => (data.value as any)?.samples || []);
+const coverUrl = computed(() => samples.value.find((sample) => sample.cover_url)?.cover_url || '');
 const recipientName = computed(() => (data.value as any)?.recipient_name || '');
 const categoryTitle = computed(() => (data.value as any)?.category_title || '');
 const alreadyChosen = computed(() => (data.value as any)?.already_chosen || false);
@@ -119,6 +121,15 @@ useSeoMeta({
               <strong :style="{ color: 'var(--accent-strong)' }">{{ recipientName }}</strong>
               ({{ categoryTitle }}). Luister rustig naar alle vier en kies de versie die het beste voelt.
             </p>
+          </div>
+
+          <div v-if="coverUrl" v-reveal class="rich-card mx-auto mb-10 max-w-sm overflow-hidden p-2">
+            <img
+              :src="coverUrl"
+              :alt="`Albumcover voor ${recipientName || 'jouw persoonlijke lied'}`"
+              class="aspect-square w-full rounded-[calc(var(--radius-card)-0.5rem)] object-cover"
+              decoding="async"
+            />
           </div>
 
           <div v-reveal-stagger data-stagger="0.1" class="grid gap-5 sm:grid-cols-2">
