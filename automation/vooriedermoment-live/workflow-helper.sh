@@ -70,6 +70,7 @@ configure_key() {
 }
 
 claim_next() {
+  local mode=${1:-required}
   local key payload response order_id category recipient slug order_dir
   # Een afgebroken run moet dezelfde lokaal bewaarde claim kunnen hervatten
   # zonder opnieuw vier Suno-nummers te genereren.
@@ -94,6 +95,13 @@ claim_next() {
     -H 'Content-Type: application/json' \
     --data "$payload" \
     "$api_base/automation/orders/claim")
+
+  if ! print -rn -- "$response" | "$jq_bin" -e '.data != null' >/dev/null; then
+    if [[ "$mode" == optional ]]; then
+      return 0
+    fi
+    die "Er staat geen betaalde order klaar in de automation-wachtrij."
+  fi
 
   print -rn -- "$response" | "$jq_bin" -e '
     .data.order.order_id and
@@ -382,7 +390,8 @@ shift || true
 case "$command" in
   doctor) doctor ;;
   configure-key) configure_key "$@" ;;
-  claim-next) claim_next ;;
+  claim-next) claim_next required ;;
+  claim-next-if-available) claim_next optional ;;
   current-order-dir) current_order_dir ;;
   value) value "$@" ;;
   stage) stage ;;
