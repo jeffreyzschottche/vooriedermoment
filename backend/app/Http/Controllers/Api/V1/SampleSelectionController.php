@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\DeleteOrderSamples;
+use App\Mail\SampleChosenMail;
+use App\Models\SongSample;
 use App\Models\SongRequest;
 use App\Services\Orders\SamplePayloadFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class SampleSelectionController extends Controller
 {
@@ -85,7 +88,7 @@ class SampleSelectionController extends Controller
             return response()->json(['error' => 'Ongeldige sample'], 400);
         }
 
-        DB::transaction(function () use ($songRequest, $request): void {
+        $chosenSample = DB::transaction(function () use ($songRequest, $request): SongSample {
             $lockedOrder = SongRequest::whereKey($songRequest->id)->lockForUpdate()->firstOrFail();
 
             abort_if($lockedOrder->chosen_sample_id, 409, 'Er is al een sample gekozen.');
@@ -103,7 +106,15 @@ class SampleSelectionController extends Controller
             ])->save();
 
             DeleteOrderSamples::dispatch($lockedOrder->id)->afterCommit();
+
+            return $chosenSample;
         });
+
+        $notifyEmail = config('orders.notify_email');
+
+        if (filled($notifyEmail)) {
+            Mail::to($notifyEmail)->send(new SampleChosenMail($songRequest->refresh(), $chosenSample));
+        }
 
         return response()->json([
             'message' => 'Bedankt voor je keuze! De tijdelijke previews worden nu verwijderd.',

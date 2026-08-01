@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Mail\SampleChosenMail;
 use App\Mail\SamplesReadyMail;
 use App\Models\SongRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,6 +22,7 @@ class AutomationSampleUploadTest extends TestCase
         Storage::fake('local');
         Mail::fake();
         config()->set('orders.api_key', 'automation-test-key');
+        config()->set('orders.notify_email', 'studio@example.com');
         config()->set('orders.storage_disk', 'local');
     }
 
@@ -93,6 +95,10 @@ class AutomationSampleUploadTest extends TestCase
         $this->assertSame(3, $songRequest->chosen_sample_position);
         $this->assertSame('Versie 3', $songRequest->chosen_sample_title);
         $this->assertSame('https://suno.com/song/3', $songRequest->chosen_suno_source_url);
+        Mail::assertSent(SampleChosenMail::class, function (SampleChosenMail $mail): bool {
+            return $mail->hasTo('studio@example.com')
+                && $mail->chosenSample->position === 3;
+        });
         $this->assertNotNull($songRequest->samples_deleted_at);
         $this->assertDatabaseCount('song_samples', 0);
 
