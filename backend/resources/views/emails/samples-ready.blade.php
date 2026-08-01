@@ -24,13 +24,6 @@
             padding: 40px;
             box-shadow: 0 4px 24px rgba(13, 21, 18, 0.08);
         }
-        .logo {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        .logo img {
-            height: 40px;
-        }
         h1 {
             font-size: 28px;
             font-weight: 700;
@@ -110,9 +103,7 @@
 <body>
     <div class="container">
         <div class="card">
-            <div class="logo">
-                <img src="{{ config('app.url') }}/logozwart.png" alt="Voor Ieder Moment">
-            </div>
+            @include('emails.partials.logo')
 
             <h1>Hoi {{ $recipientName }}!</h1>
 

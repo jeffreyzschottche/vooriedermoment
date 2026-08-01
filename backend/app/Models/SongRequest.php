@@ -28,6 +28,7 @@ class SongRequest extends Model
         'payment_intent_reference',
         'paid_at',
         'payment_fulfillment_queued_at',
+        'payment_confirmation_sent_at',
         'order_notification_sent_at',
         // Sample fields
         'samples',
@@ -75,6 +76,7 @@ class SongRequest extends Model
         'exported_at' => 'datetime',
         'paid_at' => 'datetime',
         'payment_fulfillment_queued_at' => 'datetime',
+        'payment_confirmation_sent_at' => 'datetime',
         'order_notification_sent_at' => 'datetime',
         'automation_claimed_at' => 'datetime',
         'automation_claim_expires_at' => 'datetime',

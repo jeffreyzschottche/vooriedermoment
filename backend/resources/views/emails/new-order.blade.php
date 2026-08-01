@@ -20,6 +20,7 @@
 </head>
 <body>
     <div class="container">
+        @include('emails.partials.logo')
         <h1>Nieuwe betaalde aanvraag #{{ $order['order_id'] }}</h1>
         <p class="muted">{{ $order['category_title'] }} — €{{ $order['price_eur'] }}</p>
 

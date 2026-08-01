@@ -11,8 +11,8 @@
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 500px; background: #ffffff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
                     <tr>
                         <td style="padding: 40px; text-align: center;">
+                            @include('emails.partials.logo')
                             <div style="font-size: 48px; margin-bottom: 16px;">🎵</div>
-                            <div style="font-size: 20px; font-weight: 700; color: #16a34a; margin-bottom: 24px;">Voor Ieder Moment</div>
 
                             <h1 style="font-size: 24px; color: #0d1512; margin: 0 0 16px;">Je samples zijn klaar!</h1>
 

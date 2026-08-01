@@ -3,6 +3,7 @@
 namespace App\Services\Payment;
 
 use App\Jobs\ProcessPaidSongRequest;
+use App\Jobs\SendPaymentConfirmation;
 use App\Models\PaymentWebhookEvent;
 use App\Models\SongRequest;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +70,10 @@ class StripeWebhookProcessor
                 $songRequest->forceFill([
                     'payment_fulfillment_queued_at' => now(),
                 ])->save();
+            }
+
+            if (! $songRequest->payment_confirmation_sent_at) {
+                SendPaymentConfirmation::dispatch($songRequest->id)->afterCommit();
             }
 
             PaymentWebhookEvent::create([

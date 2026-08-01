@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Jobs\ProcessPaidSongRequest;
+use App\Jobs\SendPaymentConfirmation;
+use App\Mail\PaymentConfirmationMail;
 use App\Models\SongRequest;
 use App\Services\Payment\PaymentProvider;
 use App\Services\Payment\StripeWebhookProcessor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
@@ -82,6 +85,7 @@ class StripePaymentFlowTest extends TestCase
         $this->assertNotNull($songRequest->payment_fulfillment_queued_at);
         $this->assertStringStartsWith('discount:', $songRequest->payment_reference);
         Queue::assertPushed(ProcessPaidSongRequest::class, 1);
+        Queue::assertPushed(SendPaymentConfirmation::class, 1);
     }
 
     public function test_invalid_discount_code_does_not_start_payment_or_fulfillment(): void
@@ -151,6 +155,7 @@ class StripePaymentFlowTest extends TestCase
         )['status']);
 
         Queue::assertPushed(ProcessPaidSongRequest::class, 1);
+        Queue::assertPushed(SendPaymentConfirmation::class, 1);
 
         $this->assertDatabaseHas('song_requests', [
             'id' => $songRequest->id,
@@ -245,6 +250,31 @@ class StripePaymentFlowTest extends TestCase
             ->assertJsonPath('order_id', $songRequest->id);
 
         Queue::assertPushed(ProcessPaidSongRequest::class, 1);
+        Queue::assertPushed(SendPaymentConfirmation::class, 1);
+    }
+
+    public function test_payment_confirmation_is_branded_and_sent_only_once(): void
+    {
+        Mail::fake();
+        config()->set('app.frontend_url', 'https://vooriedermoment.nl');
+
+        $songRequest = $this->songRequest([
+            'status' => 'paid',
+            'payment_provider' => 'stripe',
+            'payment_reference' => 'cs_test_confirmation',
+            'payment_intent_reference' => 'pi_test_confirmation',
+            'paid_at' => now(),
+        ]);
+
+        $job = new SendPaymentConfirmation($songRequest->id);
+        $job->handle();
+        $job->handle();
+
+        Mail::assertSent(PaymentConfirmationMail::class, 1, function (PaymentConfirmationMail $mail) use ($songRequest): bool {
+            return $mail->hasTo($songRequest->email)
+                && str_contains($mail->render(), 'https://vooriedermoment.nl/logowit.png');
+        });
+        $this->assertNotNull($songRequest->refresh()->payment_confirmation_sent_at);
     }
 
     private function songRequest(array $overrides = []): SongRequest
