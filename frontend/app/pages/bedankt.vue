@@ -11,6 +11,7 @@ const route = useRoute();
 const api = useApi();
 const returnedPaid = ref(false);
 const returnedCategoryTitle = ref('');
+const returnedStatus = ref('');
 const paymentPending = ref(Boolean(route.query.session_id));
 
 const paid = computed(() =>
@@ -18,6 +19,7 @@ const paid = computed(() =>
   || ['paid', 'producing', 'music_prompt_ready', 'production_ready'].includes(current.value?.status ?? ''),
 );
 const categoryTitle = computed(() => lastPayload.value?.categoryTitle || returnedCategoryTitle.value);
+const productionNeedsAttention = computed(() => returnedStatus.value === 'production_failed');
 
 onMounted(async () => {
   const sessionId = typeof route.query.session_id === 'string' ? route.query.session_id : '';
@@ -31,6 +33,7 @@ onMounted(async () => {
 
       returnedPaid.value = response.data.paid;
       returnedCategoryTitle.value = response.data.category_title ?? '';
+      returnedStatus.value = response.data.status;
 
       if (response.data.paid) {
         paymentPending.value = false;
@@ -74,7 +77,15 @@ const themeStyle = computed(() => themeVars(theme.value));
         <p
           v-hero-reveal
           data-hero-delay="0.2"
-          v-if="paid"
+          v-if="productionNeedsAttention"
+          class="mt-6 text-lg leading-relaxed sm:text-xl"
+          :style="{ color: 'var(--color-ink-soft)' }"
+        >
+          Je betaling is gelukt. We controleren je persoonlijke aanvraag nu extra zorgvuldig,
+          zodat alle ingevulde details goed in het nummer terugkomen. Je ontvangt hierover ook een e-mail.
+        </p>
+        <p
+          v-else-if="paid"
           class="mt-6 text-lg leading-relaxed sm:text-xl"
           :style="{ color: 'var(--color-ink-soft)' }"
         >

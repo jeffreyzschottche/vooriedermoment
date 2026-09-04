@@ -60,6 +60,8 @@ class SongRequest extends Model
         'automation_claim_expires_at',
         'automation_attempts',
         'automation_last_error',
+        'production_failure_notified_at',
+        'discount_lyrics_sent_at',
     ];
 
     protected $casts = [
@@ -80,6 +82,8 @@ class SongRequest extends Model
         'order_notification_sent_at' => 'datetime',
         'automation_claimed_at' => 'datetime',
         'automation_claim_expires_at' => 'datetime',
+        'production_failure_notified_at' => 'datetime',
+        'discount_lyrics_sent_at' => 'datetime',
         'automation_attempts' => 'integer',
         'price_cents' => 'integer',
     ];

@@ -3,11 +3,16 @@
 namespace Tests\Feature;
 
 use App\Mail\NewOrderMail;
+use App\Mail\DiscountLyricsMail;
+use App\Mail\ProductionNeedsAttentionMail;
+use App\Jobs\ProcessPaidSongRequest;
 use App\Models\SongRequest;
+use App\Services\Production\SongProductionPipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
+use RuntimeException;
 
 class SongRequestProductionTest extends TestCase
 {
@@ -85,5 +90,62 @@ class SongRequestProductionTest extends TestCase
 
         $this->postJson("/api/v1/song-requests/{$id}/checkout")->assertOk();
         Mail::assertSent(NewOrderMail::class, 1);
+    }
+
+    public function test_a_paid_order_that_exhausts_production_retries_notifies_the_customer_once(): void
+    {
+        Mail::fake();
+
+        $songRequest = SongRequest::create([
+            'category' => 'team-clublied',
+            'category_title' => 'Team- of clublied',
+            'email' => 'klant@example.com',
+            'intake' => ['clubName' => 'VV Voorbeeld'],
+            'status' => 'producing',
+            'paid_at' => now(),
+        ]);
+        $job = new ProcessPaidSongRequest($songRequest->id);
+
+        $job->failed(new RuntimeException('AI-lyrics afgekeurd: details ontbreken.'));
+
+        $this->assertDatabaseHas('song_requests', [
+            'id' => $songRequest->id,
+            'status' => 'production_failed',
+            'automation_status' => 'failed',
+            'automation_last_error' => 'AI-lyrics afgekeurd: details ontbreken.',
+        ]);
+        $this->assertNotNull($songRequest->fresh()->production_failure_notified_at);
+        Mail::assertSent(ProductionNeedsAttentionMail::class, 1);
+
+        // Een handmatige retry die opnieuw faalt mag de klant niet spammen.
+        $job->failed(new RuntimeException('Opnieuw mislukt.'));
+        Mail::assertSent(ProductionNeedsAttentionMail::class, 1);
+    }
+
+    public function test_a_discount_code_order_receives_final_lyrics_once_they_are_generated(): void
+    {
+        Mail::fake();
+        config()->set('ai.lyrics_require_complete_coverage', false);
+
+        $songRequest = SongRequest::create([
+            'category' => 'verjaardag',
+            'category_title' => 'Verjaardag',
+            'email' => 'eigenaar@example.com',
+            'intake' => [
+                'recipientName' => 'Mila',
+                'anecdotes' => 'Mila zingt altijd mee.',
+            ],
+            'status' => 'paid',
+            'paid_at' => now(),
+            'payment_provider' => 'discount_code',
+        ]);
+
+        app(SongProductionPipeline::class)->run($songRequest);
+
+        $this->assertNotNull($songRequest->fresh()->discount_lyrics_sent_at);
+        Mail::assertSent(DiscountLyricsMail::class, 1);
+
+        app(SongProductionPipeline::class)->run($songRequest->fresh());
+        Mail::assertSent(DiscountLyricsMail::class, 1);
     }
 }

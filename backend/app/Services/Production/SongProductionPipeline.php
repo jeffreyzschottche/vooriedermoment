@@ -2,10 +2,12 @@
 
 namespace App\Services\Production;
 
+use App\Mail\DiscountLyricsMail;
 use App\Models\SongRequest;
 use App\Services\Lyrics\LyricsGenerator;
 use App\Services\Music\MusicProvider;
 use Throwable;
+use Illuminate\Support\Facades\Mail;
 
 class SongProductionPipeline
 {
@@ -43,6 +45,16 @@ class SongProductionPipeline
                 ],
             ]);
 
+            $songRequest->refresh();
+            if (
+                $songRequest->payment_provider === 'discount_code'
+                && $songRequest->email
+                && ! $songRequest->discount_lyrics_sent_at
+            ) {
+                Mail::to($songRequest->email)->send(new DiscountLyricsMail($songRequest));
+                $songRequest->forceFill(['discount_lyrics_sent_at' => now()])->save();
+            }
+
             $music = $this->music->generate($songRequest->refresh(), $generated['lyrics'], $songRequest->intake ?? []);
 
             $songRequest->update([
@@ -78,4 +90,3 @@ class SongProductionPipeline
         return $songRequest->refresh();
     }
 }
-
