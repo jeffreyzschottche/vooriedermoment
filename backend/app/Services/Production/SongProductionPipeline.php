@@ -29,7 +29,22 @@ class SongProductionPipeline
         ]);
 
         try {
-            $generated = $this->lyrics->generate($songRequest->category, $songRequest->intake ?? []);
+            // De geheime kortingscode is ook een interne lyric-generator. Voor
+            // die eigen test-/werkflow willen we altijd de beste AI-versie per
+            // e-mail ontvangen, ook wanneer de klantgerichte volledigheidscheck
+            // nog details mist. Reguliere betaalde orders blijven strikt.
+            $requireCompleteCoverage = (bool) config('ai.lyrics_require_complete_coverage', true);
+            if ($songRequest->payment_provider === 'discount_code') {
+                config()->set('ai.lyrics_require_complete_coverage', false);
+            }
+
+            try {
+                $generated = $this->lyrics->generate($songRequest->category, $songRequest->intake ?? []);
+            } finally {
+                // Queue workers leven lang: laat de uitzonderingsregel nooit
+                // per ongeluk doorlekken naar een volgende klantorder.
+                config()->set('ai.lyrics_require_complete_coverage', $requireCompleteCoverage);
+            }
 
             $songRequest->update([
                 'lyrics' => $generated['lyrics'],

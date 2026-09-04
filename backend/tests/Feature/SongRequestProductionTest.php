@@ -125,7 +125,6 @@ class SongRequestProductionTest extends TestCase
     public function test_a_discount_code_order_receives_final_lyrics_once_they_are_generated(): void
     {
         Mail::fake();
-        config()->set('ai.lyrics_require_complete_coverage', false);
 
         $songRequest = SongRequest::create([
             'category' => 'verjaardag',
