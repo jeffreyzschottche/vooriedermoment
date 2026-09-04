@@ -8,6 +8,23 @@ use Tests\TestCase;
 
 class LyricsGeneratorCoverageTest extends TestCase
 {
+    public function test_lyrics_are_addressed_to_the_recipient_not_written_as_their_inner_monologue(): void
+    {
+        $generator = app(LyricsGenerator::class);
+        $writeForRecipient = new ReflectionMethod($generator, 'writeForRecipient');
+
+        $sections = $writeForRecipient->invoke($generator, [[
+            'section' => 'verse1',
+            'lines' => [
+                'Bijna tegen de bus, maar ik bleef koel.',
+                'Mijn hart zat in mijn keel, maar niemand hield mij tegen.',
+            ],
+        ]]);
+
+        $this->assertSame('Bijna tegen de bus, maar je bleef koel.', $sections[0]['lines'][0]);
+        $this->assertSame('Jouw hart zat in jouw keel, maar niemand hield jou tegen.', $sections[0]['lines'][1]);
+    }
+
     /**
      * Dit is een statische flowtest: er wordt geen AI-provider aangeroepen.
      * Iedere waarde is uniek, zodat we bewijzen dat hij in de briefing staat

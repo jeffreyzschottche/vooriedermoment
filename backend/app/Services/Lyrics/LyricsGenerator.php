@@ -438,6 +438,7 @@ class LyricsGenerator
         $lyrics = $usedAi
             ? $this->addRepeatedChorus($aiLyrics)
             : $baseLyrics;
+        $lyrics = $this->writeForRecipient($lyrics);
         $formatted = $this->formatLyrics($lyrics);
 
         return [
@@ -793,6 +794,7 @@ class LyricsGenerator
             $previousIssues !== [] ? 'Los deze geconstateerde problemen op: '.implode('; ', $previousIssues).'.' : '',
             '',
             'Harde eisen:',
+            '- Spreek de hoofdpersoon consequent aan in de tweede persoon: je, jij en jouw. Schrijf niet vanuit diens ik-perspectief.',
             '- Lever exact vijf unieke secties: Verse 1, Chorus, Verse 2, Bridge en Final Chorus.',
             '- Schrijf per sectie exact vier volwaardige regels.',
             "- Schrijf in totaal tussen {$minWords} en {$maxWords} woorden.",
@@ -1063,6 +1065,7 @@ class LyricsGenerator
             '</huidige_lyrics>',
             '',
             'Harde eisen:',
+            '- Spreek de hoofdpersoon consequent aan in de tweede persoon: je, jij en jouw. Schrijf niet vanuit diens ik-perspectief.',
             '- Behoud alle formulierfeiten die al goed verwerkt zijn.',
             '- Gebruik bij namen, afzenders, rollen, plekken, getallen en must-haves de herkenbare woorden letterlijk.',
             '- Voeg ieder ontbrekend gegeven natuurlijk toe; maak geen opsomming en verzin geen nieuwe feiten.',
@@ -1321,6 +1324,39 @@ class LyricsGenerator
         ));
     }
 
+    /**
+     * Een cadeau-song spreekt de hoofdpersoon aan. Modellen vallen soms terug
+     * op een ik-verteller; normaliseer die veelvoorkomende vormen als laatste
+     * beveiliging zonder de aangeleverde feiten of structuur te veranderen.
+     *
+     * @param array<int, array{section: string, lines: array<int, string>}> $sections
+     * @return array<int, array{section: string, lines: array<int, string>}>
+     */
+    protected function writeForRecipient(array $sections): array
+    {
+        $replacements = [
+            '/\bIk\b/u' => 'Je',
+            '/\bik\b/u' => 'je',
+            '/\bMijn\b/u' => 'Jouw',
+            '/\bmijn\b/u' => 'jouw',
+            '/\bMij\b/u' => 'Jou',
+            '/\bmij\b/u' => 'jou',
+        ];
+
+        return array_map(function (array $section) use ($replacements): array {
+            $section['lines'] = array_map(
+                fn (string $line): string => (string) preg_replace(
+                    array_keys($replacements),
+                    array_values($replacements),
+                    $line,
+                ),
+                $section['lines'] ?? [],
+            );
+
+            return $section;
+        }, $sections);
+    }
+
     /** @return array<int, string> */
     private function coverageWords(string $value): array
     {
@@ -1528,6 +1564,7 @@ class LyricsGenerator
                 : $this->generalLyricsFallback($context, $intake);
         }
 
+        $sections = $this->writeForRecipient($sections);
         $formatted = $this->formatLyrics($sections);
 
         return [
@@ -1569,6 +1606,7 @@ class LyricsGenerator
             $previousIssues !== [] ? 'Aandachtspunten uit de vorige controle: '.implode('; ', $previousIssues).'.' : '',
             '',
             'Eisen:',
+            '- Spreek de hoofdpersoon consequent aan in de tweede persoon: je, jij en jouw. Schrijf niet vanuit diens ik-perspectief.',
             '- Verwerk IEDER genummerd inhoudsfeit [F…] minstens één keer duidelijk herkenbaar in de lyrics.',
             '- Parafraseren mag, maar behoud unieke namen, plekken, getallen, uitspraken en andere herkenningswoorden.',
             '- Verdeel alle feiten natuurlijk over de secties; maak er geen opsomming van en verzin niets erbij.',
