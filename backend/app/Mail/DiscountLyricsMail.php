@@ -22,12 +22,26 @@ class DiscountLyricsMail extends Mailable
 
     public function content(): Content
     {
+        $musicPreferences = [];
+        foreach ([
+            'musicStyle' => 'Genre / muziekstijl',
+            'vocals' => 'Stem / zangstijl',
+            'tone' => 'Sfeer',
+            'tempo' => 'Snelheid / tempo',
+        ] as $field => $label) {
+            $value = $this->songRequest->intake[$field] ?? null;
+            if (is_string($value) && trim($value) !== '') {
+                $musicPreferences[$label] = trim($value);
+            }
+        }
+
         return new Content(
             view: 'emails.discount-lyrics',
             with: [
                 'orderId' => $this->songRequest->id,
                 'recipientName' => $this->songRequest->recipient_name,
                 'lyrics' => $this->songRequest->final_lyrics ?: $this->songRequest->lyrics,
+                'musicPreferences' => $musicPreferences,
             ],
         );
     }
