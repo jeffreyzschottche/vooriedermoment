@@ -18,6 +18,13 @@ return [
 
     'default' => env('AI_PROVIDER', 'null'),
 
+    'final_review' => [
+        'enabled' => (bool) env('OPENAI_LYRICS_REVIEW_ENABLED', false),
+        'model' => env('OPENAI_LYRICS_REVIEW_MODEL', 'gpt-5.6-sol'),
+        'timeout' => (int) env('OPENAI_LYRICS_REVIEW_TIMEOUT', 180),
+        'max_output_tokens' => (int) env('OPENAI_LYRICS_REVIEW_MAX_OUTPUT_TOKENS', 12000),
+    ],
+
     'providers' => [
 
         'null' => [

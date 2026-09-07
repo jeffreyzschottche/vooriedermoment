@@ -2,6 +2,18 @@
 
 Laravel 12 API voor aanvragen, concept-lyrics, checkout-status en auth.
 
+De optionele laatste lyricsredactie gebruikt OpenAI Responses met Code Interpreter (Python), na de bestaande AI-schrijf- en controlerondes. Zet in `.env`:
+
+```dotenv
+OPENAI_API_KEY=jouw-openai-api-key
+OPENAI_LYRICS_REVIEW_ENABLED=true
+OPENAI_LYRICS_REVIEW_MODEL=gpt-5.6-sol
+```
+
+`AI_PROVIDER=deepseek` blijft de eerste schrijver bepalen. De OpenAI-stap ontvangt de lyrics en inhoudelijke formulierbriefing inclusief stijl en te vermijden onderwerpen; administratieve velden zoals e-mail worden niet meegestuurd. De preview vóór betaling blijft lokaal. De eindredactie vereist een afgeronde Python-toolcall, geldige songstructuur en behoud van verplichte formulierdetails. Bij een fout stopt de generatie via de bestaande foutafhandeling; er wordt niet stilzwijgend ongecontroleerde tekst gebruikt. Python ondersteunt de fonetische en logische beoordeling, maar garandeert de inhoudelijke kwaliteit niet.
+
+Na aanpassing van productieconfiguratie: `php artisan config:cache` en `php artisan queue:restart`. De review heeft standaard een timeout van 180 seconden en maximaal 12000 outputtokens (inclusief redeneren/tools), instelbaar met `OPENAI_LYRICS_REVIEW_TIMEOUT` en `OPENAI_LYRICS_REVIEW_MAX_OUTPUT_TOKENS`.
+
 ## Status
 
 De backend is technisch lokaal werkend en kan als API live worden gezet. Met `PAYMENT_PROVIDER=stub` wordt een checkout direct als betaald gemarkeerd zonder echte Mollie- of Stripe-betaling. Na een geslaagde checkout start de productiepipeline; met `MUSIC_PROVIDER=stub` wordt daarbij nog geen externe muziekdienst aangeroepen.

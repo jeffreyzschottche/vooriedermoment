@@ -27,6 +27,7 @@
         <env name="DB_DATABASE" value=":memory:"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="AI_PROVIDER" value="null" force="true"/>
+        <env name="OPENAI_LYRICS_REVIEW_ENABLED" value="false" force="true"/>
         <env name="DEEPSEEK_API_KEY" value="" force="true"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>

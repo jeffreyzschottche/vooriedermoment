@@ -439,6 +439,9 @@ class LyricsGenerator
             ? $this->addRepeatedChorus($aiLyrics)
             : $baseLyrics;
         $lyrics = $this->writeForRecipient($lyrics);
+        if ($usedAi) {
+            $lyrics = $this->reviewFinalLyrics($lyrics, $category, $context, $intake);
+        }
         $formatted = $this->formatLyrics($lyrics);
 
         return [
@@ -1329,7 +1332,7 @@ class LyricsGenerator
      * op een ik-verteller; normaliseer die veelvoorkomende vormen als laatste
      * beveiliging zonder de aangeleverde feiten of structuur te veranderen.
      *
-     * @param array<int, array{section: string, lines: array<int, string>}> $sections
+     * @param  array<int, array{section: string, lines: array<int, string>}>  $sections
      * @return array<int, array{section: string, lines: array<int, string>}>
      */
     protected function writeForRecipient(array $sections): array
@@ -1565,6 +1568,9 @@ class LyricsGenerator
         }
 
         $sections = $this->writeForRecipient($sections);
+        if ($usedAi) {
+            $sections = $this->reviewFinalLyrics($sections, 'anders', $context, $intake);
+        }
         $formatted = $this->formatLyrics($sections);
 
         return [
@@ -1576,6 +1582,37 @@ class LyricsGenerator
             'preview' => $this->buildPreview($sections),
             'used_ai' => $usedAi,
         ];
+    }
+
+    protected function reviewFinalLyrics(array $sections, string $category, array $context, array $intake): array
+    {
+        if (! config('ai.final_review.enabled', false)) {
+            return $sections;
+        }
+
+        $briefing = implode("\n", array_merge(
+            ['Categorie: '.$category],
+            $this->completeLyricsBriefing($context, $intake),
+        ));
+        $raw = app(OpenAiLyricsReviewer::class)->review($this->formatLyrics($sections), $briefing);
+        // Validate before parsing: the permissive generator parser can otherwise
+        // discard extra lines or synthesize a missing final chorus.
+        $lines = array_values(array_filter(array_map('trim', preg_split('/\R/u', trim($raw)) ?: []), fn ($line) => $line !== ''));
+        $headings = ['[Verse 1]', '[Chorus]', '[Verse 2]', '[Bridge]', '[Final Chorus]'];
+        if (count($lines) !== 25) {
+            throw new RuntimeException('OpenAI-lyricscontrole gaf een ongeldige songstructuur terug.');
+        }
+        foreach ($headings as $index => $heading) {
+            if ($lines[$index * 5] !== $heading) {
+                throw new RuntimeException('OpenAI-lyricscontrole gaf een ongeldige songstructuur terug.');
+            }
+        }
+        $reviewed = $this->parseGeneralLyrics($raw);
+        if (! $this->candidateCoverageComplete($reviewed, $context, $intake)) {
+            throw new RuntimeException('OpenAI-lyricscontrole heeft verplichte formulierdetails weggelaten.');
+        }
+
+        return $category === 'anders' ? $reviewed : $this->addRepeatedChorus($reviewed);
     }
 
     protected function buildGeneralLyricsPrompt(
