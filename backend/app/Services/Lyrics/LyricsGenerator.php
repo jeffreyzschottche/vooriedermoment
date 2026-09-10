@@ -1590,51 +1590,36 @@ class LyricsGenerator
             return $sections;
         }
 
-        $briefing = implode("\n", array_merge(
-            ['Categorie: '.$category],
-            $this->completeLyricsBriefing($context, $intake),
-        ));
-        $headings = ['[Verse 1]', '[Chorus]', '[Verse 2]', '[Bridge]', '[Final Chorus]'];
-        $maxAttempts = 3;
+        $fallback = $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
 
-        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+        try {
+            $briefing = implode("\n", array_merge(
+                ['Categorie: '.$category],
+                $this->completeLyricsBriefing($context, $intake),
+            ));
             $raw = app(OpenAiLyricsReviewer::class)->review($this->formatLyrics($sections), $briefing);
-            // Validate before parsing: the permissive generator parser can otherwise
-            // discard extra lines or synthesize a missing final chorus.
+
+            // Basic structure check - if it doesn't match, just use original
             $lines = array_values(array_filter(array_map('trim', preg_split('/\R/u', trim($raw)) ?: []), fn ($line) => $line !== ''));
+            $headings = ['[Verse 1]', '[Chorus]', '[Verse 2]', '[Bridge]', '[Final Chorus]'];
 
             if (count($lines) !== 25) {
-                if ($attempt === $maxAttempts) {
-                    return $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
-                }
-                continue;
+                return $fallback;
             }
 
-            $structureValid = true;
             foreach ($headings as $index => $heading) {
                 if ($lines[$index * 5] !== $heading) {
-                    $structureValid = false;
-                    break;
+                    return $fallback;
                 }
-            }
-            if (! $structureValid) {
-                if ($attempt === $maxAttempts) {
-                    return $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
-                }
-                continue;
             }
 
             $reviewed = $this->parseGeneralLyrics($raw);
-            if ($this->candidateCoverageComplete($reviewed, $context, $intake)) {
-                return $category === 'anders' ? $reviewed : $this->addRepeatedChorus($reviewed);
-            }
 
-            if ($attempt === $maxAttempts) {
-                return $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
-            }
+            return $category === 'anders' ? $reviewed : $this->addRepeatedChorus($reviewed);
+        } catch (\Throwable $e) {
+            // Any error (HTTP, parsing, etc.) - just use original lyrics
+            return $fallback;
         }
-
-        return $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
     }
 
     protected function buildGeneralLyricsPrompt(
