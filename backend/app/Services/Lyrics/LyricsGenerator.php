@@ -1594,25 +1594,47 @@ class LyricsGenerator
             ['Categorie: '.$category],
             $this->completeLyricsBriefing($context, $intake),
         ));
-        $raw = app(OpenAiLyricsReviewer::class)->review($this->formatLyrics($sections), $briefing);
-        // Validate before parsing: the permissive generator parser can otherwise
-        // discard extra lines or synthesize a missing final chorus.
-        $lines = array_values(array_filter(array_map('trim', preg_split('/\R/u', trim($raw)) ?: []), fn ($line) => $line !== ''));
         $headings = ['[Verse 1]', '[Chorus]', '[Verse 2]', '[Bridge]', '[Final Chorus]'];
-        if (count($lines) !== 25) {
-            throw new RuntimeException('OpenAI-lyricscontrole gaf een ongeldige songstructuur terug.');
-        }
-        foreach ($headings as $index => $heading) {
-            if ($lines[$index * 5] !== $heading) {
-                throw new RuntimeException('OpenAI-lyricscontrole gaf een ongeldige songstructuur terug.');
+        $maxAttempts = 3;
+
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+            $raw = app(OpenAiLyricsReviewer::class)->review($this->formatLyrics($sections), $briefing);
+            // Validate before parsing: the permissive generator parser can otherwise
+            // discard extra lines or synthesize a missing final chorus.
+            $lines = array_values(array_filter(array_map('trim', preg_split('/\R/u', trim($raw)) ?: []), fn ($line) => $line !== ''));
+
+            if (count($lines) !== 25) {
+                if ($attempt === $maxAttempts) {
+                    return $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
+                }
+                continue;
+            }
+
+            $structureValid = true;
+            foreach ($headings as $index => $heading) {
+                if ($lines[$index * 5] !== $heading) {
+                    $structureValid = false;
+                    break;
+                }
+            }
+            if (! $structureValid) {
+                if ($attempt === $maxAttempts) {
+                    return $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
+                }
+                continue;
+            }
+
+            $reviewed = $this->parseGeneralLyrics($raw);
+            if ($this->candidateCoverageComplete($reviewed, $context, $intake)) {
+                return $category === 'anders' ? $reviewed : $this->addRepeatedChorus($reviewed);
+            }
+
+            if ($attempt === $maxAttempts) {
+                return $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
             }
         }
-        $reviewed = $this->parseGeneralLyrics($raw);
-        if (! $this->candidateCoverageComplete($reviewed, $context, $intake)) {
-            throw new RuntimeException('OpenAI-lyricscontrole heeft verplichte formulierdetails weggelaten.');
-        }
 
-        return $category === 'anders' ? $reviewed : $this->addRepeatedChorus($reviewed);
+        return $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
     }
 
     protected function buildGeneralLyricsPrompt(
