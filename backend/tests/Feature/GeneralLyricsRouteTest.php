@@ -48,13 +48,7 @@ class GeneralLyricsRouteTest extends TestCase
 
         Http::fakeSequence()
             ->push(['choices' => [['message' => ['content' => $lyrics]]]])
-            ->push(['choices' => [['message' => ['content' => 'GOED']]]])
-            ->push(['choices' => [['message' => ['content' => $lyrics]]]])
-            ->push(['choices' => [['message' => ['content' => 'GOED']]]])
-            ->push(['choices' => [['message' => ['content' => $lyrics]]]])
-            ->push(['choices' => [['message' => ['content' => 'GOED']]]])
-            ->push(['choices' => [['message' => ['content' => $lyrics]]]])
-            ->push(['choices' => [['message' => ['content' => 'GOED']]]]);
+            ->push(['choices' => [['message' => ['content' => $lyrics]]]]);
 
         $response = $this->postJson('/api/v1/lyrics/general', [
             'intake' => [
@@ -75,16 +69,19 @@ class GeneralLyricsRouteTest extends TestCase
 
         $this->assertStringContainsString('Henk dit is jouw moment', $response->json('lyrics'));
 
-        Http::assertSentCount(8);
+        // Schrijven (chat) + controleren/herschrijven (reasoner); alle feiten
+        // zitten erin, dus geen reparatiecall.
+        Http::assertSentCount(2);
 
         Http::assertSent(fn ($request) => $request['model'] === 'deepseek-chat'
             && str_contains($request['messages'][0]['content'], 'Gelegenheid: Pensioen')
-            && str_contains($request['messages'][0]['content'], 'Verbeteringsronde')
+            && str_contains($request['messages'][0]['content'], '<startconcept>')
         );
 
         $requests = Http::recorded();
-        $secondPrompt = $requests[2][0]['messages'][0]['content'];
-        $this->assertStringContainsString('Verbeteringsronde 2 van 4', $secondPrompt);
+        $secondPrompt = $requests[1][0]['messages'][0]['content'];
+        $this->assertSame('deepseek-reasoner', $requests[1][0]['model']);
+        $this->assertStringContainsString('strenge eindredacteur', $secondPrompt);
         $this->assertStringContainsString('Henk dit is jouw moment', $secondPrompt);
     }
 

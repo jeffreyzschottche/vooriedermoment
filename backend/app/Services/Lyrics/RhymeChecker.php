@@ -67,17 +67,25 @@ class RhymeChecker
 
     /**
      * Alle rijmwoorden voor $word (over alle pagina's), genormaliseerd en gecachet.
+     * Met $maxPages haal je minder pagina's op (sneller, bv. voor prompt-hints).
      *
      * @return array<int, string> Lege array = geen rijmlijst gevonden / fout.
      */
-    public function rhymeWords(string $word): array
+    public function rhymeWords(string $word, ?int $maxPages = null): array
     {
         $word = $this->normalize($word);
         if ($word === '') {
             return [];
         }
 
-        return Cache::remember('rijm:'.$word, now()->addDays($this->cacheDays), function () use ($word) {
+        $pages = $maxPages === null ? $this->maxPages : max(1, min($maxPages, $this->maxPages));
+        $fullKey = 'rijm:'.$word;
+        $key = $pages === $this->maxPages ? $fullKey : "{$fullKey}:p{$pages}";
+        if ($key !== $fullKey && Cache::has($fullKey)) {
+            return Cache::get($fullKey);
+        }
+
+        return Cache::remember($key, now()->addDays($this->cacheDays), function () use ($word, $pages) {
             try {
                 $first = $this->fetch($word, 1);
                 if ($first === null) {
@@ -89,7 +97,7 @@ class RhymeChecker
                     return [];
                 }
 
-                $lastPage = min($this->parseLastPage($first), $this->maxPages);
+                $lastPage = min($this->parseLastPage($first), $pages);
                 for ($page = 2; $page <= $lastPage; $page++) {
                     $html = $this->fetch($word, $page);
                     if ($html === null) {

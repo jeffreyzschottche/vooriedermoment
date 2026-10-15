@@ -55,10 +55,10 @@ class DeepSeekProvider implements AiProvider
     {
         try {
             $response = Http::withToken($this->config['key'])
-                ->timeout(45)
+                ->timeout((int) ($this->config['timeout'] ?? 90))
                 ->post(rtrim($this->config['base_url'], '/') . '/chat/completions', [
                     'model' => $model,
-                    'max_tokens' => $this->config['max_tokens'] ?? 1024,
+                    'max_tokens' => $this->config['max_tokens'] ?? 4096,
                     'temperature' => $this->config['temperature'] ?? 0.7,
                     'messages' => [
                         ['role' => 'user', 'content' => $prompt],

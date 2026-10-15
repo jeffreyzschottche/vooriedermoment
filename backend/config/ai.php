@@ -19,7 +19,7 @@ return [
     'default' => env('AI_PROVIDER', 'null'),
 
     'final_review' => [
-        'enabled' => (bool) env('OPENAI_LYRICS_REVIEW_ENABLED', false),
+        'enabled' => (bool) env('OPENAI_LYRICS_REVIEW_ENABLED', true),
         'model' => env('OPENAI_LYRICS_REVIEW_MODEL', 'gpt-5.6-sol'),
         'timeout' => (int) env('OPENAI_LYRICS_REVIEW_TIMEOUT', 180),
         'max_output_tokens' => (int) env('OPENAI_LYRICS_REVIEW_MAX_OUTPUT_TOKENS', 12000),
@@ -54,25 +54,25 @@ return [
             'model' => env('DEEPSEEK_DEFAULT_MODEL', 'deepseek-chat'),
             'fallback_model' => env('DEEPSEEK_FALLBACK_MODEL', 'deepseek-reasoner'),
             'base_url' => env('DEEPSEEK_BASE_URL', 'https://api.deepseek.com'),
-            'max_tokens' => (int) env('DEEPSEEK_MAX_TOKENS', 1024),
+            // Ruim genoeg voor deepseek-reasoner (denkstappen + volledige lyrics).
+            'max_tokens' => (int) env('DEEPSEEK_MAX_TOKENS', 4096),
+            'timeout' => (int) env('DEEPSEEK_TIMEOUT', 90),
             'temperature' => (float) env('DEEPSEEK_TEMPERATURE', 0.7),
         ],
 
     ],
 
     /*
-    | Aantal AI-pogingen per lyric-sectie. DeepSeek is goedkoop genoeg om wat
-    | vaker te itereren; vanaf de latere pogingen mag de provider zijn fallback-
-    | model gebruiken als dat is geconfigureerd.
+    | Lyrics-flow per nummer (LyricsGenerator::generateAiLyrics): DeepSeek-chat
+    | schrijft, DeepSeek-reasoner controleert + herschrijft in één call, en
+    | alleen bij ontbrekende formulierfeiten volgt één reparatiecall. Daarna
+    | één OpenAI-eindreview (final_review). Max. 3 DeepSeek-calls + 1 OpenAI.
+    |
+    | lyrics_attempts/lyrics_fallback_after_attempt horen bij het oude per-
+    | couplet-pad (generateAiLines) en worden door de flow hierboven niet gebruikt.
     */
     'lyrics_attempts' => (int) env('LYRICS_AI_ATTEMPTS', env('DEEPSEEK_LYRICS_ATTEMPTS', 5)),
     'lyrics_fallback_after_attempt' => (int) env('LYRICS_AI_FALLBACK_AFTER_ATTEMPT', 3),
-    // LyricsGenerator handhaaft minimaal vier schrijf-/controlerondes, ook als
-    // een oude productie-env hier nog 2 of 3 bevat.
-    'general_lyrics_rotations' => (int) env('GENERAL_LYRICS_ROTATIONS', env('GENERAL_LYRICS_ATTEMPTS', 4)),
-    'song_lyrics_rotations' => (int) env('SONG_LYRICS_ROTATIONS', 4),
-    'lyrics_critic_enabled' => (bool) env('LYRICS_CRITIC_ENABLED', true),
-    'lyrics_coverage_repair_attempts' => (int) env('LYRICS_COVERAGE_REPAIR_ATTEMPTS', 2),
     'lyrics_require_complete_coverage' => (bool) env('LYRICS_REQUIRE_COMPLETE_COVERAGE', true),
     'lyrics_require_ai_in_production' => (bool) env('LYRICS_REQUIRE_AI_IN_PRODUCTION', true),
     'lyrics_min_words' => (int) env('LYRICS_MIN_WORDS', 110),

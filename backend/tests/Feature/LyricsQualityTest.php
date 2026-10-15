@@ -196,26 +196,18 @@ class LyricsQualityTest extends TestCase
         $this->assertStringNotContainsString('[Chorus final]', $result['lyrics']);
     }
 
-    public function test_category_ai_rewrites_the_complete_song_and_uses_a_separate_critic(): void
+    public function test_category_ai_writes_then_revises_in_two_calls(): void
     {
         config([
             'ai.default' => 'deepseek',
             'ai.providers.deepseek.key' => 'test-key',
-            'ai.song_lyrics_rotations' => 4,
-            'ai.lyrics_critic_enabled' => true,
             'ai.lyrics_min_words' => 100,
             'ai.lyrics_max_words' => 190,
         ]);
 
         Http::fakeSequence()
             ->push($this->deepSeekResponse($this->weakLyrics()))
-            ->push($this->deepSeekResponse("AFKEUREN\n- De regels zijn te kort en te algemeen.\n- Gebruik de concrete examendetails."))
-            ->push($this->deepSeekResponse($this->strongLyrics()))
-            ->push($this->deepSeekResponse('GOED'))
-            ->push($this->deepSeekResponse($this->strongLyrics()))
-            ->push($this->deepSeekResponse('GOED'))
-            ->push($this->deepSeekResponse($this->strongLyrics()))
-            ->push($this->deepSeekResponse('GOED'));
+            ->push($this->deepSeekResponse($this->strongLyrics()));
 
         $result = app(LyricsGenerator::class)->generate('geslaagd', [
             'recipientName' => 'Lara',
@@ -234,16 +226,20 @@ class LyricsQualityTest extends TestCase
         $this->assertStringNotContainsString('Dit is jouw moment', $result['lyrics']);
         $this->assertGreaterThanOrEqual(100, str_word_count(strip_tags($result['lyrics'])));
 
-        Http::assertSentCount(8);
-        Http::assertSent(fn ($request) => str_contains(
-            $request['messages'][0]['content'],
-            'Je bent de strenge eindredacteur',
-        ));
+        Http::assertSentCount(2);
 
         $requests = Http::recorded();
+        $this->assertSame('deepseek-chat', $requests[0][0]['model']);
+        $this->assertSame('deepseek-reasoner', $requests[1][0]['model']);
+
+        // De revisiecall krijgt het concept én de lokale controlepunten mee.
+        $revisePrompt = $requests[1][0]['messages'][0]['content'];
+        $this->assertStringContainsString('Je bent de strenge eindredacteur', $revisePrompt);
+        $this->assertStringContainsString('Dit is jouw moment', $revisePrompt);
+        $this->assertStringContainsString('de tekst is te kort', $revisePrompt);
         $this->assertStringContainsString(
-            'De regels zijn te kort en te algemeen',
-            $requests[2][0]['messages'][0]['content'],
+            '<startconcept>',
+            $requests[0][0]['messages'][0]['content'],
         );
         $this->assertStringContainsString(
             '[F',
@@ -260,16 +256,11 @@ class LyricsQualityTest extends TestCase
         config([
             'ai.default' => 'deepseek',
             'ai.providers.deepseek.key' => 'test-key',
-            'ai.song_lyrics_rotations' => 4,
-            'ai.lyrics_critic_enabled' => false,
-            'ai.lyrics_coverage_repair_attempts' => 2,
             'ai.lyrics_min_words' => 100,
             'ai.lyrics_max_words' => 190,
         ]);
 
         Http::fakeSequence()
-            ->push($this->deepSeekResponse($this->strongLyrics()))
-            ->push($this->deepSeekResponse($this->strongLyrics()))
             ->push($this->deepSeekResponse($this->strongLyrics()))
             ->push($this->deepSeekResponse($this->strongLyrics()))
             ->push($this->deepSeekResponse($this->strongLyricsWithSenderAndExtraPerson()));
@@ -289,13 +280,55 @@ class LyricsQualityTest extends TestCase
         $this->assertTrue($result['used_ai']);
         $this->assertStringContainsString('Familie Nova', $result['lyrics']);
         $this->assertStringContainsString('zus Saar', $result['lyrics']);
-        Http::assertSentCount(5);
+        Http::assertSentCount(3);
 
         $requests = Http::recorded();
-        $repairPrompt = $requests[4][0]['messages'][0]['content'];
+        $repairPrompt = $requests[2][0]['messages'][0]['content'];
         $this->assertStringContainsString('laatste lyrics-reparateur', $repairPrompt);
         $this->assertStringContainsString('familie Nova', $repairPrompt);
         $this->assertStringContainsString('Saar (zus)', $repairPrompt);
+    }
+
+    public function test_van_dale_rhymes_for_names_are_given_to_deepseek_without_extra_ai_calls(): void
+    {
+        config([
+            'ai.default' => 'deepseek',
+            'ai.providers.deepseek.key' => 'test-key',
+            'rhyme.enabled' => true,
+            'ai.lyrics_min_words' => 100,
+            'ai.lyrics_max_words' => 190,
+        ]);
+
+        Http::fake([
+            'rijmwoordenboek.vandale.nl/rijm/lara*' => Http::response(
+                '<main><a class="w" href="/rijm/sahara">sahara</a><a class="w" href="/rijm/tiara">tiara</a></main>'
+                .'<aside><a class="w" href="/rijm/papa">papa</a></aside>'
+            ),
+            'rijmwoordenboek.vandale.nl/*' => Http::response('', 404),
+            'api.deepseek.com/*' => Http::sequence()
+                ->push($this->deepSeekResponse($this->strongLyrics()))
+                ->push($this->deepSeekResponse($this->strongLyrics())),
+        ]);
+
+        app(LyricsGenerator::class)->generate('geslaagd', [
+            'recipientName' => 'Lara',
+            'studyLevel' => 'vwo',
+            'nextStep' => 'een tussenjaar',
+            'school' => 'Utrecht',
+            'examStory' => 'de laatste wiskundetoets',
+            'anecdotes' => 'Voor wiskunde sliep Lara nauwelijks en haar samenvattingen lagen door de kamer.',
+            'mustMention' => 'De trein naar het tussenjaar en haar fiets.',
+        ]);
+
+        $deepSeek = Http::recorded(fn ($request) => str_contains($request->url(), 'api.deepseek.com'));
+        $this->assertCount(2, $deepSeek);
+
+        foreach ($deepSeek as [$request]) {
+            $prompt = $request['messages'][0]['content'];
+            $this->assertStringContainsString('RIJMWOORDEN', $prompt);
+            $this->assertStringContainsString('lara: sahara, tiara', $prompt);
+            $this->assertStringNotContainsString('papa', $prompt);
+        }
     }
 
     private function deepSeekResponse(string $content): array

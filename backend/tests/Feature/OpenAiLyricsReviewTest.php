@@ -42,7 +42,7 @@ class OpenAiLyricsReviewTest extends TestCase
 
     public function test_both_generation_paths_apply_one_final_review(): void
     {
-        config(['ai.default' => 'deepseek', 'ai.providers.deepseek.key' => 'test-key', 'ai.lyrics_critic_enabled' => false]);
+        config(['ai.default' => 'deepseek', 'ai.providers.deepseek.key' => 'test-key']);
         foreach (['verjaardag', 'anders'] as $category) {
             Http::fake([
                 'api.deepseek.com/*' => Http::response(['choices' => [['message' => ['content' => $this->lyrics('Henk')]]]]),
@@ -88,21 +88,31 @@ class OpenAiLyricsReviewTest extends TestCase
         Http::assertSent(fn ($request) => str_contains($request['input'], 'Henk') && ! str_contains($request['input'], 'private@example.com'));
     }
 
-    public function test_removed_form_details_are_rejected(): void
+    public function test_review_that_drops_form_details_keeps_the_deepseek_version(): void
     {
         $generator = $this->generator();
         $draft = $generator->generateDraft('anders', ['name' => 'Henk']);
         Http::fake(['*/responses' => Http::response($this->response($this->lyrics('Piet')))]);
-        $this->expectExceptionMessage('formulierdetails weggelaten');
-        $generator->review($draft['sections'], 'anders', $draft['context'], ['name' => 'Henk']);
+        $sections = $generator->review($draft['sections'], 'anders', $draft['context'], ['name' => 'Henk']);
+        $this->assertSame($draft['sections'], $sections);
     }
 
-    public function test_malformed_output_is_rejected_instead_of_truncated(): void
+    public function test_review_receives_missing_facts_and_may_add_them(): void
+    {
+        $generator = $this->generator();
+        $draft = $generator->generateDraft('anders', ['name' => 'Henk']);
+        $draft['sections'] = array_map(fn ($section) => ['section' => $section['section'], 'lines' => str_replace('Henk', 'jij', $section['lines'])], $draft['sections']);
+        Http::fake(['*/responses' => Http::response($this->response($this->lyrics('Henk')))]);
+        $sections = $generator->review($draft['sections'], 'anders', $draft['context'], ['name' => 'Henk']);
+        $this->assertStringContainsString('Henk', implode(' ', array_merge(...array_column($sections, 'lines'))));
+        Http::assertSent(fn ($request) => str_contains($request['input'], 'NOG NIET VERWERKT'));
+    }
+
+    public function test_malformed_output_keeps_the_original_instead_of_truncating(): void
     {
         $generator = $this->generator();
         Http::fake(['*/responses' => Http::response($this->response($this->lyrics('Henk')."\nExtra uitleg"))]);
-        $this->expectExceptionMessage('ongeldige songstructuur');
-        $generator->review([], 'anders', [], []);
+        $this->assertSame([], $generator->review([], 'anders', [], []));
     }
 
     public function test_disabled_review_and_draft_make_no_requests(): void
