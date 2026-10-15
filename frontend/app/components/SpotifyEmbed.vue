@@ -4,7 +4,7 @@
 // - showcase + geen src: rijke kaart zolang de Spotify-embed nog niet gekoppeld is
 //   met Spotify-logo en een sfeerbeeld (bv. de categorie-cover).
 // - anders geen src: compacte nette placeholder (kleine tegels).
-withDefaults(
+const props = withDefaults(
   defineProps<{
     src?: string | null;
     title?: string;
@@ -12,6 +12,8 @@ withDefaults(
     cover?: string | null;
     showcase?: boolean;
     placeholderText?: string;
+    // Neutrale donkere speler i.p.v. de kleur van de albumhoes.
+    dark?: boolean;
   }>(),
   {
     src: null,
@@ -20,15 +22,21 @@ withDefaults(
     cover: null,
     showcase: false,
     placeholderText: 'Voorbeeld komt binnenkort.',
+    dark: false,
   },
 );
+
+const iframeSrc = computed(() => {
+  if (!props.src || !props.dark) return props.src;
+  return `${props.src}${props.src.includes('?') ? '&' : '?'}theme=0`;
+});
 </script>
 
 <template>
   <div class="overflow-hidden rounded-lg">
     <iframe
       v-if="src"
-      :src="src"
+      :src="iframeSrc"
       :title="title"
       width="100%"
       :height="height"
@@ -49,12 +57,7 @@ withDefaults(
       />
 
       <div class="relative flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
-        <svg viewBox="0 0 168 168" class="h-11 w-11" aria-hidden="true">
-          <path
-            fill="#1ED760"
-            d="M83.996.277C37.747.277.253 37.77.253 84.019c0 46.251 37.494 83.741 83.743 83.741 46.254 0 83.744-37.49 83.744-83.741 0-46.246-37.49-83.738-83.745-83.738zm38.404 120.78a5.217 5.217 0 01-7.18 1.73c-19.662-12.01-44.414-14.73-73.564-8.07a5.222 5.222 0 01-6.249-3.93 5.213 5.213 0 013.926-6.25c31.9-7.291 59.263-4.15 81.337 9.34 2.46 1.51 3.24 4.72 1.73 7.18zm10.25-22.805c-1.89 3.075-5.91 4.045-8.98 2.155-22.51-13.839-56.823-17.846-83.448-9.764-3.453 1.043-7.1-.903-8.148-4.35a6.538 6.538 0 014.354-8.143c30.413-9.228 68.222-4.758 94.072 11.127 3.07 1.89 4.04 5.91 2.15 8.98zm.88-23.744c-26.99-16.031-71.52-17.505-97.289-9.684a7.835 7.835 0 01-9.768-5.221 7.834 7.834 0 015.221-9.771c29.581-8.98 78.756-7.245 109.83 11.202a7.823 7.823 0 012.74 10.733c-2.2 3.722-7.02 4.949-10.73 2.741z"
-          />
-        </svg>
+        <SpotifyLogo class="h-11 w-11" />
 
         <div>
           <p class="font-display text-2xl font-semibold leading-tight text-white sm:text-3xl">
@@ -77,12 +80,7 @@ withDefaults(
       class="flex flex-col items-center justify-center gap-3 rounded-lg px-6 text-center"
       :style="{ height: height + 'px', background: 'var(--color-surface-soft)' }"
     >
-      <svg viewBox="0 0 168 168" class="h-8 w-8" aria-hidden="true">
-        <path
-          fill="#1ED760"
-          d="M83.996.277C37.747.277.253 37.77.253 84.019c0 46.251 37.494 83.741 83.743 83.741 46.254 0 83.744-37.49 83.744-83.741 0-46.246-37.49-83.738-83.745-83.738zm38.404 120.78a5.217 5.217 0 01-7.18 1.73c-19.662-12.01-44.414-14.73-73.564-8.07a5.222 5.222 0 01-6.249-3.93 5.213 5.213 0 013.926-6.25c31.9-7.291 59.263-4.15 81.337 9.34 2.46 1.51 3.24 4.72 1.73 7.18zm10.25-22.805c-1.89 3.075-5.91 4.045-8.98 2.155-22.51-13.839-56.823-17.846-83.448-9.764-3.453 1.043-7.1-.903-8.148-4.35a6.538 6.538 0 014.354-8.143c30.413-9.228 68.222-4.758 94.072 11.127 3.07 1.89 4.04 5.91 2.15 8.98zm.88-23.744c-26.99-16.031-71.52-17.505-97.289-9.684a7.835 7.835 0 01-9.768-5.221 7.834 7.834 0 015.221-9.771c29.581-8.98 78.756-7.245 109.83 11.202a7.823 7.823 0 012.74 10.733c-2.2 3.722-7.02 4.949-10.73 2.741z"
-        />
-      </svg>
+      <SpotifyLogo class="h-8 w-8" />
       <p class="max-w-xs text-sm font-medium" :style="{ color: 'var(--color-ink-soft)' }">
         {{ placeholderText }}
       </p>

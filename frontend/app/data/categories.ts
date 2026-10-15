@@ -47,7 +47,8 @@ export interface Category {
   heroLead: string;
   intro: string;
   whatYouGet: string[];
-  // Voor 'existing': de (nog te delen) Spotify-playlist + "staat jouw naam erbij?"
+  // Spotify-embed (album/playlist). 'existing': showcase + "staat jouw naam erbij?";
+  // overige varianten: sectie met voorbeeldnummers.
   playlistEmbed?: string | null;
   existingHook?: string;
   sampleTracks?: SampleTrack[];
@@ -270,7 +271,7 @@ export const categories: Category[] = [
       'Met jouw naam (of die van de geslaagde) erin verwerkt',
       'Release op Spotify en YouTube Music inbegrepen',
     ],
-    playlistEmbed: null,
+    playlistEmbed: 'https://open.spotify.com/embed/album/1SCZZQaJ3fgG5cUGcE2h7A?utm_source=generator',
     existingHook: 'Staat jouw naam al in het nummer?',
     sampleTracks: [
       { title: 'Eindelijk Mijn Rijbewijs', subtitle: 'De originele hit', spotifyEmbed: null },
@@ -309,7 +310,7 @@ export const categories: Category[] = [
       'Jouw naam in de tekst',
       'Release op Spotify en YouTube Music inbegrepen',
     ],
-    playlistEmbed: null,
+    playlistEmbed: 'https://open.spotify.com/embed/album/2qCHoJvGiHas24WHuwqagG?utm_source=generator',
     existingHook: 'Staat jouw naam tussen de 10.000?',
     sampleTracks: [
       { title: 'Geslaagd! (10.000 Namen)', subtitle: 'Het originele nummer', spotifyEmbed: null },
@@ -382,6 +383,7 @@ export const categories: Category[] = [
     heroLead: 'Geen sokken of een mok dit jaar. Geef je vader een eigen nummer — over hém, met jullie verhaal erin.',
     intro: 'Vertel ons over je vader: zijn gewoontes, jullie grapjes, dat ene moment. Wij maken er een persoonlijk nummer van.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet Vaderdag-nummer', 'Jullie verhaal en inside jokes erin', 'Publicatie op Spotify en YouTube Music inbegrepen'],
+    playlistEmbed: 'https://open.spotify.com/embed/album/0VbpBAPTHllUF6L1PLBxzk?utm_source=generator',
     intakeFields: baseFields([
       { name: 'nickname', label: 'Hoe noem je hem?', type: 'text', placeholder: 'Bijv. pap, papa, opa', span: 'half' },
       { name: 'hobby', label: 'Zijn hobby of typische dingen', type: 'text', placeholder: 'Bijv. BBQ, voetbal, klussen', span: 'half' },
@@ -409,6 +411,7 @@ export const categories: Category[] = [
     heroLead: 'Zeg met muziek wat niet altijd in een kaartje past. Een persoonlijk nummer vol herinneringen, dankbaarheid en jullie eigen woorden.',
     intro: 'Deel jullie mooiste herinneringen en typische momenten. Wij maken er een nummer van dat ze steeds opnieuw kan beluisteren.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet Moederdag-nummer', 'Jullie herinneringen verwerkt in de tekst', 'Publicatie op Spotify en YouTube Music inbegrepen'],
+    playlistEmbed: 'https://open.spotify.com/embed/album/6SoUkWJQwdYklobiDi7y7N?utm_source=generator',
     intakeFields: baseFields([
       { name: 'nickname', label: 'Hoe noem je haar?', type: 'text', placeholder: 'Bijv. mam, mama, oma', span: 'half' },
       { name: 'memory', label: 'Een dierbare herinnering', type: 'text', placeholder: 'Bijv. zondagse pannenkoeken', span: 'half' },
@@ -436,6 +439,7 @@ export const categories: Category[] = [
     heroLead: 'Een nieuw leven, een nieuwe naam en een verhaal dat pas net begint. Vang dit moment in een persoonlijk geboortenummer.',
     intro: 'Vertel ons de naam, de geboortedatum en wat dit moment zo bijzonder maakt — wij maken er een teder nummer van.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet geboortenummer', 'De naam van je kindje in de tekst', 'Publicatie op Spotify en YouTube Music inbegrepen'],
+    playlistEmbed: 'https://open.spotify.com/embed/album/7qwnh0Wxn3GiQGDhDG0n2Y?utm_source=generator',
     intakeFields: baseFields([
       { name: 'babyName', label: 'Naam van het kindje', type: 'text', placeholder: 'Bijv. Liv', required: true, span: 'half' },
       { name: 'birthDate', label: 'Geboortedatum', type: 'date', span: 'half' },
@@ -463,6 +467,7 @@ export const categories: Category[] = [
     heroLead: 'Niet zomaar "Lang zal ze leven". Een eigen verjaardagsnummer met naam, leeftijd en alle inside jokes.',
     intro: 'Vertel ons over de jarige: leeftijd, karakter en de grapjes die alleen jullie snappen. Wij maken er het muzikale hoogtepunt van.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet verjaardagsnummer', 'Naam, leeftijd en inside jokes erin', 'Publicatie op Spotify en YouTube Music inbegrepen'],
+    playlistEmbed: 'https://open.spotify.com/embed/album/6LIuu6O539lxO6vqJA4rNE?utm_source=generator',
     intakeFields: baseFields([
       { name: 'age', label: 'Welke leeftijd?', type: 'text', placeholder: 'Bijv. 50', span: 'half' },
       { name: 'party', label: 'Soort feest', type: 'text', placeholder: 'Bijv. surprise, kroegavond', span: 'half' },
@@ -490,6 +495,7 @@ export const categories: Category[] = [
     heroLead: 'Voor de hele ploeg: bij een kampioenschap, seizoensafsluiting, sponsoravond of gewoon omdat jullie een eigen kantinehit verdienen.',
     intro: 'Vertel ons over het team, de clubcultuur, de kleuren en de momenten die iedereen herkent. Wij maken er een meezingbaar teamlied van.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet team- of clublied', 'Teamnaam, clubcultuur en momenten in de tekst', 'Publicatie op Spotify en YouTube Music inbegrepen'],
+    playlistEmbed: 'https://open.spotify.com/embed/album/4jmFVvaChdmht6T2z8TrX4?utm_source=generator',
     intakeFields: baseFields([
       { name: 'teamType', label: 'Waar gaat het over?', type: 'select', options: ['Hele club', 'Eén team', 'Kampioenswedstrijd', 'Seizoensafsluiting', 'Sponsor / businessclub', 'Supportersgroep'], required: true, span: 'half' },
       { name: 'clubName', label: 'Club- of teamnaam', type: 'text', placeholder: 'Bijv. VV De Spartaan JO17-1', required: true, span: 'half' },
@@ -529,12 +535,7 @@ export const categories: Category[] = [
       'Overal te delen op Spotify, YouTube Music en social media',
       'Inzetbaar voor jubileum, recruitment, beurs of bedrijfsfeest',
     ],
-    sampleTracks: [
-      { title: 'Wij Bouwen Door', subtitle: 'Sample — stoere bouwhit', spotifyEmbed: null },
-      { title: 'Fundament', subtitle: 'Sample — ingetogen & trots', spotifyEmbed: null },
-      { title: 'Van Tekening Tot Sleutel', subtitle: 'Sample — uptempo meezinger', spotifyEmbed: null },
-      { title: 'Handen Uit De Mouwen', subtitle: 'Sample — energiek werklied', spotifyEmbed: null },
-    ],
+    playlistEmbed: 'https://open.spotify.com/embed/album/1ALnqm93ohAUppVq9SiqsA?utm_source=generator',
     intakeFields: [
       { name: 'companyName', label: 'Bedrijfsnaam', type: 'text', placeholder: 'Bijv. Bouwbedrijf Jansen B.V.', required: true, span: 'half' },
       { name: 'contactName', label: 'Contactpersoon', type: 'text', placeholder: 'Naam', required: true, span: 'half' },

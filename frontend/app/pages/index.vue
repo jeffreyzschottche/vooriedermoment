@@ -266,6 +266,20 @@ const faqPreview = [
       </div>
     </section>
 
+    <!-- SPOTIFY: onze nummers (artiest-embed, werkt zichzelf bij) -->
+    <section class="py-20 sm:py-28">
+      <div v-reveal class="site-container">
+        <PlaylistShowcase
+          embed="https://open.spotify.com/embed/artist/5iXRrtThUvD2eKB4hbsGXo?utm_source=generator"
+          kicker="Nu op Spotify"
+          title="Luister naar onze nummers"
+          text="Van rijbewijs tot Vaderdag: deze nummers staan al op Spotify. Zo klinkt een persoonlijk nummer van Voor Ieder Moment."
+          :chips="['Echte releases', 'Spotify & YouTube Music', 'Voor ieder moment']"
+          request-href="/aanvraag"
+        />
+      </div>
+    </section>
+
     <!-- PIPELINE -->
     <section class="studio-shell-full py-20 sm:py-28">
       <div class="site-container">

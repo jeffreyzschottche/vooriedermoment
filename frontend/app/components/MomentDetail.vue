@@ -13,6 +13,27 @@ const requestHref = computed(() => `${categoryPath(props.category)}#aanvraag`);
 const isExisting = computed(() => props.category.variant === 'existing');
 const isB2b = computed(() => props.category.variant === 'b2b');
 
+// Teksten voor het Spotify-podium, per variant.
+const showcase = computed(() => {
+  const c = props.category;
+  if (isExisting.value) {
+    return {
+      kicker: 'Al uitgebracht op Spotify',
+      title: c.sampleTracks?.[0]?.title ?? c.title,
+      text: 'Luister het origineel hieronder. Staat jouw naam er niet tussen, of wil je jullie eigen verhaal erin? Dan maken we een persoonlijke versie.',
+      chips: ['Al op Spotify', 'Ook op YouTube Music', 'Eigen versie mogelijk'],
+    };
+  }
+  return {
+    kicker: `${c.navLabel} op Spotify`,
+    title: isB2b.value ? 'Zo kan jouw bedrijfsnummer klinken' : 'Zo kan jouw nummer klinken',
+    text: isB2b.value
+      ? 'Een paar echte voorbeelden van bedrijfsnummers. Jouw nummer wordt volledig op jullie bedrijf, mensen en projecten afgestemd.'
+      : 'Een paar echte voorbeelden, zo op Spotify te beluisteren. Jouw nummer krijgt jullie eigen namen, herinneringen en inside jokes.',
+    chips: ['Echte voorbeelden', 'Spotify & YouTube Music', isB2b.value ? 'Bedrijfsnaam erin' : 'Jullie namen erin'],
+  };
+});
+
 const productionHighlights = [
   { title: 'Vertel wat het persoonlijk maakt', text: 'Deel namen, herinneringen, uitspraken en details die alleen jullie herkennen.' },
   { title: 'Kies uit verschillende opties', text: 'Binnen 24–72 uur sturen we verschillende korte muzikale voorproefjes naar je inbox.' },
@@ -33,13 +54,27 @@ const productionHighlights = [
           </p>
           <div v-reveal class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
             <a href="#aanvraag" class="stitch-button px-8 py-3.5">Vraag jouw versie aan</a>
+            <a
+              v-if="category.playlistEmbed"
+              href="#voorbeelden"
+              class="stitch-outline-button inline-flex items-center gap-2 px-6 py-3.5"
+            >
+              <span
+                class="flex h-6 w-6 items-center justify-center rounded-full text-[10px]"
+                :style="{ background: 'var(--accent)', color: 'var(--accent-ink)' }"
+                aria-hidden="true"
+              >▶</span>
+              Luister voorbeelden
+            </a>
+          </div>
+          <div v-reveal class="mt-5">
             <OfferBadge size="sm" inline />
           </div>
         </div>
 
         <div v-reveal class="space-y-5">
           <div
-            class="overflow-hidden rounded-2xl border"
+            class="relative overflow-hidden rounded-2xl border"
             :style="{ borderColor: 'var(--color-line)', boxShadow: '0 18px 48px rgba(13,21,18,0.14)' }"
           >
             <img
@@ -47,6 +82,14 @@ const productionHighlights = [
               :alt="`${category.title} — persoonlijk nummer`"
               class="aspect-[16/9] w-full object-cover"
             />
+            <a
+              v-if="category.playlistEmbed"
+              href="#voorbeelden"
+              class="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-black/70 px-3.5 py-2 text-xs font-semibold text-white backdrop-blur transition hover:bg-black/85"
+            >
+              <SpotifyLogo class="h-4 w-4" />
+              Nu op Spotify
+            </a>
           </div>
 
           <div class="rich-card p-7 sm:p-8">
@@ -62,33 +105,22 @@ const productionHighlights = [
       </div>
     </section>
 
-    <!-- EXISTING: playlist + zoeken -->
-    <section v-if="isExisting" class="py-14" :style="{ background: 'var(--color-surface-soft)' }">
+    <!-- VOORBEELDEN: Spotify-podium (+ namenzoeker voor existing) -->
+    <section v-if="category.playlistEmbed || isExisting" id="voorbeelden" class="scroll-mt-24 py-14 sm:py-20">
       <div class="site-container space-y-8">
-        <div v-reveal>
+        <div v-if="category.playlistEmbed" v-reveal>
           <PlaylistShowcase
             :embed="category.playlistEmbed"
-            :title="category.sampleTracks?.[0]?.title ?? category.title"
-            :subtitle="category.intro"
+            :kicker="showcase.kicker"
+            :title="showcase.title"
+            :text="showcase.text"
+            :chips="showcase.chips"
+            :request-href="requestHref"
             :cover="cover"
           />
         </div>
-        <div v-reveal>
+        <div v-if="isExisting" v-reveal>
           <SongSearch :hook="category.existingHook" :request-href="requestHref" />
-        </div>
-      </div>
-    </section>
-
-    <!-- B2B: sample-nummers -->
-    <section v-if="isB2b && category.sampleTracks?.length" class="py-14" :style="{ background: 'var(--color-surface-soft)' }">
-      <div class="site-container">
-        <div v-reveal class="mb-8 text-center">
-          <span class="section-kicker">Voorbeelden</span>
-          <h2 class="section-heading text-3xl md:text-4xl">Zo kan jouw bedrijfsnummer klinken</h2>
-          <p class="section-subtext mx-auto mt-3 max-w-2xl">Kies uit verschillende muzikale opties. Jouw nummer wordt volledig op jullie bedrijf afgestemd.</p>
-        </div>
-        <div v-reveal>
-          <SampleTrackList :tracks="category.sampleTracks" :columns="4" />
         </div>
       </div>
     </section>
@@ -96,8 +128,10 @@ const productionHighlights = [
     <!-- AANVRAAG -->
     <section class="site-container py-16 sm:py-20">
       <div class="grid gap-5 md:grid-cols-3">
-        <article v-for="item in productionHighlights" :key="item.title" v-reveal class="rich-card p-6">
-          <div class="mb-5 h-1.5 w-14 accent-gradient" style="border-radius: 999px;" />
+        <article v-for="(item, i) in productionHighlights" :key="item.title" v-reveal class="rich-card p-6">
+          <p class="mb-4 font-display text-4xl font-semibold" :style="{ color: 'var(--accent)' }">
+            {{ String(i + 1).padStart(2, '0') }}
+          </p>
           <h2 class="font-display text-xl font-semibold" :style="{ color: 'var(--color-ink)' }">{{ item.title }}</h2>
           <p class="mt-3 text-sm leading-7" :style="{ color: 'var(--color-ink-soft)' }">{{ item.text }}</p>
         </article>
