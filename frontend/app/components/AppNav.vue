@@ -37,9 +37,11 @@ watch(
         class="block shrink-0 transition-transform duration-200 hover:scale-[1.02]"
       >
         <img
-          src="/logowit.png"
+          src="/logo-header.png"
           alt="Voor Ieder Moment"
-          class="h-20 w-48 object-cover sm:h-24 sm:w-60"
+          width="320"
+          height="190"
+          class="h-16 w-auto sm:h-20"
         />
       </NuxtLink>
 

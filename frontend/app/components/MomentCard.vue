@@ -51,26 +51,26 @@ const cover = computed(() => categoryImage(props.category));
     </div>
 
     <!-- Body -->
-    <div class="flex flex-1 flex-col p-6">
+    <div class="flex flex-1 flex-col p-4 sm:p-6">
       <h3
-        class="font-display text-xl font-semibold transition-colors duration-200 sm:text-2xl"
+        class="font-display text-base font-semibold leading-snug transition-colors duration-200 sm:text-2xl"
         :style="{ color: 'var(--color-ink)' }"
       >
         {{ category.title }}
       </h3>
 
       <p
-        class="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed"
+        class="mt-3 line-clamp-3 hidden flex-1 text-sm leading-relaxed sm:block"
         :style="{ color: 'var(--color-ink-soft)' }"
       >
         {{ category.heroLead }}
       </p>
 
       <span
-        class="mt-5 inline-flex items-center gap-2 text-sm font-bold"
+        class="mt-auto inline-flex items-center gap-2 pt-3 text-xs font-bold sm:pt-5 sm:text-sm"
         :style="{ color: t.accentStrong }"
       >
-        {{ category.slug === 'anders' ? 'Vertel jouw moment' : 'Bekijk intake' }}
+        {{ category.slug === 'anders' ? 'Vertel jouw moment' : 'Bekijk moment' }}
         <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
       </span>
     </div>

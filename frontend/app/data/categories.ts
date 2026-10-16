@@ -50,6 +50,8 @@ export interface Category {
   // Spotify-embed (album/playlist). 'existing': showcase + "staat jouw naam erbij?";
   // overige varianten: sectie met voorbeeldnummers.
   playlistEmbed?: string | null;
+  // Exacte albumtitel op Spotify (voor de MusicAlbum-structured data).
+  albumTitle?: string;
   existingHook?: string;
   sampleTracks?: SampleTrack[];
   intakeFields: IntakeField[];
@@ -272,6 +274,7 @@ export const categories: Category[] = [
       'Release op Spotify en YouTube Music inbegrepen',
     ],
     playlistEmbed: 'https://open.spotify.com/embed/album/1SCZZQaJ3fgG5cUGcE2h7A?utm_source=generator',
+    albumTitle: 'Rijbewijs',
     existingHook: 'Staat jouw naam al in het nummer?',
     sampleTracks: [
       { title: 'Eindelijk Mijn Rijbewijs', subtitle: 'De originele hit', spotifyEmbed: null },
@@ -311,6 +314,7 @@ export const categories: Category[] = [
       'Release op Spotify en YouTube Music inbegrepen',
     ],
     playlistEmbed: 'https://open.spotify.com/embed/album/2qCHoJvGiHas24WHuwqagG?utm_source=generator',
+    albumTitle: 'Geslaagd',
     existingHook: 'Staat jouw naam tussen de 10.000?',
     sampleTracks: [
       { title: 'Geslaagd! (10.000 Namen)', subtitle: 'Het originele nummer', spotifyEmbed: null },
@@ -384,6 +388,7 @@ export const categories: Category[] = [
     intro: 'Vertel ons over je vader: zijn gewoontes, jullie grapjes, dat ene moment. Wij maken er een persoonlijk nummer van.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet Vaderdag-nummer', 'Jullie verhaal en inside jokes erin', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     playlistEmbed: 'https://open.spotify.com/embed/album/0VbpBAPTHllUF6L1PLBxzk?utm_source=generator',
+    albumTitle: 'Vaderdag',
     intakeFields: baseFields([
       { name: 'nickname', label: 'Hoe noem je hem?', type: 'text', placeholder: 'Bijv. pap, papa, opa', span: 'half' },
       { name: 'hobby', label: 'Zijn hobby of typische dingen', type: 'text', placeholder: 'Bijv. BBQ, voetbal, klussen', span: 'half' },
@@ -412,6 +417,7 @@ export const categories: Category[] = [
     intro: 'Deel jullie mooiste herinneringen en typische momenten. Wij maken er een nummer van dat ze steeds opnieuw kan beluisteren.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet Moederdag-nummer', 'Jullie herinneringen verwerkt in de tekst', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     playlistEmbed: 'https://open.spotify.com/embed/album/6SoUkWJQwdYklobiDi7y7N?utm_source=generator',
+    albumTitle: 'Moederdag',
     intakeFields: baseFields([
       { name: 'nickname', label: 'Hoe noem je haar?', type: 'text', placeholder: 'Bijv. mam, mama, oma', span: 'half' },
       { name: 'memory', label: 'Een dierbare herinnering', type: 'text', placeholder: 'Bijv. zondagse pannenkoeken', span: 'half' },
@@ -440,6 +446,7 @@ export const categories: Category[] = [
     intro: 'Vertel ons de naam, de geboortedatum en wat dit moment zo bijzonder maakt — wij maken er een teder nummer van.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet geboortenummer', 'De naam van je kindje in de tekst', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     playlistEmbed: 'https://open.spotify.com/embed/album/7qwnh0Wxn3GiQGDhDG0n2Y?utm_source=generator',
+    albumTitle: 'Kind geboren',
     intakeFields: baseFields([
       { name: 'babyName', label: 'Naam van het kindje', type: 'text', placeholder: 'Bijv. Liv', required: true, span: 'half' },
       { name: 'birthDate', label: 'Geboortedatum', type: 'date', span: 'half' },
@@ -468,6 +475,7 @@ export const categories: Category[] = [
     intro: 'Vertel ons over de jarige: leeftijd, karakter en de grapjes die alleen jullie snappen. Wij maken er het muzikale hoogtepunt van.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet verjaardagsnummer', 'Naam, leeftijd en inside jokes erin', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     playlistEmbed: 'https://open.spotify.com/embed/album/6LIuu6O539lxO6vqJA4rNE?utm_source=generator',
+    albumTitle: 'Verjaardag',
     intakeFields: baseFields([
       { name: 'age', label: 'Welke leeftijd?', type: 'text', placeholder: 'Bijv. 50', span: 'half' },
       { name: 'party', label: 'Soort feest', type: 'text', placeholder: 'Bijv. surprise, kroegavond', span: 'half' },
@@ -496,6 +504,7 @@ export const categories: Category[] = [
     intro: 'Vertel ons over het team, de clubcultuur, de kleuren en de momenten die iedereen herkent. Wij maken er een meezingbaar teamlied van.',
     whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet team- of clublied', 'Teamnaam, clubcultuur en momenten in de tekst', 'Publicatie op Spotify en YouTube Music inbegrepen'],
     playlistEmbed: 'https://open.spotify.com/embed/album/4jmFVvaChdmht6T2z8TrX4?utm_source=generator',
+    albumTitle: 'Team- of clublied',
     intakeFields: baseFields([
       { name: 'teamType', label: 'Waar gaat het over?', type: 'select', options: ['Hele club', 'Eén team', 'Kampioenswedstrijd', 'Seizoensafsluiting', 'Sponsor / businessclub', 'Supportersgroep'], required: true, span: 'half' },
       { name: 'clubName', label: 'Club- of teamnaam', type: 'text', placeholder: 'Bijv. VV De Spartaan JO17-1', required: true, span: 'half' },
@@ -536,6 +545,7 @@ export const categories: Category[] = [
       'Inzetbaar voor jubileum, recruitment, beurs of bedrijfsfeest',
     ],
     playlistEmbed: 'https://open.spotify.com/embed/album/1ALnqm93ohAUppVq9SiqsA?utm_source=generator',
+    albumTitle: 'Bouwbedrijf',
     intakeFields: [
       { name: 'companyName', label: 'Bedrijfsnaam', type: 'text', placeholder: 'Bijv. Bouwbedrijf Jansen B.V.', required: true, span: 'half' },
       { name: 'contactName', label: 'Contactpersoon', type: 'text', placeholder: 'Naam', required: true, span: 'half' },
@@ -612,6 +622,11 @@ export function categoryPath(c: Pick<Category, 'slug' | 'route'>): string {
 // gegenereerde kleur-cover (frontend/public/momenten/<slug>.svg).
 export function categoryImage(c: Pick<Category, 'slug' | 'image'>): string {
   return c.image ?? `/momenten/${c.slug}.svg`;
+}
+
+// Deelafbeelding (og:image, JSON-LD): JPG, want WhatsApp/Facebook/LinkedIn tonen geen SVG.
+export function categoryOgImage(c: Pick<Category, 'slug' | 'image'>): string {
+  return c.image ?? `/momenten/${c.slug}.jpg`;
 }
 
 // Categorieën die in het /momenten-overzicht en de nav verschijnen.

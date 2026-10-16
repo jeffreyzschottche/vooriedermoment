@@ -1,6 +1,12 @@
 <script setup lang="ts">
-// Organization JSON-LD globaal op elke pagina.
-useJsonLd(organizationSchema);
+// Organization + WebSite JSON-LD globaal op elke pagina.
+useJsonLd([organizationSchema, websiteSchema]);
+
+// Canonical en og:url voor iedere pagina (zonder query of trailing slash).
+const route = useRoute();
+const canonicalUrl = computed(() => SITE_URL + (route.path === '/' ? '/' : route.path.replace(/\/+$/, '')));
+useHead({ link: [{ rel: 'canonical', href: canonicalUrl, key: 'canonical' }] });
+useSeoMeta({ ogUrl: canonicalUrl });
 </script>
 
 <template>

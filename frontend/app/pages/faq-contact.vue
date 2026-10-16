@@ -4,12 +4,17 @@ const offer = useOffer();
 useSeoMeta({
   title: 'FAQ & contact',
   description: 'Veelgestelde vragen over persoonlijke nummers van Voor Ieder Moment, plus contactgegevens.',
+  ogTitle: 'Veelgestelde vragen & contact | Voor Ieder Moment',
+  ogDescription: 'Veelgestelde vragen over persoonlijke nummers van Voor Ieder Moment, plus contactgegevens.',
+  twitterTitle: 'Veelgestelde vragen & contact | Voor Ieder Moment',
+  twitterDescription: 'Veelgestelde vragen over persoonlijke nummers van Voor Ieder Moment, plus contactgegevens.',
 });
 
 const faqs = [
-  { question: 'Hoe werkt het van aanvraag tot Spotify?', answer: 'Kies eerst het moment waarvoor je een nummer wilt laten maken. Daarna ontvang je een formulier dat je stap voor stap invult met namen, herinneringen, inside jokes en de gewenste sfeer. Na betaling maken we verschillende korte muzikale opties. Via een persoonlijke link kies je jouw favoriet. Wij werken die keuze uit tot een compleet nummer en publiceren het voor je op Spotify en YouTube Music. Zodra het live staat, ontvang je de luisterlinks per e-mail.' },
+  { question: 'Hoe werkt het van aanvraag tot Spotify?', answer: 'Kies eerst het moment waarvoor je een nummer wilt laten maken. Daarna ontvang je een formulier dat je stap voor stap invult met namen, herinneringen, inside jokes en de gewenste sfeer. Direct na betaling ontvang je je persoonlijke songtekst per e-mail. Daarna maken we verschillende korte muzikale opties. Via een persoonlijke link kies je jouw favoriet. Wij werken die keuze uit tot een compleet nummer en publiceren het voor je op Spotify en YouTube Music. Zodra het live staat, ontvang je de luisterlinks per e-mail.' },
+  { question: 'Wanneer ontvang ik de songtekst?', answer: 'Binnen enkele minuten na je betaling. Je krijgt een bevestiging van je bestelling met de volledige songtekst, geschreven op basis van jouw verhaal. Het nummer zelf volgt later: eerst de muzikale opties, daarna de complete versie op Spotify en YouTube Music.' },
   { question: 'Hoe vul ik het formulier in?', answer: 'Het formulier leidt je stap voor stap door de aanvraag. Je vertelt voor wie het nummer is, wat de gelegenheid is, welke verhalen of eigenschappen erin moeten en welke sfeer je zoekt. Je hoeft geen tekst te schrijven of muzikale termen te kennen: gewone, concrete antwoorden zijn genoeg. Hoe meer herkenbare details je deelt, hoe persoonlijker het resultaat.' },
-  { question: 'Wat krijg ik precies?', answer: 'Je kiest uit verschillende korte muzikale opties. Van jouw favoriete optie maken we één compleet persoonlijk nummer. Daarna verzorgen wij de publicatie op Spotify en YouTube Music en sturen we je de links om het nummer te beluisteren en te delen.' },
+  { question: 'Wat krijg ik precies?', answer: 'Direct na betaling je persoonlijke songtekst per e-mail. Daarna kies je uit verschillende korte muzikale opties. Van jouw favoriete optie maken we één compleet persoonlijk nummer. Daarna verzorgen wij de publicatie op Spotify en YouTube Music en sturen we je de links om het nummer te beluisteren en te delen.' },
   { question: 'Wat kost een nummer?', answer: offer.hasDiscount.value ? `Normaal ${offer.formattedRegular}, nu ${offer.formattedSale}. De muzikale opties, één compleet nummer en de publicatie op Spotify en YouTube Music zijn inbegrepen.` : `${offer.formattedRegular}. De muzikale opties, één compleet nummer en de publicatie op Spotify en YouTube Music zijn inbegrepen.` },
   { question: 'Hoe kies ik mijn favoriete optie?', answer: 'Zodra de opties klaarstaan, ontvang je per e-mail een persoonlijke link. Daar kun je alle voorproefjes rustig beluisteren en jouw favoriet selecteren. Met die keuze gaan wij verder; je hoeft niets te downloaden, uploaden of technisch in te stellen.' },
   { question: 'Wat gebeurt er nadat ik mijn favoriet heb gekozen?', answer: 'Wij maken jouw gekozen richting af tot een compleet nummer en zetten de publicatie in gang. Zodra het nummer op Spotify en YouTube Music staat, mailen we je de directe links. Vanaf dat moment kun je het nummer steeds opnieuw beluisteren en met anderen delen.' },
@@ -70,7 +75,7 @@ useJsonLd(faqSchema(faqs));
 
           <div class="mt-8 space-y-2 border-t pt-6 text-sm" :style="{ borderColor: 'var(--color-line)', color: 'var(--color-ink-soft)' }">
             <p>Voor Ieder Moment</p>
-            <p>Amsterdam, Nederland</p>
+            <p>info@vooriedermoment.nl</p>
           </div>
         </div>
       </section>

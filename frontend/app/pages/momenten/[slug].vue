@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCategory, categoryImage } from '~/data/categories';
+import { getCategory, categoryOgImage } from '~/data/categories';
 import { absoluteUrl } from '~/composables/useStructuredData';
 
 const route = useRoute();
@@ -13,7 +13,7 @@ if (!category.value) {
 
 const offer = useOffer();
 const c = category.value!;
-const cover = absoluteUrl(categoryImage(c));
+const cover = absoluteUrl(categoryOgImage(c));
 const pageUrl = absoluteUrl(`/momenten/${c.slug}`);
 
 useSeoMeta({
@@ -30,10 +30,11 @@ useSeoMeta({
   twitterImage: cover,
 });
 
-useHead({ link: [{ rel: 'canonical', href: pageUrl }] });
-
 useJsonLd([
-  productSchema({ name: `${c.title} — persoonlijk nummer`, description: c.seoDescription, price: offer.currentPrice.value, url: `/momenten/${c.slug}`, image: categoryImage(c) }),
+  productSchema({ name: `${c.title} — persoonlijk nummer`, description: c.seoDescription, price: offer.currentPrice.value, url: `/momenten/${c.slug}`, image: categoryOgImage(c) }),
+  ...(c.playlistEmbed && c.albumTitle
+    ? [musicAlbumSchema({ name: c.albumTitle, embed: c.playlistEmbed, image: categoryOgImage(c) })]
+    : []),
   faqSchema(c.faq),
   breadcrumbSchema([
     { name: 'Home', path: '/' },

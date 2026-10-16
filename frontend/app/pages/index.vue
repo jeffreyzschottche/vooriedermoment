@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { requestCategories } from '~/data/categories';
+import { categoryPath, requestCategories } from '~/data/categories';
+import { reviews } from '~/data/reviews';
 
 const offer = useOffer();
 
@@ -7,34 +8,25 @@ useSeoMeta({
   title: 'Een persoonlijk nummer voor elk moment',
   ogTitle: 'Voor Ieder Moment — een persoonlijk nummer voor elk moment',
   description:
-    'Laat voor € 9,99 een persoonlijk nummer maken voor ieder bijzonder moment. Kies uit verschillende muzikale opties; wij publiceren jouw favoriet op Spotify en YouTube Music.',
+    'Laat voor € 9,99 een persoonlijk Nederlandstalig nummer maken voor een verjaardag, rijbewijs, geboorte, team of bedrijf. Je songtekst direct in je mail, jouw favoriet op Spotify.',
   ogDescription:
-    'Vertel jouw verhaal, kies de muzikale optie die raakt en luister naar je eigen nummer op Spotify en YouTube Music.',
+    'Vertel jouw verhaal, ontvang direct je persoonlijke songtekst en luister straks naar je eigen nummer op Spotify en YouTube Music.',
   ogUrl: 'https://vooriedermoment.nl/',
   ogImage: 'https://vooriedermoment.nl/hero-studio.png',
   twitterTitle: 'Voor Ieder Moment — een persoonlijk nummer voor elk moment',
   twitterDescription: 'Laat een persoonlijk nummer maken voor elk moment.',
 });
 
-useJsonLd([
-  productSchema({
-    name: 'Persoonlijk nummer',
-    description:
-      'Eén persoonlijk nummer op basis van jouw verhaal, met keuze uit verschillende muzikale opties en publicatie op Spotify en YouTube Music.',
-    price: offer.currentPrice.value,
-    url: '/aanvraag',
-  }),
-]);
 
 const heroStats = [
-  { display: '€ 9,99', label: 'één complete prijs' },
-  { display: 'Meerdere', label: 'muzikale opties' },
-  { display: '1 nummer', label: 'door ons gepubliceerd' },
+  { display: '€ 9,99', label: 'alles inbegrepen' },
+  { display: 'Direct', label: 'je songtekst in je mail' },
+  { display: 'Spotify', label: 'release door ons geregeld' },
 ];
 
 const pipeline = [
   { n: '01', title: 'Moment kiezen', text: 'Geslaagd, rijbewijs, teamlied, bouwbedrijf of een eigen gelegenheid.' },
-  { n: '02', title: 'Vertel jouw verhaal', text: 'Deel namen, herinneringen, inside jokes en de sfeer die bij het moment past.' },
+  { n: '02', title: 'Vertel jouw verhaal', text: 'Deel namen, herinneringen en inside jokes. Direct na betaling staat je persoonlijke songtekst in je mail.' },
   { n: '03', title: 'Kies uit de opties', text: 'Binnen 24–72 uur ontvang je verschillende korte voorproefjes in je inbox.' },
   { n: '04', title: 'Wij regelen de release', text: 'Wij maken jouw favoriet compleet en publiceren hem binnen 24–72 uur op Spotify en YouTube Music.' },
 ];
@@ -71,13 +63,31 @@ const proof = [
 ];
 
 const faqPreview = [
-  { q: 'Hoe werkt het precies?', a: 'Je kiest een moment en vult stap voor stap ons formulier in met namen, herinneringen en de gewenste sfeer. Na betaling sturen we je verschillende muzikale opties. Jij kiest je favoriet; wij maken het nummer compleet en publiceren het voor je op Spotify en YouTube Music.' },
+  { q: 'Hoe werkt het precies?', a: 'Je kiest een moment en vult stap voor stap ons formulier in met namen, herinneringen en de gewenste sfeer. Direct na betaling ontvang je je persoonlijke songtekst per e-mail; daarna sturen we je verschillende muzikale opties. Jij kiest je favoriet; wij maken het nummer compleet en publiceren het voor je op Spotify en YouTube Music.' },
+  { q: 'Wanneer krijg ik de songtekst?', a: 'Meteen na je betaling. Je ontvangt een bevestiging met de volledige songtekst, geschreven op basis van jouw verhaal. Zo weet je direct wat er straks gezongen wordt.' },
   { q: 'Moet ik zelf iets regelen voor Spotify?', a: 'Nee. Wij verzorgen de volledige publicatie op Spotify en YouTube Music. Je hebt geen artiestenaccount of technische kennis nodig. Zodra jouw nummer live staat, ontvang je de directe luisterlinks per e-mail.' },
   { q: 'Hoe snel staat mijn nummer online?', a: 'Binnen 24–72 uur na betaling ontvang je de muzikale opties. Na jouw keuze maken we de favoriet compleet en staat het nummer meestal binnen nog eens 24–72 uur op Spotify en YouTube Music.' },
   { q: 'Kan ik mijn nummer later opnieuw beluisteren?', a: 'Ja. Jouw nummer wordt als een echte release gepubliceerd. Voeg het toe aan je Spotify- of YouTube Music-bibliotheek en luister er zo vaak naar als je wilt.' },
   { q: 'Kan ik het nummer met anderen delen?', a: 'Zeker. Deel de luisterlink eenvoudig via WhatsApp, e-mail of social media met familie, vrienden, collega’s of het hele team.' },
   { q: 'Wat als mijn moment er niet tussen staat?', a: 'Kies dan “Een ander moment”. Van pensioen, jubileum en afscheid tot een bedankje of een herinnering die alleen voor jullie betekenis heeft: jij vertelt het verhaal, wij maken het nummer.' },
 ];
+
+useJsonLd([
+  productSchema({
+    name: 'Persoonlijk nummer',
+    description:
+      'Eén persoonlijk nummer op basis van jouw verhaal, met keuze uit verschillende muzikale opties en publicatie op Spotify en YouTube Music.',
+    price: offer.currentPrice.value,
+    url: '/aanvraag',
+    reviews,
+  }),
+  serviceSchema({
+    price: offer.currentPrice.value,
+    moments: requestCategories.map((c) => ({ name: c.title, path: categoryPath(c), description: c.seoDescription })),
+  }),
+  musicGroupSchema,
+  faqSchema(faqPreview.map((item) => ({ question: item.q, answer: item.a }))),
+]);
 </script>
 
 <template>
@@ -124,8 +134,8 @@ const faqPreview = [
               data-hero-delay="0.2"
               class="mt-8 max-w-xl text-lg leading-relaxed text-white/70 sm:text-xl"
             >
-              Vertel wat dit moment bijzonder maakt en kies uit vier unieke samples.
-              Wij maken jouw favoriet compleet en publiceren hem voor je.
+              Vertel wat dit moment bijzonder maakt. Je songtekst staat direct na betaling in je mail,
+              daarna kies je uit verschillende voorproefjes en zetten wij jouw favoriet op Spotify.
             </p>
 
             <div
@@ -255,7 +265,7 @@ const faqPreview = [
           </p>
         </div>
 
-        <div v-reveal-stagger data-stagger="0.08" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div v-reveal-stagger data-stagger="0.08" class="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           <MomentCard
             v-for="c in requestCategories"
             :key="c.slug"
@@ -279,6 +289,9 @@ const faqPreview = [
         />
       </div>
     </section>
+
+    <!-- REVIEWS (alleen zichtbaar met echte reviews in data/reviews.ts) -->
+    <ReviewsSection />
 
     <!-- PIPELINE -->
     <section class="studio-shell-full py-20 sm:py-28">

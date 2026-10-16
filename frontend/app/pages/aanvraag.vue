@@ -7,6 +7,10 @@ import {
 useSeoMeta({
   title: 'Vraag een nummer aan',
   description: 'Kies je moment en vertel je verhaal. Wij maken er een persoonlijk nummer van.',
+  ogTitle: 'Vraag een persoonlijk nummer aan | Voor Ieder Moment',
+  ogDescription: 'Kies je moment en vertel je verhaal. Wij maken er een persoonlijk nummer van.',
+  twitterTitle: 'Vraag een persoonlijk nummer aan | Voor Ieder Moment',
+  twitterDescription: 'Kies je moment en vertel je verhaal. Wij maken er een persoonlijk nummer van.',
 });
 
 </script>
@@ -29,7 +33,7 @@ useSeoMeta({
       </div>
     </header>
 
-    <div v-reveal class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div v-reveal class="mt-12 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
       <MomentCard v-for="c in requestCategories" :key="c.slug" :category="c" />
     </div>
 

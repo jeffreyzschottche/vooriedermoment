@@ -11,8 +11,7 @@ const props = defineProps<{
   cover?: string | null;
 }>();
 
-// embed-URL → gewone Spotify-link (open.spotify.com/album/<id>).
-const openUrl = computed(() => props.embed.replace('/embed/', '/').split('?')[0]);
+const openUrl = computed(() => spotifyOpenUrl(props.embed));
 </script>
 
 <template>

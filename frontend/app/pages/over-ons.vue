@@ -3,6 +3,10 @@ useSeoMeta({
   title: 'Over ons',
   description:
     'Voor Ieder Moment maakt van echte verhalen persoonlijke nummers voor Spotify en YouTube Music. Persoonlijk, betaalbaar en snel geregeld.',
+  ogTitle: 'Over Voor Ieder Moment',
+  ogDescription: 'Voor Ieder Moment maakt van echte verhalen persoonlijke nummers voor Spotify en YouTube Music. Persoonlijk, betaalbaar en snel geregeld.',
+  twitterTitle: 'Over Voor Ieder Moment',
+  twitterDescription: 'Voor Ieder Moment maakt van echte verhalen persoonlijke nummers voor Spotify en YouTube Music. Persoonlijk, betaalbaar en snel geregeld.',
 });
 
 useJsonLd(breadcrumbSchema([
@@ -47,6 +51,19 @@ const steps = [
             <p class="mt-2 text-sm leading-6" :style="{ color: 'var(--color-ink-soft)' }">{{ s.d }}</p>
           </article>
         </div>
+      </div>
+    </section>
+
+    <section class="site-container py-16 sm:py-20">
+      <div v-reveal>
+        <PlaylistShowcase
+          embed="https://open.spotify.com/embed/artist/5iXRrtThUvD2eKB4hbsGXo?utm_source=generator"
+          kicker="Nu op Spotify"
+          title="Hoor zelf hoe het klinkt"
+          text="Dit zijn nummers die we al hebben gemaakt en uitgebracht. Zo klinkt een persoonlijk nummer van Voor Ieder Moment."
+          :chips="['Echte releases', 'Spotify & YouTube Music']"
+          request-href="/aanvraag"
+        />
       </div>
     </section>
 

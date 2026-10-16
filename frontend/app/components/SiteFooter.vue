@@ -37,9 +37,9 @@ const year = new Date().getFullYear();
               <p class="mb-5 text-xs font-bold uppercase tracking-[0.2em]" style="color: var(--accent-gold);">
                 Momenten
               </p>
-              <nav class="grid gap-3 text-white/55">
+              <nav class="grid grid-cols-2 gap-x-6 gap-y-3 text-white/55 lg:grid-cols-1">
                 <NuxtLink
-                  v-for="c in requestCategories.slice(0, 6)"
+                  v-for="c in requestCategories"
                   :key="c.slug"
                   :to="categoryPath(c)"
                   class="transition-colors duration-200 hover:text-white"

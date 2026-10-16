@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { requestCategories } from '~/data/categories';
+import { categoryPath, requestCategories } from '~/data/categories';
 
 useSeoMeta({
   title: 'Alle momenten',
   description:
     'Laat een persoonlijk nummer maken voor een verjaardag, rijbewijs, diploma, nieuw huis, geboorte, team, bedrijf en meer.',
+  ogTitle: 'Alle momenten — persoonlijke nummers | Voor Ieder Moment',
+  ogDescription: 'Laat een persoonlijk nummer maken voor een verjaardag, rijbewijs, diploma, nieuw huis, geboorte, team, bedrijf en meer.',
+  twitterTitle: 'Alle momenten — persoonlijke nummers | Voor Ieder Moment',
+  twitterDescription: 'Laat een persoonlijk nummer maken voor een verjaardag, rijbewijs, diploma, nieuw huis, geboorte, team, bedrijf en meer.',
 });
 
-useJsonLd(breadcrumbSchema([
-  { name: 'Home', path: '/' },
-  { name: 'Momenten', path: '/momenten' },
-]));
+useJsonLd([
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Momenten', path: '/momenten' },
+  ]),
+  itemListSchema(requestCategories.map((c) => ({ name: c.title, path: categoryPath(c) }))),
+]);
 </script>
 
 <template>
@@ -24,7 +31,7 @@ useJsonLd(breadcrumbSchema([
       </p>
     </header>
 
-    <div v-reveal class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div v-reveal class="mt-12 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
       <MomentCard v-for="c in requestCategories" :key="c.slug" :category="c" />
     </div>
   </div>

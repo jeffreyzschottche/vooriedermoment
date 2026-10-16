@@ -91,7 +91,7 @@ const themeStyle = computed(() => themeVars(theme.value));
         >
           Je betaling is gelukt. We hebben je aanvraag voor
           <strong :style="{ color: 'var(--accent-strong)' }">{{ categoryTitle }}</strong>
-          ontvangen. Binnen 24–72 uur staan vier samples voor je klaar.
+          ontvangen. Je songtekst komt binnen enkele minuten in je mail, en binnen 24–72 uur staan vier samples voor je klaar.
         </p>
         <p
           v-hero-reveal
