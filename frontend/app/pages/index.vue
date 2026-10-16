@@ -3,6 +3,17 @@ import { categoryPath, requestCategories } from '~/data/categories';
 import { reviews } from '~/data/reviews';
 
 const offer = useOffer();
+const spotifyUrl = SPOTIFY_ARTIST_URL;
+
+// Lijn-iconen (24×24, stroke) voor de voordelen en doelgroepen.
+const icons: Record<string, string> = {
+  heart: 'M12 20s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 10c0 5.65-7 10-7 10Z',
+  pen: 'M4 20h4L19 9l-4-4L4 16v4Zm9-13 4 4',
+  wave: 'M3 12h2m4-5v10m4-13v16m4-11v6m4-3h-2',
+  home: 'M4 11 12 4l8 7v9h-5v-6H9v6H4v-9Z',
+  team: 'M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 20c0-3 3-5 6-5s6 2 6 5m0-5c3 0 8 1 8 5',
+  building: 'M4 21V5l8-2v18m0-12 8 2v10M8 9h0m0 4h0m0 4h0m8-2h0m0 4h0',
+};
 
 useSeoMeta({
   title: 'Een persoonlijk nummer voor elk moment',
@@ -21,7 +32,7 @@ useSeoMeta({
 const heroStats = [
   { display: '€ 9,99', label: 'alles inbegrepen' },
   { display: 'Direct', label: 'je songtekst in je mail' },
-  { display: 'Spotify', label: 'release door ons geregeld' },
+  { display: 'Op Spotify', label: 'door ons geregeld' },
 ];
 
 const pipeline = [
@@ -33,33 +44,26 @@ const pipeline = [
 
 const valueProps = [
   {
-    icon: '🎵',
+    icon: 'heart',
     title: 'Jouw verhaal staat centraal',
     body: 'Geen standaardtekst met alleen een andere naam. We verwerken echte herinneringen, uitspraken en details die alleen jullie herkennen.',
   },
   {
-    icon: '📝',
+    icon: 'pen',
     title: 'Vragen die bij het moment passen',
     body: 'Een bouwbedrijf vraagt om andere details dan een verjaardag of teamlied. Daarom sluit iedere aanvraag aan op de gelegenheid.',
   },
   {
-    icon: '🚀',
+    icon: 'wave',
     title: 'Van sample naar streaming',
     body: 'Kies het voorproefje dat het beste voelt. Wij maken die versie compleet en regelen de release op Spotify en YouTube Music.',
   },
 ];
 
-const studioPanels = [
-  { label: 'Naam', value: 'Sophie' },
-  { label: 'Moment', value: 'Geslaagd' },
-  { label: 'Stijl', value: 'Feest / pop' },
-  { label: 'Must-have', value: 'Vlag, docent, klasgrap' },
-];
-
 const proof = [
-  { title: 'Voor families', text: 'Een cadeau dat niet in de kast verdwijnt, maar op het feest zelf een moment maakt.' },
-  { title: 'Voor teams', text: 'Een meezinger voor kleedkamer, kantine, kampioenschap of seizoensafsluiting.' },
-  { title: 'Voor bedrijven', text: 'Een herkenbaar bedrijfsnummer met naam, slogan, projecten en teamcultuur.' },
+  { icon: 'home', title: 'Voor families', text: 'Een cadeau dat niet in de kast verdwijnt, maar op het feest zelf een moment maakt.' },
+  { icon: 'team', title: 'Voor teams', text: 'Een meezinger voor kleedkamer, kantine, kampioenschap of seizoensafsluiting.' },
+  { icon: 'building', title: 'Voor bedrijven', text: 'Een herkenbaar bedrijfsnummer met naam, slogan, projecten en teamcultuur.' },
 ];
 
 const faqPreview = [
@@ -91,139 +95,99 @@ useJsonLd([
 </script>
 
 <template>
-  <div class="overflow-hidden">
-    <!-- HERO - Full Screen -->
-    <section class="hero-section studio-shell-full">
-      <!-- Background image with parallax -->
-      <div class="absolute inset-0">
-        <img
-          v-parallax
-          data-parallax-speed="0.2"
-          src="/hero-studio.png"
-          alt=""
-          class="h-[120%] w-full object-cover opacity-40"
-        />
-      </div>
-      <!-- Gradient overlays -->
-      <div class="absolute inset-0 bg-gradient-to-r from-[rgba(13,21,18,0.97)] via-[rgba(13,21,18,0.85)] to-[rgba(13,21,18,0.4)]" />
-      <div class="absolute inset-0 bg-gradient-to-t from-[rgba(13,21,18,0.5)] via-transparent to-transparent" />
+  <div class="overflow-x-clip">
+    <!-- HERO -->
+    <section class="hero-fresh relative">
+      <div class="hero-blob hero-blob-a" aria-hidden="true" />
+      <div class="hero-blob hero-blob-b" aria-hidden="true" />
 
-      <div class="hero-inner relative flex min-h-[calc(100vh-4.5rem)] flex-col justify-center py-16 lg:py-24">
-        <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <!-- Left content -->
-          <div class="max-w-2xl">
-            <span
-              v-hero-reveal
-              class="section-kicker"
-              style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: var(--accent-gold);"
-            >
-              Van jouw verhaal naar muziek
+      <div class="hero-inner relative grid gap-14 pb-20 pt-12 sm:pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10 lg:pb-28 lg:pt-20">
+        <div class="max-w-2xl">
+          <a
+            v-hero-reveal
+            :href="spotifyUrl"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-full border bg-white py-1.5 pl-1.5 pr-4 text-sm font-semibold shadow-sm transition hover:border-[#1ed760]"
+            :style="{ borderColor: 'var(--color-line)', color: 'var(--color-ink)' }"
+          >
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#121412]">
+              <SpotifyLogo class="h-4 w-4" />
             </span>
+            Onze nummers staan op Spotify
+            <span aria-hidden="true" :style="{ color: 'var(--color-ink-faint)' }">→</span>
+          </a>
 
-            <h1
-              v-hero-reveal
-              data-hero-delay="0.1"
-              class="font-display text-5xl font-semibold leading-[0.95] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl"
-            >
-              Jouw moment.
-              <span class="gradient-text">Jouw nummer.</span>
-            </h1>
+          <h1
+            v-hero-reveal
+            data-hero-delay="0.1"
+            class="mt-7 font-display text-[3.4rem] font-bold leading-[0.92] tracking-[-0.045em] sm:text-7xl lg:text-[5.6rem]"
+            :style="{ color: 'var(--color-ink)' }"
+          >
+            Jouw moment.<br />
+            <span class="hero-highlight">Jouw nummer.</span>
+          </h1>
 
-            <p
-              v-hero-reveal
-              data-hero-delay="0.2"
-              class="mt-8 max-w-xl text-lg leading-relaxed text-white/70 sm:text-xl"
-            >
-              Vertel wat dit moment bijzonder maakt. Je songtekst staat direct na betaling in je mail,
-              daarna kies je uit verschillende voorproefjes en zetten wij jouw favoriet op Spotify.
-            </p>
+          <p
+            v-hero-reveal
+            data-hero-delay="0.2"
+            class="mt-7 max-w-xl text-lg leading-relaxed sm:text-xl"
+            :style="{ color: 'var(--color-ink-soft)' }"
+          >
+            Vertel wat dit moment bijzonder maakt. Je songtekst staat direct na betaling in je mail,
+            daarna kies je uit verschillende voorproefjes en zetten wij jouw favoriet op Spotify.
+          </p>
 
-            <div
-              v-hero-reveal
-              data-hero-delay="0.3"
-              class="mt-10 flex flex-col gap-4 sm:flex-row"
-            >
-              <NuxtLink to="/aanvraag" class="stitch-button px-10 py-5 text-base">
-                Maak je nummer
-              </NuxtLink>
-              <NuxtLink
-                to="/momenten"
-                class="stitch-outline-button border-white/20 bg-white/5 px-10 py-5 text-base text-white hover:bg-white hover:text-[var(--color-ink)]"
-              >
-                Bekijk momenten
-              </NuxtLink>
-            </div>
-
-            <!-- Stats -->
-            <div
-              v-hero-reveal
-              data-hero-delay="0.4"
-              class="mt-14 grid gap-4 sm:grid-cols-3"
-            >
-              <div
-                v-for="(stat, i) in heroStats"
-                :key="stat.label"
-                class="glass-panel p-5"
-              >
-                <p class="font-display text-3xl font-semibold text-white">
-                  {{ stat.display }}
-                </p>
-                <p class="mt-1.5 text-sm font-medium text-white/50">{{ stat.label }}</p>
-              </div>
-            </div>
+          <div v-hero-reveal data-hero-delay="0.3" class="mt-9 flex flex-col gap-3 sm:flex-row">
+            <NuxtLink to="/aanvraag" class="stitch-button px-8 py-4 text-base">
+              Maak je nummer <span aria-hidden="true">→</span>
+            </NuxtLink>
+            <NuxtLink to="/momenten" class="stitch-outline-button px-8 py-4 text-base">
+              Bekijk momenten
+            </NuxtLink>
           </div>
 
-          <!-- Right: Live briefing preview -->
-          <aside v-hero-reveal data-hero-delay="0.5" class="hidden lg:block">
-            <div class="space-y-5">
-              <div class="glass-panel p-6">
-                <div class="flex items-start justify-between gap-4">
-                  <div>
-                    <p class="text-xs font-bold uppercase tracking-[0.2em]" style="color: var(--accent-gold);">Live briefing</p>
-                    <h2 class="mt-3 font-display text-2xl font-semibold leading-tight text-white lg:text-3xl">
-                      Geslaagd-nummer voor Sophie
-                    </h2>
-                  </div>
-                  <span class="rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold text-white/60">Demo</span>
-                </div>
-                <div v-reveal-stagger data-stagger="0.06" class="mt-6 grid gap-3 sm:grid-cols-2">
-                  <div
-                    v-for="panel in studioPanels"
-                    :key="panel.label"
-                    class="rounded-xl border border-white/10 bg-white/5 p-4"
-                  >
-                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">{{ panel.label }}</p>
-                    <p class="mt-2 text-sm font-semibold text-white">{{ panel.value }}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="glass-panel p-6">
-                <div class="flex items-center justify-between gap-4 text-sm text-white/60">
-                  <span>Samples</span>
-                  <span>Keuze</span>
-                  <span>Spotify</span>
-                </div>
-                <div class="progress-bar mt-4">
-                  <div class="progress-bar-fill" style="width: 66%;" />
-                </div>
-                <div class="mt-5 space-y-2">
-                  <div class="h-2.5 w-11/12 rounded-full bg-white/10" />
-                  <div class="h-2.5 w-8/12 rounded-full bg-white/10" />
-                  <div class="h-2.5 w-10/12 rounded-full bg-white/10" />
-                </div>
-              </div>
-            </div>
-          </aside>
+          <ul v-hero-reveal data-hero-delay="0.4" class="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold" :style="{ color: 'var(--color-ink-soft)' }">
+            <li v-for="stat in heroStats" :key="stat.label" class="inline-flex items-center gap-2">
+              <span class="flex h-5 w-5 items-center justify-center rounded-full text-[11px]" :style="{ background: 'var(--accent-soft)', color: 'var(--accent-strong)' }" aria-hidden="true">✓</span>
+              <span><strong :style="{ color: 'var(--color-ink)' }">{{ stat.display }}</strong> {{ stat.label }}</span>
+            </li>
+          </ul>
         </div>
-      </div>
 
-      <!-- Scroll indicator -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
-        <div class="flex flex-col items-center gap-2 text-white/40">
-          <span class="text-xs font-medium uppercase tracking-widest">Scroll</span>
-          <div class="h-10 w-5 rounded-full border border-white/20 p-1">
-            <div class="h-2 w-full animate-bounce rounded-full bg-white/40" />
+        <!-- Visual: studio-foto met zwevende speler en songtekst -->
+        <div v-hero-reveal data-hero-delay="0.35" class="relative mx-auto w-full max-w-[540px] lg:mr-0">
+          <div class="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-[0_40px_80px_-30px_rgba(18,20,18,0.45)] sm:aspect-[5/5.4]">
+            <img src="/hero-studio.png" alt="" class="h-full w-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[rgba(13,21,18,0.75)] via-[rgba(13,21,18,0.1)] to-transparent" />
+          </div>
+
+          <!-- Songtekst-kaart -->
+          <div class="float-card absolute left-3 top-6 w-56 rounded-3xl border bg-white/95 p-5 backdrop-blur sm:-left-10 sm:top-8 sm:w-64" :style="{ borderColor: 'var(--color-line)' }">
+            <p class="text-[11px] font-bold uppercase tracking-[0.16em]" :style="{ color: 'var(--accent-strong)' }">Refrein · voorbeeld</p>
+            <p class="mt-3 font-display text-lg font-semibold leading-snug" :style="{ color: 'var(--color-ink)' }">
+              Sophie, de vlag gaat uit vandaag,<br />
+              jouw diploma is het antwoord op elke vraag
+            </p>
+          </div>
+
+          <!-- Nu-speelt-kaart -->
+          <div class="float-card float-card-late absolute -bottom-6 left-4 right-4 rounded-3xl bg-[#121412]/95 p-4 text-white backdrop-blur sm:-right-8 sm:left-auto sm:w-80">
+            <div class="flex items-center gap-4">
+              <div class="h-14 w-14 shrink-0 rounded-2xl" style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent-gold) 100%);" />
+              <div class="min-w-0 flex-1">
+                <p class="truncate font-semibold">Geslaagd! — voor Sophie</p>
+                <p class="mt-0.5 text-sm text-white/55">Voor Ieder Moment</p>
+              </div>
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1ed760] text-sm text-[#121412]" aria-hidden="true">▶</span>
+            </div>
+            <div class="mt-4 flex items-center gap-3 text-[11px] text-white/50">
+              <span>1:12</span>
+              <div class="h-1 flex-1 overflow-hidden rounded-full bg-white/15">
+                <div class="h-full w-[45%] rounded-full bg-white" />
+              </div>
+              <span>2:48</span>
+            </div>
           </div>
         </div>
       </div>
@@ -235,7 +199,7 @@ useJsonLd([
         <div v-reveal-stagger data-stagger="0.1" class="grid gap-6 lg:grid-cols-3">
           <article v-for="item in valueProps" :key="item.title" class="bento-card">
             <div class="bento-card-icon mb-6">
-              {{ item.icon }}
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="icons[item.icon]" /></svg>
             </div>
             <h2 class="font-display text-2xl font-semibold sm:text-3xl" :style="{ color: 'var(--color-ink)' }">
               {{ item.title }}
@@ -294,12 +258,14 @@ useJsonLd([
     <ReviewsSection />
 
     <!-- PIPELINE -->
-    <section class="studio-shell-full py-20 sm:py-28">
+    <section class="py-6 sm:py-10">
+      <div class="edge-container">
+      <div class="studio-shell py-20 sm:py-24">
       <div class="site-container">
         <div v-reveal class="mb-14 max-w-3xl">
           <span
             class="section-kicker"
-            style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color: var(--accent-gold);"
+            style="color: var(--accent-gold);"
           >
             Zo werkt het
           </span>
@@ -313,8 +279,8 @@ useJsonLd([
         </div>
 
         <div v-reveal-stagger data-stagger="0.12" class="grid gap-5 lg:grid-cols-4">
-          <article v-for="step in pipeline" :key="step.n" class="glass-panel p-7">
-            <p class="font-display text-5xl font-semibold" style="color: var(--accent-gold);">
+          <article v-for="step in pipeline" :key="step.n" class="glass-panel p-7 transition hover:bg-white/10">
+            <p class="inline-flex h-10 w-10 items-center justify-center rounded-full font-display text-sm font-bold" style="background: var(--accent); color: var(--accent-ink);">
               {{ step.n }}
             </p>
             <h3 class="mt-6 font-display text-xl font-semibold text-white lg:text-2xl">
@@ -325,6 +291,8 @@ useJsonLd([
             </p>
           </article>
         </div>
+      </div>
+      </div>
       </div>
     </section>
 
@@ -357,7 +325,9 @@ useJsonLd([
               :key="item.title"
               class="bento-card flex items-start gap-5"
             >
-              <div class="bento-card-icon shrink-0 text-3xl">♪</div>
+              <div class="bento-card-icon shrink-0">
+                <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="icons[item.icon]" /></svg>
+              </div>
               <div>
                 <h3 class="font-display text-xl font-semibold sm:text-2xl" :style="{ color: 'var(--color-ink)' }">
                   {{ item.title }}
@@ -379,7 +349,7 @@ useJsonLd([
           <div>
             <span
               class="section-kicker"
-              style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color: var(--accent-gold);"
+              style="color: var(--accent-gold);"
             >
               Eén duidelijke prijs
             </span>
@@ -432,3 +402,46 @@ useJsonLd([
     </section>
   </div>
 </template>
+
+<style scoped>
+.hero-fresh {
+  overflow: hidden;
+}
+.hero-blob {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.hero-blob-a {
+  width: 520px;
+  height: 520px;
+  right: -120px;
+  top: -160px;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.hero-blob-b {
+  width: 420px;
+  height: 420px;
+  left: -160px;
+  bottom: -120px;
+  background: color-mix(in srgb, var(--accent-gold) 22%, transparent);
+}
+.hero-highlight {
+  color: var(--accent);
+}
+.float-card {
+  box-shadow: 0 24px 50px -20px rgba(18, 20, 18, 0.35);
+  animation: float 7s ease-in-out infinite;
+}
+.float-card-late {
+  animation-delay: -3.5s;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .float-card { animation: none; }
+}
+</style>

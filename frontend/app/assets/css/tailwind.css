@@ -5,17 +5,17 @@
 @layer base {
   :root {
     /* Premium studio huisstijl */
-    --color-bg: #f8faf6;
-    --color-bg-soft: #edf3ed;
+    --color-bg: #fbfaf7;
+    --color-bg-soft: #f3f1ec;
     --color-bg-contrast: #0d1512;
     --color-surface: #ffffff;
-    --color-surface-soft: #f3f7f3;
-    --color-line: #dce6dc;
-    --color-line-strong: #c5d4c5;
+    --color-surface-soft: #f5f3ee;
+    --color-line: #ebe7df;
+    --color-line-strong: #d9d3c7;
 
-    --color-ink: #0d1512;
-    --color-ink-soft: #4a5a52;
-    --color-ink-faint: #7a8f82;
+    --color-ink: #121412;
+    --color-ink-soft: #545a55;
+    --color-ink-faint: #8a8f89;
 
     /* Merk-accent (default). Wordt per categorie overschreven via .moment-theme */
     --accent: #ff6a4a;
@@ -50,10 +50,7 @@
 
   body {
     min-height: 100vh;
-    background:
-      radial-gradient(ellipse 80% 50% at 20% 0%, color-mix(in srgb, var(--accent-soft) 60%, transparent) 0%, transparent 50%),
-      radial-gradient(ellipse 60% 40% at 80% 10%, color-mix(in srgb, var(--accent-alt-soft) 50%, transparent) 0%, transparent 50%),
-      var(--color-bg);
+    background: var(--color-bg);
     color: var(--color-ink);
   }
 
@@ -78,8 +75,9 @@
 
 @layer components {
   .font-display {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: 'Bricolage Grotesque', 'Manrope', system-ui, sans-serif;
     font-optical-sizing: auto;
+    letter-spacing: -0.03em;
   }
 
   /* Container systeem */
@@ -126,10 +124,7 @@
   .studio-shell {
     @apply relative overflow-hidden text-white;
     background: linear-gradient(135deg, #0d1512 0%, #142822 50%, #1a3530 100%);
-    border-radius: 20px;
-    box-shadow:
-      0 4px 6px -1px rgba(13, 21, 18, 0.1),
-      0 32px 64px -12px rgba(13, 21, 18, 0.25);
+    border-radius: 28px;
   }
 
   .studio-shell-full {
@@ -140,10 +135,9 @@
 
   .glass-panel {
     @apply border backdrop-blur-xl;
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.12);
-    border-radius: 14px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    border-radius: 22px;
   }
 
   .glass-panel-light {
@@ -155,62 +149,62 @@
   }
 
   .section-band {
-    @apply border-y;
-    border-color: var(--color-line);
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%),
-      var(--color-surface-soft);
+    background: var(--color-surface-soft);
   }
 
   .moment-theme {
     background:
-      radial-gradient(ellipse 100% 60% at 50% 0%, color-mix(in srgb, var(--accent-soft) 80%, transparent) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 45% at 85% 0%, color-mix(in srgb, var(--accent-soft) 90%, transparent) 0%, transparent 60%),
       var(--color-bg);
   }
 
   .panel {
     @apply border bg-white;
     border-color: var(--color-line);
-    border-radius: 14px;
-    box-shadow: 0 4px 24px rgba(13, 21, 18, 0.06);
+    border-radius: 20px;
+    box-shadow: 0 1px 2px rgba(18, 20, 18, 0.04), 0 12px 32px -16px rgba(18, 20, 18, 0.12);
   }
 
   .rich-card {
     @apply border bg-white transition-all;
     border-color: var(--color-line);
-    border-radius: 14px;
-    box-shadow: 0 4px 24px rgba(13, 21, 18, 0.06);
+    border-radius: 20px;
+    box-shadow: 0 1px 2px rgba(18, 20, 18, 0.04);
     transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.3s ease;
   }
   .rich-card:hover {
-    transform: translateY(-4px);
     border-color: color-mix(in srgb, var(--accent) 30%, var(--color-line));
-    box-shadow: 0 12px 40px rgba(13, 21, 18, 0.12);
+    box-shadow: 0 1px 2px rgba(18, 20, 18, 0.04), 0 16px 40px -20px rgba(18, 20, 18, 0.18);
   }
 
   .soft-card {
     @apply border;
     background: var(--color-surface-soft);
     border-color: var(--color-line);
-    border-radius: 14px;
+    border-radius: 20px;
   }
 
   .accent-gradient {
     background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
   }
 
+  /* Klein label boven een kop: stip in de accentkleur, geen kader. */
   .section-kicker {
-    @apply mb-5 inline-flex items-center rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em];
+    @apply mb-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em];
     color: var(--accent-strong);
-    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
-    background: var(--accent-soft);
+  }
+  .section-kicker::before {
+    content: '';
+    @apply h-1.5 w-1.5 shrink-0 rounded-full;
+    background: currentColor;
   }
 
   .section-heading {
-    @apply font-display font-semibold;
+    @apply font-display font-bold;
     color: var(--color-ink);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
   }
 
   .section-subtext {
@@ -228,18 +222,15 @@
 
   /* Knoppen */
   .stitch-button {
-    @apply accent-gradient inline-flex items-center justify-center rounded-xl px-7 py-3.5 text-sm font-bold transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-all duration-300;
+    background: var(--accent);
     color: var(--accent-ink);
-    box-shadow:
-      0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent),
-      0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--accent) 70%, transparent);
   }
   .stitch-button:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow:
-      0 8px 24px color-mix(in srgb, var(--accent) 45%, transparent),
-      0 4px 8px rgba(0, 0, 0, 0.1);
-    filter: brightness(1.05);
+    background: var(--accent-strong);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 26px -10px color-mix(in srgb, var(--accent) 80%, transparent);
   }
   .stitch-button:active {
     transform: translateY(0) scale(0.98);
@@ -250,15 +241,13 @@
   }
 
   .stitch-outline-button {
-    @apply inline-flex items-center justify-center rounded-xl border-2 bg-white/90 px-7 py-3.5 text-sm font-bold backdrop-blur transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border bg-white px-7 py-3.5 text-sm font-bold transition-all duration-300;
     color: var(--color-ink);
     border-color: var(--color-line-strong);
   }
   .stitch-outline-button:hover {
-    border-color: var(--accent);
-    color: var(--accent-strong);
-    background: var(--accent-soft);
-    transform: translateY(-2px);
+    border-color: var(--color-ink);
+    transform: translateY(-1px);
   }
   .stitch-outline-button:active {
     transform: translateY(0);
@@ -269,7 +258,7 @@
   }
 
   .ghost-button {
-    @apply inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-200;
+    @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200;
     color: var(--color-ink-soft);
   }
   .ghost-button:hover {
@@ -294,18 +283,18 @@
   .bento-card {
     @apply relative overflow-hidden border bg-white p-7 transition-all duration-500;
     border-color: var(--color-line);
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(13, 21, 18, 0.06);
+    border-radius: 24px;
+    box-shadow: 0 1px 2px rgba(18, 20, 18, 0.04);
     transition-timing-function: var(--ease-out-expo);
   }
   .bento-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 48px rgba(13, 21, 18, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 1px 2px rgba(18, 20, 18, 0.04), 0 20px 44px -22px rgba(18, 20, 18, 0.22);
     border-color: color-mix(in srgb, var(--accent) 25%, var(--color-line));
   }
 
   .bento-card-icon {
-    @apply flex h-14 w-14 items-center justify-center rounded-2xl text-2xl font-semibold;
+    @apply flex h-12 w-12 items-center justify-center rounded-2xl text-xl font-semibold;
     background: var(--accent-soft);
     color: var(--accent-strong);
   }
@@ -316,7 +305,7 @@
   }
 
   .field-input {
-    @apply w-full rounded-xl border bg-white px-5 py-4 text-sm outline-none transition-all duration-200;
+    @apply w-full rounded-2xl border bg-white px-5 py-4 text-sm outline-none transition-all duration-200;
     border-color: var(--color-line-strong);
     color: var(--color-ink);
   }
@@ -333,7 +322,7 @@
 
   /* Keuze-knop (select-opties, intake) — herbruikbaar i.p.v. inline styles */
   .option-pill {
-    @apply rounded-xl border px-4 py-3 text-left text-sm font-semibold transition-all duration-200;
+    @apply rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition-all duration-200;
     border-color: var(--color-line-strong);
     background: var(--color-surface);
     color: var(--color-ink);

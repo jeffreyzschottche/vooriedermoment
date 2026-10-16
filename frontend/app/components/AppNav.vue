@@ -23,13 +23,13 @@ watch(
 
 <template>
   <header
-    class="sticky top-0 z-50 border-b transition-all duration-300"
+    class="sticky top-0 z-50 border-b backdrop-blur-xl transition-all duration-300"
     :style="{
-      borderColor: 'rgba(13,21,18,0.06)',
-      background: '#ffffff',
+      borderColor: 'rgba(18,20,18,0.06)',
+      background: 'rgba(251,250,247,0.82)',
     }"
   >
-    <div class="hero-inner flex min-h-[5.5rem] items-center justify-between gap-6 py-2">
+    <div class="hero-inner flex min-h-[4.5rem] items-center justify-between gap-6 py-1.5">
       <!-- Logo -->
       <NuxtLink
         to="/"
@@ -41,12 +41,12 @@ watch(
           alt="Voor Ieder Moment"
           width="320"
           height="190"
-          class="h-16 w-auto sm:h-20"
+          class="h-12 w-auto sm:h-14"
         />
       </NuxtLink>
 
       <!-- Desktop nav -->
-      <nav class="hidden items-center gap-1 lg:flex">
+      <nav class="hidden items-center gap-1 rounded-full border bg-white/70 p-1 lg:flex" :style="{ borderColor: 'var(--color-line)' }">
         <div
           v-for="link in links"
           :key="link.to"
@@ -56,9 +56,9 @@ watch(
         >
           <NuxtLink
             :to="link.to"
-            class="rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200"
+            class="block rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 hover:text-[var(--color-ink)]"
             :style="route.path === link.to || (link.to !== '/' && route.path.startsWith(link.to))
-              ? { color: 'var(--accent-strong)', background: 'var(--accent-soft)' }
+              ? { color: '#fff', background: 'var(--color-ink)' }
               : { color: 'var(--color-ink-soft)' }"
           >
             {{ link.label }}
@@ -96,14 +96,14 @@ watch(
 
       <!-- CTA button -->
       <div class="hidden lg:block">
-        <NuxtLink to="/aanvraag" class="stitch-button">
-          Start aanvraag
+        <NuxtLink to="/aanvraag" class="stitch-button px-6 py-3">
+          Start aanvraag <span aria-hidden="true">→</span>
         </NuxtLink>
       </div>
 
       <!-- Mobile menu button -->
       <button
-        class="inline-flex h-12 w-12 items-center justify-center rounded-xl border transition-all duration-200 lg:hidden"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-200 lg:hidden"
         :style="{
           borderColor: isOpen ? 'var(--accent)' : 'var(--color-line-strong)',
           color: isOpen ? 'var(--accent-strong)' : 'var(--color-ink)',
@@ -136,7 +136,7 @@ watch(
             v-for="link in links"
             :key="link.to"
             :to="link.to"
-            class="rounded-xl border px-5 py-4 font-display text-base font-medium transition-all duration-200"
+            class="rounded-2xl border px-5 py-4 font-display text-lg font-semibold transition-all duration-200"
             :style="{
               borderColor: route.path === link.to ? 'var(--accent)' : 'var(--color-line)',
               color: route.path === link.to ? 'var(--accent-strong)' : 'var(--color-ink)',
