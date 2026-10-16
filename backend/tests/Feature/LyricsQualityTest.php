@@ -289,6 +289,47 @@ class LyricsQualityTest extends TestCase
         $this->assertStringContainsString('Saar (zus)', $repairPrompt);
     }
 
+    public function test_broken_rhymes_reach_the_revision_and_trigger_the_repair_call(): void
+    {
+        config([
+            'ai.default' => 'deepseek',
+            'ai.providers.deepseek.key' => 'test-key',
+            'ai.lyrics_min_words' => 100,
+            'ai.lyrics_max_words' => 190,
+        ]);
+
+        $broken = str_replace(
+            ['Jouw vwo diploma beantwoordt elke vraag', 'Nu klinkt jouw overwinning het hele huis uit'],
+            ['Jouw vwo diploma geeft een helder antwoord', 'Nu klinkt jouw overwinning door het hele huis'],
+            $this->strongLyrics(),
+        );
+
+        Http::fakeSequence()
+            ->push($this->deepSeekResponse($broken))
+            ->push($this->deepSeekResponse($broken))
+            ->push($this->deepSeekResponse($this->strongLyrics()));
+
+        $result = app(LyricsGenerator::class)->generate('geslaagd', [
+            'recipientName' => 'Lara',
+            'studyLevel' => 'vwo',
+            'nextStep' => 'een tussenjaar',
+            'school' => 'Utrecht',
+            'examStory' => 'de laatste wiskundetoets',
+            'anecdotes' => 'Voor wiskunde sliep Lara nauwelijks en haar samenvattingen lagen door de kamer.',
+            'mustMention' => 'De trein naar het tussenjaar en haar fiets.',
+        ]);
+
+        $this->assertStringContainsString('beantwoordt elke vraag', $result['lyrics']);
+        Http::assertSentCount(3);
+
+        $requests = Http::recorded();
+        $this->assertStringContainsString("Chorus: 'antwoord' rijmt niet op 'vandaag'", $requests[1][0]['messages'][0]['content']);
+        $this->assertStringContainsString('Rijmschema AABB', $requests[0][0]['messages'][0]['content']);
+        $repairPrompt = $requests[2][0]['messages'][0]['content'];
+        $this->assertStringContainsString('rijm- en ritmeproblemen', $repairPrompt);
+        $this->assertStringContainsString("'huis' rijmt niet op 'geluid'", $repairPrompt);
+    }
+
     public function test_van_dale_rhymes_for_names_are_given_to_deepseek_without_extra_ai_calls(): void
     {
         config([
@@ -377,22 +418,22 @@ class LyricsQualityTest extends TestCase
             'Vandaag kwam eindelijk het bericht waarop ze wacht',
             '[Chorus]',
             'Lara zet de vlag maar buiten vandaag',
-            'Jouw vwo diploma geeft een helder antwoord',
-            'Van stille twijfel naar een luid applaus',
-            'Nu klinkt jouw overwinningsakkoord door het hele huis',
+            'Jouw vwo diploma beantwoordt elke vraag',
+            'Van stille twijfel naar een zaal vol geluid',
+            'Nu klinkt jouw overwinning het hele huis uit',
             '[Verse 2]',
             'Voor wiskunde sliep je nauwelijks één uur',
             'Toch zat je vroeg weer klaar bij de schoolmuur',
-            'Je samenvattingen lagen verspreid over de vloer',
-            'Maar koppig en precies ging jij steeds door',
+            'Je samenvattingen lagen door de kamer verspreid',
+            'Maar koppig en precies nam jij voor alles de tijd',
             '[Bridge]',
             'Straks wacht de trein naar jouw tussenjaar',
             'Een rugzak en je fiets staan al klaar',
             'Neem mee hoe vaak je eigen twijfel kantelde',
             'Toen jij na elke tegenslag opnieuw handelde',
             '[Final Chorus]',
-            'Hang de tas maar hoog aan de vlag',
-            'Lara jouw diploma draagt jouw handschrift vandaag',
+            'Hang de tas maar hoog aan de vlag vandaag',
+            'Lara jouw diploma is het antwoord op elke vraag',
             'Van zenuwachtige nachten naar vrijheid vooraan',
             'Nu mag jouw volgende hoofdstuk echt opengaan',
         ]);

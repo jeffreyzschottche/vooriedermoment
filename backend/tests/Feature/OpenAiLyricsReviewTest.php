@@ -97,6 +97,20 @@ class OpenAiLyricsReviewTest extends TestCase
         $this->assertSame($draft['sections'], $sections);
     }
 
+    public function test_review_that_breaks_rhymes_keeps_the_deepseek_version(): void
+    {
+        $generator = $this->generator();
+        $draft = $generator->generateDraft('anders', ['name' => 'Henk']);
+        $sections = array_map(
+            fn ($section) => ['section' => $section, 'lines' => ['Henk we zingen voor jou', 'Omdat ik op je bouw', 'Samen staan we klaar', 'Vandaag zijn wij bij elkaar']],
+            ['verse1', 'chorus', 'verse2', 'bridge', 'chorus_final'],
+        );
+        Http::fake(['*/responses' => Http::response($this->response(str_replace('Omdat ik op je bouw', 'Omdat ik naar je kijk', $this->lyrics('Henk'))))]);
+
+        $this->assertSame($sections, $generator->review($sections, 'anders', $draft['context'], ['name' => 'Henk']));
+        Http::assertSent(fn ($request) => str_contains($request['input'], 'RIJMSCHEMA: AABB'));
+    }
+
     public function test_review_receives_missing_facts_and_may_add_them(): void
     {
         $generator = $this->generator();

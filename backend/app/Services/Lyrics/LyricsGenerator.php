@@ -18,6 +18,11 @@ class LyricsGenerator
 
     protected RhymeChecker $rhyme;
 
+    protected RhymeAnalyzer $rhymeAnalyzer;
+
+    /** Zoveel niet-rijmende paren na de herschrijfstap rechtvaardigen de (bestaande) reparatiecall. */
+    private const RHYME_REPAIR_THRESHOLD = 2;
+
     /** Van Dale-rijmhulp in de prompt: max. woorden, pagina's per woord en rijmen per woord. */
     private const RHYME_HINT_WORDS = 8;
 
@@ -254,6 +259,7 @@ class LyricsGenerator
         $this->dataPath = database_path('data');
         $this->ai = $ai ?? new AiManager;
         $this->rhyme = $rhyme ?? new RhymeChecker;
+        $this->rhymeAnalyzer = new RhymeAnalyzer($this->rhyme);
         $this->loadSongform();
     }
 
@@ -649,13 +655,24 @@ class LyricsGenerator
             return [];
         }
 
+        // De reparatiecall draait alleen als er feiten ontbreken of het rijm
+        // nog duidelijk hapert; anders blijft het bij twee DeepSeek-calls.
         $missing = $this->missingIntakeRequirements($this->formatLyrics($best), $context, $intake);
-        if ($missing === []) {
+        $rhymeFailures = count($this->rhymeAnalyzer->rhymeFailures($best));
+        if ($missing === [] && $rhymeFailures < self::RHYME_REPAIR_THRESHOLD) {
             return $best;
         }
 
         $repaired = $this->parseGeneralLyrics($provider->complete(
-            $this->buildCoverageRepairPrompt($category, $context, $intake, $best, $missing, $rhymes),
+            $this->buildCoverageRepairPrompt(
+                $category,
+                $context,
+                $intake,
+                $best,
+                $missing,
+                $rhymes,
+                $rhymeFailures > 0 ? $this->rhymeAnalyzer->issues($this->canonicalSongSections($best)) : [],
+            ),
             ['use_fallback_model' => true],
         ));
 
@@ -663,8 +680,9 @@ class LyricsGenerator
     }
 
     /**
-     * Kandidaat met de minste ontbrekende formulierfeiten; bij gelijke stand
-     * wint de eerste (de nieuwste, meest bewerkte versie).
+     * Kandidaat met de minste ontbrekende formulierfeiten, daarna de minste
+     * niet-rijmende paren; bij gelijke stand wint de eerste (de nieuwste,
+     * meest bewerkte versie).
      *
      * @param  array<int, array<int, array{section: string, lines: array<int, string>}>>  $candidates
      * @return array<int, array{section: string, lines: array<int, string>}>
@@ -672,17 +690,20 @@ class LyricsGenerator
     protected function bestCandidate(array $candidates, array $context, array $intake): array
     {
         $best = [];
-        $fewestMissing = PHP_INT_MAX;
+        $bestScore = [PHP_INT_MAX, PHP_INT_MAX];
 
         foreach ($candidates as $candidate) {
             if ($candidate === []) {
                 continue;
             }
 
-            $missing = count($this->missingIntakeRequirements($this->formatLyrics($candidate), $context, $intake));
-            if ($missing < $fewestMissing) {
+            $score = [
+                count($this->missingIntakeRequirements($this->formatLyrics($candidate), $context, $intake)),
+                count($this->rhymeAnalyzer->rhymeFailures($candidate)),
+            ];
+            if ($score < $bestScore) {
                 $best = $candidate;
-                $fewestMissing = $missing;
+                $bestScore = $score;
             }
         }
 
@@ -846,7 +867,7 @@ class LyricsGenerator
                 '- IEDER genummerd inhoudsfeit [F…] is herkenbaar verwerkt, met de unieke namen, plekken, getallen en uitspraken;',
                 '- begrijpelijk, natuurlijk Nederlands zonder wartaal, kromme zinnen of afgebroken gedachten;',
                 '- één logisch verhaal met een eigen functie per sectie;',
-                '- eindrijm dat op het gehoor klopt (klank vanaf de laatste beklemtoonde klinker), zonder zelfrijm of geforceerd rijm;',
+                '- AABB-eindrijm dat op het gehoor klopt (klank vanaf de laatste beklemtoonde klinker), zonder zelfrijm of geforceerd rijm; zeg elk rijmpaar in gedachten hardop;',
                 '- zingbare cadans en een specifieke, herkenbare hook in het refrein;',
                 '- geen verzonnen feiten, lege complimenten of clichés die voor iedereen passen;',
                 '- naleving van Vermijden.',
@@ -869,7 +890,7 @@ class LyricsGenerator
             '- Lever exact vijf unieke secties: Verse 1, Chorus, Verse 2, Bridge en Final Chorus.',
             '- Schrijf per sectie exact vier volwaardige regels.',
             "- Schrijf in totaal tussen {$minWords} en {$maxWords} woorden.",
-            '- Streef per regel naar 5–11 woorden en schrijf natuurlijk gesproken Nederlands.',
+            '- Streef per regel naar 5–11 woorden en 6–12 lettergrepen; rijmende regels zijn ongeveer even lang. Schrijf natuurlijk gesproken Nederlands.',
             '- Geef Verse 1, Verse 2 en Bridge elk een eigen functie en nieuw concreet materiaal.',
             '- Bouw één logisch verhaal: introductie, verdieping, emotionele wending en sterk slot.',
             '- Maak het refrein herkenbaar met een specifieke hook; geen algemene tekst die voor iedereen kan zijn.',
@@ -877,7 +898,8 @@ class LyricsGenerator
             '- Verwerk IEDER genummerd inhoudsfeit uit de briefing minstens één keer duidelijk herkenbaar in de lyrics.',
             '- Parafraseren mag, maar behoud unieke namen, plekken, getallen, uitspraken en andere herkenningswoorden.',
             '- Verdeel de feiten natuurlijk over de secties; maak er geen opsomming van en verzin niets erbij.',
-            '- Laat regels paarsgewijs rijmen op klank (bijvoorbeeld regel 2 op 4); gebruik de rijmwoorden waar ze natuurlijk passen.',
+            '- Rijmschema AABB in iedere sectie: regel 1 rijmt op regel 2 en regel 3 op regel 4, op klank vanaf de laatste beklemtoonde klinker (zoals dag/lach, samen/namen). Gebruik de rijmwoorden waar ze natuurlijk passen.',
+            '- Het refrein rijmt extra strak en zuiver; geen halfrijm.',
             '- Gebruik de stijlkeuzes om woordkeus en sfeer te sturen, maar noem ze niet letterlijk tenzij dat natuurlijk past.',
             '- Respecteer alles bij Vermijden.',
             '- Vermijd geforceerd rijm, zelfrijm, stoplappen, managementtaal en nietszeggende zinnen.',
@@ -1013,6 +1035,7 @@ class LyricsGenerator
         array $sections,
         array $missing,
         array $rhymes = [],
+        array $rhymeIssues = [],
     ): string {
         $missingLines = array_map(
             static fn (array $fact) => "- {$fact['label']}: {$fact['value']}",
@@ -1031,10 +1054,17 @@ class LyricsGenerator
                 '',
             ],
             $this->rhymeBlock($rhymes),
+            $missingLines !== []
+                ? ['Deze ingevulde gegevens ontbreken nog en MOETEN allemaal herkenbaar worden toegevoegd:', implode("\n", $missingLines), '']
+                : [],
+            $rhymeIssues !== []
+                ? array_merge(
+                    ['Deze rijm- en ritmeproblemen moeten opgelost worden (vervang bij voorkeur het tweede woord van het paar):'],
+                    array_map(static fn (string $issue) => "- {$issue}", $rhymeIssues),
+                    [''],
+                )
+                : [],
             [
-                'Deze ingevulde gegevens ontbreken nog en MOETEN allemaal herkenbaar worden toegevoegd:',
-                implode("\n", $missingLines),
-                '',
                 '<huidige_lyrics>',
                 $sections === [] ? '(geen geldige huidige lyrics)' : $this->formatLyrics($sections),
                 '</huidige_lyrics>',
@@ -1042,6 +1072,7 @@ class LyricsGenerator
                 'Harde eisen:',
                 '- Spreek de hoofdpersoon consequent aan in de tweede persoon: je, jij en jouw. Schrijf niet vanuit diens ik-perspectief.',
                 '- Behoud alle formulierfeiten die al goed verwerkt zijn, en behoud kloppend rijm.',
+                '- Rijmschema AABB per sectie: regel 1 op 2, regel 3 op 4, op klank. Houd regels op 6–12 lettergrepen.',
                 '- Gebruik bij namen, afzenders, rollen, plekken, getallen en must-haves de herkenbare woorden letterlijk.',
                 '- Voeg ieder ontbrekend gegeven natuurlijk toe; maak geen opsomming en verzin geen nieuwe feiten.',
                 '- Respecteer Vermijden en de stijlaanwijzingen.',
@@ -1423,6 +1454,10 @@ class LyricsGenerator
             $issues[] = 'verwijder woorden en onderwerpen die bij Vermijden staan';
         }
 
+        foreach ($this->rhymeAnalyzer->issues($canonical) as $rhymeIssue) {
+            $issues[] = $rhymeIssue;
+        }
+
         $uniqueLines = [];
         foreach ($canonical as $section) {
             if (in_array($section['section'], ['chorus', 'chorus_final'], true)) {
@@ -1508,6 +1543,15 @@ class LyricsGenerator
                 ['Categorie: '.$category],
                 $this->completeLyricsBriefing($context, $intake),
             );
+            $briefing[] = '';
+            $briefing[] = 'RIJMSCHEMA: AABB per sectie (regel 1 op 2, regel 3 op 4), op klank. Houd regels op 6–12 lettergrepen.';
+            $rhymeIssuesBefore = $this->rhymeAnalyzer->issues($this->canonicalSongSections($sections));
+            if ($rhymeIssuesBefore !== []) {
+                $briefing[] = 'RIJM- EN RITMEPROBLEMEN (los deze op):';
+                foreach ($rhymeIssuesBefore as $issue) {
+                    $briefing[] = "- {$issue}";
+                }
+            }
             if ($missingBefore !== []) {
                 $briefing[] = '';
                 $briefing[] = 'NOG NIET VERWERKT (voeg deze herkenbaar toe):';
@@ -1535,6 +1579,11 @@ class LyricsGenerator
 
             // De review mag geen formulierfeiten kwijtraken die DeepSeek wel had.
             if (count($this->missingIntakeRequirements($this->formatLyrics($reviewed), $context, $intake)) > count($missingBefore)) {
+                return $fallback;
+            }
+
+            // En mag het rijm niet slechter maken dan de DeepSeek-versie.
+            if (count($this->rhymeAnalyzer->rhymeFailures($reviewed)) > count($this->rhymeAnalyzer->rhymeFailures($sections))) {
                 return $fallback;
             }
 

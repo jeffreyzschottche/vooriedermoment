@@ -74,7 +74,7 @@ class RhymeChecker
     public function rhymeWords(string $word, ?int $maxPages = null): array
     {
         $word = $this->normalize($word);
-        if ($word === '') {
+        if (! $this->enabled || $word === '') {
             return [];
         }
 

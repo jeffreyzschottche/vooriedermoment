@@ -32,6 +32,7 @@ class OpenAiLyricsReviewer
                         'Behoud alle aangeleverde feiten, namen, relaties, perspectief en stijlaanwijzingen. Verzin geen nieuwe feiten en respecteer VERMIJDEN.',
                         'Gebruik daadwerkelijk Python via Code Interpreter om de uiteindelijke tekst te controleren: structuur, feiten/relaties en rijmparen.',
                         'Beoordeel betekenis en logica ook zelf. Python ondersteunt de controle, maar bewijst semantische juistheid niet.',
+                        'Rijmschema per sectie is AABB: regel 1 rijmt op regel 2 en regel 3 op regel 4. Houd regels op 6–12 lettergrepen en rijmende regels ongeveer even lang.',
                         'Beoordeel Nederlands eindrijm op uitspraak vanaf de laatste beklemtoonde klinker, niet alleen op spelling. Gebruik fonetische transcripties bij de Python-vergelijking; neem onzekerheden serieus en herschrijf twijfelachtige rijmparen.',
                         'Geef uitsluitend de definitieve lyrics terug, zonder uitleg, code, controles of markdown-codeblok.',
                         'Gebruik exact vijf secties in deze volgorde: [Verse 1], [Chorus], [Verse 2], [Bridge], [Final Chorus], elk met precies vier regels.',
