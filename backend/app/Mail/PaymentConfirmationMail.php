@@ -18,12 +18,25 @@ class PaymentConfirmationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Je bestelling is bevestigd — aanvraag #{$this->songRequest->id}",
+            subject: "Je bestelling is gelukt — je songtekst voor {$this->songRequest->recipient_name}",
         );
     }
 
     public function content(): Content
     {
+        $musicPreferences = [];
+        foreach ([
+            'musicStyle' => 'Genre / muziekstijl',
+            'vocals' => 'Stem / zangstijl',
+            'tone' => 'Sfeer',
+            'tempo' => 'Snelheid / tempo',
+        ] as $field => $label) {
+            $value = $this->songRequest->intake[$field] ?? null;
+            if (is_string($value) && trim($value) !== '') {
+                $musicPreferences[$label] = trim($value);
+            }
+        }
+
         return new Content(
             view: 'emails.payment-confirmation',
             with: [
@@ -35,6 +48,8 @@ class PaymentConfirmationMail extends Mailable
                     ? 'Kortingscode'
                     : 'Stripe',
                 'paidAt' => $this->songRequest->paid_at?->timezone('Europe/Amsterdam')->format('d-m-Y H:i'),
+                'lyrics' => $this->songRequest->final_lyrics ?: $this->songRequest->lyrics,
+                'musicPreferences' => $musicPreferences,
             ],
         );
     }

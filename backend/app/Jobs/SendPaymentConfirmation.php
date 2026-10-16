@@ -35,7 +35,14 @@ class SendPaymentConfirmation implements ShouldBeUnique, ShouldQueue
     {
         $songRequest = SongRequest::find($this->songRequestId);
 
-        if (! $songRequest || ! $songRequest->email || ! $songRequest->paid_at || $songRequest->payment_confirmation_sent_at) {
+        // Wordt na de lyricsgeneratie gedispatcht; zonder songtekst geen bevestiging.
+        if (
+            ! $songRequest
+            || ! $songRequest->email
+            || ! $songRequest->paid_at
+            || $songRequest->payment_confirmation_sent_at
+            || blank($songRequest->final_lyrics ?: $songRequest->lyrics)
+        ) {
             return;
         }
 

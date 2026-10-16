@@ -85,7 +85,8 @@ class StripePaymentFlowTest extends TestCase
         $this->assertNotNull($songRequest->payment_fulfillment_queued_at);
         $this->assertStringStartsWith('discount:', $songRequest->payment_reference);
         Queue::assertPushed(ProcessPaidSongRequest::class, 1);
-        Queue::assertPushed(SendPaymentConfirmation::class, 1);
+        // De bevestiging (met songtekst) volgt pas na de lyricsgeneratie.
+        Queue::assertNotPushed(SendPaymentConfirmation::class);
     }
 
     public function test_invalid_discount_code_does_not_start_payment_or_fulfillment(): void
@@ -155,7 +156,8 @@ class StripePaymentFlowTest extends TestCase
         )['status']);
 
         Queue::assertPushed(ProcessPaidSongRequest::class, 1);
-        Queue::assertPushed(SendPaymentConfirmation::class, 1);
+        // De bevestiging (met songtekst) volgt pas na de lyricsgeneratie.
+        Queue::assertNotPushed(SendPaymentConfirmation::class);
 
         $this->assertDatabaseHas('song_requests', [
             'id' => $songRequest->id,
@@ -250,7 +252,8 @@ class StripePaymentFlowTest extends TestCase
             ->assertJsonPath('order_id', $songRequest->id);
 
         Queue::assertPushed(ProcessPaidSongRequest::class, 1);
-        Queue::assertPushed(SendPaymentConfirmation::class, 1);
+        // De bevestiging (met songtekst) volgt pas na de lyricsgeneratie.
+        Queue::assertNotPushed(SendPaymentConfirmation::class);
     }
 
     public function test_payment_confirmation_is_branded_and_sent_only_once(): void
@@ -271,10 +274,31 @@ class StripePaymentFlowTest extends TestCase
         $job->handle();
 
         Mail::assertSent(PaymentConfirmationMail::class, 1, function (PaymentConfirmationMail $mail) use ($songRequest): bool {
+            $html = $mail->render();
+
             return $mail->hasTo($songRequest->email)
-                && str_contains($mail->render(), 'https://vooriedermoment.nl/logowit.png');
+                && str_contains($html, 'https://vooriedermoment.nl/logowit.png')
+                && str_contains($html, 'Je bestelling is gelukt')
+                && str_contains($html, 'Een testlied');
         });
         $this->assertNotNull($songRequest->refresh()->payment_confirmation_sent_at);
+    }
+
+    public function test_payment_confirmation_waits_until_the_lyrics_exist(): void
+    {
+        Mail::fake();
+
+        $songRequest = $this->songRequest([
+            'status' => 'paid',
+            'payment_provider' => 'stripe',
+            'paid_at' => now(),
+            'lyrics' => null,
+        ]);
+
+        (new SendPaymentConfirmation($songRequest->id))->handle();
+
+        Mail::assertNothingSent();
+        $this->assertNull($songRequest->refresh()->payment_confirmation_sent_at);
     }
 
     private function songRequest(array $overrides = []): SongRequest

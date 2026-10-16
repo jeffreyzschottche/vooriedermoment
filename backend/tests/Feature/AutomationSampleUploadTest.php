@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Mail\SampleChosenMail;
 use App\Mail\SamplesReadyMail;
 use App\Models\SongRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -95,10 +94,10 @@ class AutomationSampleUploadTest extends TestCase
         $this->assertSame(3, $songRequest->chosen_sample_position);
         $this->assertSame('Versie 3', $songRequest->chosen_sample_title);
         $this->assertSame('https://suno.com/song/3', $songRequest->chosen_suno_source_url);
-        Mail::assertSent(SampleChosenMail::class, function (SampleChosenMail $mail): bool {
-            return $mail->hasTo('studio@example.com')
-                && $mail->chosenSample->position === 3;
-        });
+        // De admin krijgt per bestelling maar één mail (bij de order); geen keuze-mail.
+        $toAdmin = fn (\Illuminate\Mail\Mailable $mail) => $mail->hasTo('studio@example.com');
+        $this->assertCount(0, Mail::sent($toAdmin));
+        $this->assertCount(0, Mail::queued($toAdmin));
         $this->assertNotNull($songRequest->samples_deleted_at);
         $this->assertDatabaseCount('song_samples', 0);
 

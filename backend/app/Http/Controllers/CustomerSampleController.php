@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\SampleChosenMail;
 use App\Models\SongRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerSampleController extends Controller
@@ -125,9 +123,6 @@ class CustomerSampleController extends Controller
         }
 
         $songRequest->update(['samples_deleted_at' => now()]);
-
-        // Mail naar admin
-        Mail::to(config('orders.notify_email'))->send(new SampleChosenMail($songRequest, $chosenSample));
 
         // Clear session
         session()->forget('sample_verified_' . $token);

@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Mail\ProductionFailedAdminMail;
 use App\Mail\ProductionNeedsAttentionMail;
 use App\Models\SongRequest;
-use App\Services\Orders\OrderExporter;
 use App\Services\Production\SongProductionPipeline;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -38,7 +38,6 @@ class ProcessPaidSongRequest implements ShouldQueue
 
     public function handle(
         SongProductionPipeline $production,
-        OrderExporter $orders,
     ): void {
         $songRequest = SongRequest::find($this->songRequestId);
 
@@ -61,7 +60,7 @@ class ProcessPaidSongRequest implements ShouldQueue
             ])->save();
         }
 
-        $orders->export($songRequest->refresh());
+        SendOrderNotification::dispatch($songRequest->id);
     }
 
     public function failed(?Throwable $exception): void
@@ -85,9 +84,17 @@ class ProcessPaidSongRequest implements ShouldQueue
 
         // Een betaalde klant mag nooit in stilte op een vastgelopen productie
         // wachten. De technische fout blijft intern; de klant krijgt één
-        // duidelijke, actiegerichte update per aanvraag.
-        if ($songRequest->email && ! $songRequest->production_failure_notified_at) {
-            Mail::to($songRequest->email)->send(new ProductionNeedsAttentionMail($songRequest));
+        // duidelijke, actiegerichte update per aanvraag, en de admin één alarm
+        // met de foutmelding. Via de queue, zodat een mailstoring hier niets breekt.
+        if (! $songRequest->production_failure_notified_at) {
+            if ($songRequest->email) {
+                Mail::to($songRequest->email)->queue(new ProductionNeedsAttentionMail($songRequest));
+            }
+
+            $adminEmail = config('orders.notify_email');
+            if (filled($adminEmail)) {
+                Mail::to($adminEmail)->queue(new ProductionFailedAdminMail($songRequest, $error));
+            }
 
             $songRequest->forceFill([
                 'production_failure_notified_at' => now(),

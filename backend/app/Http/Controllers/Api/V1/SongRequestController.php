@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSongRequest;
 use App\Jobs\ProcessPaidSongRequest;
-use App\Jobs\SendPaymentConfirmation;
 use App\Models\SongRequest;
 use App\Services\Lyrics\LyricsGenerator;
 use App\Services\Payment\PaymentProvider;
@@ -77,7 +76,6 @@ class SongRequestController extends Controller
 
         // De stub blijft synchroon, uitsluitend om lokaal en in tests te werken.
         if ($result['status'] === 'paid') {
-            SendPaymentConfirmation::dispatchSync($songRequest->id);
             ProcessPaidSongRequest::dispatchSync($songRequest->id);
             $songRequest->refresh();
         }
@@ -122,10 +120,6 @@ class SongRequestController extends Controller
                 $lockedSongRequest->forceFill([
                     'payment_fulfillment_queued_at' => now(),
                 ])->save();
-            }
-
-            if (! $lockedSongRequest->payment_confirmation_sent_at) {
-                SendPaymentConfirmation::dispatch($lockedSongRequest->id)->afterCommit();
             }
 
             return $lockedSongRequest->refresh();

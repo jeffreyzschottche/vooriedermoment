@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Je bestelling is bevestigd</title>
+    <title>Je bestelling is gelukt</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f8faf6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; color: #0d1512;">
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
@@ -14,9 +14,9 @@
                         <td style="padding: 32px;">
                             @include('emails.partials.logo')
 
-                            <h1 style="font-size: 26px; line-height: 1.25; margin: 0 0 14px; text-align: center;">Bedankt voor je bestelling!</h1>
+                            <h1 style="font-size: 26px; line-height: 1.25; margin: 0 0 14px; text-align: center;">Je bestelling is gelukt!</h1>
                             <p style="font-size: 15px; line-height: 1.7; color: #4a5a52; margin: 0 0 24px; text-align: center;">
-                                We hebben je aanvraag en betaling goed ontvangen. We gaan aan de slag met het persoonlijke nummer voor <strong>{{ $recipientName }}</strong>.
+                                We hebben je aanvraag en betaling goed ontvangen. Hieronder vind je de songtekst voor het persoonlijke nummer voor <strong>{{ $recipientName }}</strong>.
                             </p>
 
                             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #f3f7f3; border-radius: 12px; padding: 14px 18px; margin-bottom: 24px;">
@@ -28,6 +28,23 @@
                                 <tr><td style="padding: 7px 0; color: #6a756f; font-size: 14px;">Ontvangen op</td><td align="right" style="padding: 7px 0; font-size: 14px;"><strong>{{ $paidAt }}</strong></td></tr>
                                 @endif
                             </table>
+
+                            @if($lyrics)
+                            <h2 style="font-size: 20px; line-height: 1.3; margin: 0 0 12px;">Jouw songtekst</h2>
+                            <pre style="white-space: pre-wrap; font-family: inherit; font-size: 15px; line-height: 1.7; background: #f3f7f3; border-radius: 12px; padding: 20px; margin: 0 0 24px;">{{ $lyrics }}</pre>
+                            @endif
+
+                            @if($musicPreferences !== [])
+                            <h2 style="font-size: 20px; line-height: 1.3; margin: 0 0 12px;">Jouw muzikale voorkeuren</h2>
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size: 15px; line-height: 1.7; margin-bottom: 24px;">
+                                @foreach($musicPreferences as $label => $value)
+                                <tr>
+                                    <th scope="row" align="left" valign="top" style="padding: 6px 16px 6px 0; color: #4a5a52; font-weight: 600;">{{ $label }}</th>
+                                    <td valign="top" style="padding: 6px 0;">{{ $value }}</td>
+                                </tr>
+                                @endforeach
+                            </table>
+                            @endif
 
                             <div style="background: #fff4ef; border: 1px solid #ffd8cc; border-radius: 12px; padding: 18px;">
                                 <p style="font-size: 15px; line-height: 1.7; color: #4a5a52; margin: 0;">

@@ -2,12 +2,11 @@
 
 namespace App\Services\Production;
 
-use App\Mail\DiscountLyricsMail;
+use App\Jobs\SendPaymentConfirmation;
 use App\Models\SongRequest;
 use App\Services\Lyrics\LyricsGenerator;
 use App\Services\Music\MusicProvider;
 use Throwable;
-use Illuminate\Support\Facades\Mail;
 
 class SongProductionPipeline
 {
@@ -60,14 +59,11 @@ class SongProductionPipeline
                 ],
             ]);
 
-            $songRequest->refresh();
-            if (
-                $songRequest->payment_provider === 'discount_code'
-                && $songRequest->email
-                && ! $songRequest->discount_lyrics_sent_at
-            ) {
-                Mail::to($songRequest->email)->send(new DiscountLyricsMail($songRequest));
-                $songRequest->forceFill(['discount_lyrics_sent_at' => now()])->save();
+            // De klant krijgt pas nu de bevestiging: "bestelling gelukt" plus de
+            // definitieve songtekst in één mail. Via de queue, zodat een
+            // mailstoring nooit de (dure) lyricsgeneratie opnieuw laat draaien.
+            if (! $songRequest->payment_confirmation_sent_at) {
+                SendPaymentConfirmation::dispatch($songRequest->id);
             }
 
             $music = $this->music->generate($songRequest->refresh(), $generated['lyrics'], $songRequest->intake ?? []);

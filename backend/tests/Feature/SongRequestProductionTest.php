@@ -2,8 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\SendOrderNotification;
+use App\Jobs\SendPaymentConfirmation;
 use App\Mail\NewOrderMail;
-use App\Mail\DiscountLyricsMail;
+use App\Mail\PaymentConfirmationMail;
+use App\Mail\ProductionFailedAdminMail;
 use App\Mail\ProductionNeedsAttentionMail;
 use App\Jobs\ProcessPaidSongRequest;
 use App\Models\SongRequest;
@@ -11,6 +14,7 @@ use App\Services\Production\SongProductionPipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use RuntimeException;
 
@@ -86,15 +90,28 @@ class SongRequestProductionTest extends TestCase
         $this->assertNotNull(
             SongRequest::findOrFail($id)->order_notification_sent_at
         );
+        Mail::assertSent(NewOrderMail::class, function (NewOrderMail $mail): bool {
+            $html = $mail->render();
+
+            return $mail->hasTo('orders@example.com')
+                && str_contains($html, 'Betaald')
+                && str_contains($html, 'jan@example.com')
+                && str_contains($html, 'Rock / anthem')
+                && str_contains($html, 'Bouwbedrijf Jansen')
+                && str_contains($html, 'Lyrics');
+        });
         Mail::assertSent(NewOrderMail::class, 1);
+        Mail::assertSent(PaymentConfirmationMail::class, 1);
 
         $this->postJson("/api/v1/song-requests/{$id}/checkout")->assertOk();
         Mail::assertSent(NewOrderMail::class, 1);
+        Mail::assertSent(PaymentConfirmationMail::class, 1);
     }
 
-    public function test_a_paid_order_that_exhausts_production_retries_notifies_the_customer_once(): void
+    public function test_a_paid_order_that_exhausts_production_retries_notifies_the_customer_and_admin_once(): void
     {
         Mail::fake();
+        config()->set('orders.notify_email', 'orders@example.com');
 
         $songRequest = SongRequest::create([
             'category' => 'team-clublied',
@@ -115,14 +132,40 @@ class SongRequestProductionTest extends TestCase
             'automation_last_error' => 'AI-lyrics afgekeurd: details ontbreken.',
         ]);
         $this->assertNotNull($songRequest->fresh()->production_failure_notified_at);
-        Mail::assertSent(ProductionNeedsAttentionMail::class, 1);
+        Mail::assertQueued(ProductionNeedsAttentionMail::class, fn ($mail) => $mail->hasTo('klant@example.com'));
+        Mail::assertQueued(ProductionFailedAdminMail::class, function (ProductionFailedAdminMail $mail): bool {
+            return $mail->hasTo('orders@example.com')
+                && str_contains($mail->render(), 'AI-lyrics afgekeurd: details ontbreken.');
+        });
 
-        // Een handmatige retry die opnieuw faalt mag de klant niet spammen.
+        // Een handmatige retry die opnieuw faalt mag klant en admin niet spammen.
         $job->failed(new RuntimeException('Opnieuw mislukt.'));
-        Mail::assertSent(ProductionNeedsAttentionMail::class, 1);
+        Mail::assertQueued(ProductionNeedsAttentionMail::class, 1);
+        Mail::assertQueued(ProductionFailedAdminMail::class, 1);
     }
 
-    public function test_a_discount_code_order_receives_final_lyrics_once_they_are_generated(): void
+    public function test_the_admin_order_mail_is_sent_by_its_own_job_not_inside_production(): void
+    {
+        Queue::fake();
+
+        $songRequest = SongRequest::create([
+            'category' => 'verjaardag',
+            'category_title' => 'Verjaardag',
+            'email' => 'klant@example.com',
+            'intake' => ['recipientName' => 'Mila'],
+            'status' => 'paid',
+            'paid_at' => now(),
+        ]);
+
+        (new ProcessPaidSongRequest($songRequest->id))->handle(app(SongProductionPipeline::class));
+
+        // Een mailstoring kan de productie dus niet meer laten falen.
+        $this->assertSame('music_prompt_ready', $songRequest->fresh()->status);
+        Queue::assertPushed(SendOrderNotification::class, fn ($job) => $job->songRequestId === $songRequest->id);
+        Queue::assertPushed(SendPaymentConfirmation::class, 1);
+    }
+
+    public function test_a_paid_order_receives_one_confirmation_with_the_final_lyrics(): void
     {
         Mail::fake();
 
@@ -141,10 +184,15 @@ class SongRequestProductionTest extends TestCase
 
         app(SongProductionPipeline::class)->run($songRequest);
 
-        $this->assertNotNull($songRequest->fresh()->discount_lyrics_sent_at);
-        Mail::assertSent(DiscountLyricsMail::class, 1);
+        $lyrics = $songRequest->fresh()->final_lyrics;
+        $this->assertNotEmpty($lyrics);
+        $this->assertNotNull($songRequest->fresh()->payment_confirmation_sent_at);
+        Mail::assertSent(PaymentConfirmationMail::class, 1, function (PaymentConfirmationMail $mail) use ($lyrics): bool {
+            return $mail->hasTo('eigenaar@example.com')
+                && str_contains($mail->render(), e(strtok($lyrics, "\n")));
+        });
 
         app(SongProductionPipeline::class)->run($songRequest->fresh());
-        Mail::assertSent(DiscountLyricsMail::class, 1);
+        Mail::assertSent(PaymentConfirmationMail::class, 1);
     }
 }
