@@ -472,3 +472,30 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-ink-faint);
 }
+
+/* 3D-kantelen (v-tilt). Dubbele klasse zodat hover-transforms van kaarten niet winnen. */
+.tilt.tilt {
+  transform: perspective(1000px) translateY(var(--lift, 0px)) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.6s var(--ease-out-expo), box-shadow 0.4s ease, border-color 0.3s ease;
+  will-change: transform;
+}
+.tilt.tilt:hover {
+  --lift: -4px;
+}
+.tilt.tilt.is-tilting {
+  transition: transform 0.12s ease-out, box-shadow 0.4s ease, border-color 0.3s ease;
+}
+.tilt::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, 0.28), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.tilt.is-tilting::after {
+  opacity: 1;
+}

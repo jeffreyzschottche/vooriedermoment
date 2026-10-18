@@ -42,7 +42,7 @@ const productionHighlights = [
 </script>
 
 <template>
-  <div class="moment-theme" :style="themeStyle">
+  <div class="moment-theme overflow-x-clip" :style="themeStyle">
     <!-- HERO -->
     <section class="site-container py-16 sm:py-24">
       <div class="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
@@ -72,9 +72,12 @@ const productionHighlights = [
           </div>
         </div>
 
-        <div v-reveal class="space-y-5">
+        <div v-reveal class="relative space-y-5">
+          <Shape3d kind="note" :size="96" class="absolute -top-12 right-0 z-30 sm:-right-10" />
+          <Shape3d kind="sphere" :size="56" :delay="3" class="absolute -left-8 top-40 z-30 hidden sm:block" />
           <div
-            class="relative overflow-hidden rounded-2xl border"
+            v-tilt="6"
+            class="relative overflow-hidden rounded-[24px] border"
             :style="{ borderColor: 'var(--color-line)', boxShadow: '0 18px 48px rgba(13,21,18,0.14)' }"
           >
             <img

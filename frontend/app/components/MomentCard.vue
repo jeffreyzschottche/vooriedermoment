@@ -15,6 +15,7 @@ const cover = computed(() => categoryImage(props.category));
 
 <template>
   <NuxtLink
+    v-tilt="6"
     :to="href"
     class="group relative overflow-hidden border bg-white transition-all duration-500"
     :class="category.slug === 'anders'
@@ -79,7 +80,6 @@ const cover = computed(() => categoryImage(props.category));
 
 <style scoped>
 .group:hover {
-  transform: translateY(-6px);
   border-color: v-bind('t.accent + "40"');
 }
 </style>

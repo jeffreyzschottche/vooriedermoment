@@ -126,6 +126,7 @@ useJsonLd([
           >
             Jouw moment.<br />
             <span class="hero-highlight">Jouw nummer.</span>
+            <Shape3d kind="ring" :size="52" :delay="2" class="ml-2 hidden align-middle sm:inline-block" />
           </h1>
 
           <p
@@ -157,7 +158,10 @@ useJsonLd([
 
         <!-- Visual: studio-foto met wisselende songtekst en Spotify-speler -->
         <div v-hero-reveal data-hero-delay="0.35" class="relative mx-auto w-full max-w-[540px] lg:mr-0">
-          <div class="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-[0_40px_80px_-30px_rgba(18,20,18,0.45)] sm:aspect-[5/5.4]">
+          <Shape3d kind="note" :size="110" class="absolute -right-4 -top-10 z-10 sm:-right-12" />
+          <Shape3d kind="sphere" :size="70" :delay="3" class="absolute -left-14 bottom-24 z-10 hidden sm:block" />
+          <Shape3d kind="star" :size="54" :delay="5" class="absolute right-10 top-1/2 z-10 hidden lg:block" />
+          <div v-tilt="5" class="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-[0_40px_80px_-30px_rgba(18,20,18,0.45)] sm:aspect-[5/5.4]">
             <img src="/hero-studio.png" alt="" class="h-full w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-[rgba(13,21,18,0.75)] via-[rgba(13,21,18,0.1)] to-transparent" />
           </div>
@@ -167,11 +171,16 @@ useJsonLd([
       </div>
     </section>
 
+    <!-- COVER-MUUR -->
+    <section class="pb-6 pt-4">
+      <CoverWall />
+    </section>
+
     <!-- VALUE PROPS -->
     <section class="py-20 sm:py-28">
       <div class="site-container">
         <div v-reveal-stagger data-stagger="0.1" class="grid gap-6 lg:grid-cols-3">
-          <article v-for="item in valueProps" :key="item.title" class="bento-card">
+          <article v-for="item in valueProps" :key="item.title" v-tilt="6" class="bento-card">
             <div class="bento-card-icon mb-6">
               <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="icons[item.icon]" /></svg>
             </div>
@@ -235,7 +244,9 @@ useJsonLd([
     <section class="py-6 sm:py-10">
       <div class="edge-container">
       <div class="studio-shell py-20 sm:py-24">
-      <div class="site-container">
+      <Shape3d kind="disc" :size="220" class="absolute -right-16 -top-16 hidden opacity-90 md:block" />
+      <Shape3d kind="star" :size="44" :delay="4" class="absolute bottom-10 left-8 hidden md:block" />
+      <div class="site-container relative">
         <div v-reveal class="mb-14 max-w-3xl">
           <span
             class="section-kicker"
@@ -297,6 +308,7 @@ useJsonLd([
             <article
               v-for="item in proof"
               :key="item.title"
+              v-tilt="4"
               class="bento-card flex items-start gap-5"
             >
               <div class="bento-card-icon shrink-0">
@@ -320,7 +332,9 @@ useJsonLd([
     <section class="py-8 sm:py-12">
       <div class="edge-container">
         <div v-reveal class="studio-shell grid gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_0.5fr] lg:items-center">
-          <div>
+          <Shape3d kind="sphere" :size="80" :delay="2" class="absolute bottom-6 left-[52%] hidden lg:block" />
+          <Shape3d kind="note" :size="80" :delay="6" class="absolute top-6 right-[32%] hidden lg:block" />
+          <div class="relative">
             <span
               class="section-kicker"
               style="color: var(--accent-gold);"
@@ -335,7 +349,7 @@ useJsonLd([
               compleet en publiceren hem voor je, zodat je hem steeds opnieuw kunt beluisteren en delen.
             </p>
           </div>
-          <div class="glass-panel p-7 text-center">
+          <div v-tilt="6" class="glass-panel relative z-10 p-7 text-center">
             <p class="text-xs font-bold uppercase tracking-[0.2em]" style="color: var(--accent-gold);">Complete prijs</p>
             <div class="mt-5 flex justify-center">
               <OfferBadge size="lg" />

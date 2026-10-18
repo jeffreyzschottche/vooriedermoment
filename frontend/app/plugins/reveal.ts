@@ -64,6 +64,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             delay,
             ease: 'power2.out',
             scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+            clearProps: 'transform,filter',
             onStart: () => el.classList.add('is-revealed'),
           });
         })
@@ -99,6 +100,8 @@ export default defineNuxtPlugin((nuxtApp) => {
             stagger: staggerAmount,
             ease: 'power2.out',
             scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+            // Inline transform/filter weghalen, zodat v-tilt en hover-effecten werken.
+            clearProps: 'transform,filter',
           });
         })
         .catch(() => {});
