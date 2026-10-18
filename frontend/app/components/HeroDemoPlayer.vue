@@ -79,6 +79,8 @@ function loadSpotifyApi(): Promise<SpotifyIframeApi> {
 }
 
 onMounted(async () => {
+  // Elk bezoek op een willekeurig voorbeeld beginnen (SSR rendert altijd het eerste).
+  index.value = Math.floor(Math.random() * heroDemos.length);
   const api = await loadSpotifyApi();
   if (!playerWrap.value) return;
   // De API vervangt het element door de iframe; geef hem een eigen kind zodat Vue z'n DOM houdt.
