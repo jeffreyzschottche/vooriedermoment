@@ -155,40 +155,14 @@ useJsonLd([
           </ul>
         </div>
 
-        <!-- Visual: studio-foto met zwevende speler en songtekst -->
+        <!-- Visual: studio-foto met wisselende songtekst en Spotify-speler -->
         <div v-hero-reveal data-hero-delay="0.35" class="relative mx-auto w-full max-w-[540px] lg:mr-0">
           <div class="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-[0_40px_80px_-30px_rgba(18,20,18,0.45)] sm:aspect-[5/5.4]">
             <img src="/hero-studio.png" alt="" class="h-full w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-[rgba(13,21,18,0.75)] via-[rgba(13,21,18,0.1)] to-transparent" />
           </div>
 
-          <!-- Songtekst-kaart -->
-          <div class="float-card absolute left-3 top-6 w-56 rounded-3xl border bg-white/95 p-5 backdrop-blur sm:-left-10 sm:top-8 sm:w-64" :style="{ borderColor: 'var(--color-line)' }">
-            <p class="text-[11px] font-bold uppercase tracking-[0.16em]" :style="{ color: 'var(--accent-strong)' }">Refrein · voorbeeld</p>
-            <p class="mt-3 font-display text-lg font-semibold leading-snug" :style="{ color: 'var(--color-ink)' }">
-              Sophie, de vlag gaat uit vandaag,<br />
-              jouw diploma is het antwoord op elke vraag
-            </p>
-          </div>
-
-          <!-- Nu-speelt-kaart -->
-          <div class="float-card float-card-late absolute -bottom-6 left-4 right-4 rounded-3xl bg-[#121412]/95 p-4 text-white backdrop-blur sm:-right-8 sm:left-auto sm:w-80">
-            <div class="flex items-center gap-4">
-              <div class="h-14 w-14 shrink-0 rounded-2xl" style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent-gold) 100%);" />
-              <div class="min-w-0 flex-1">
-                <p class="truncate font-semibold">Geslaagd! — voor Sophie</p>
-                <p class="mt-0.5 text-sm text-white/55">Voor Ieder Moment</p>
-              </div>
-              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1ed760] text-sm text-[#121412]" aria-hidden="true">▶</span>
-            </div>
-            <div class="mt-4 flex items-center gap-3 text-[11px] text-white/50">
-              <span>1:12</span>
-              <div class="h-1 flex-1 overflow-hidden rounded-full bg-white/15">
-                <div class="h-full w-[45%] rounded-full bg-white" />
-              </div>
-              <span>2:48</span>
-            </div>
-          </div>
+          <HeroDemoPlayer />
         </div>
       </div>
     </section>
@@ -429,19 +403,5 @@ useJsonLd([
 }
 .hero-highlight {
   color: var(--accent);
-}
-.float-card {
-  box-shadow: 0 24px 50px -20px rgba(18, 20, 18, 0.35);
-  animation: float 7s ease-in-out infinite;
-}
-.float-card-late {
-  animation-delay: -3.5s;
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .float-card { animation: none; }
 }
 </style>
