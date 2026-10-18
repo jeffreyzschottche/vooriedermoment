@@ -86,75 +86,13 @@ class SunoMusicProvider implements MusicProvider
      */
     private function buildSunoPrompt(SongRequest $songRequest, string $lyrics, array $intake): array
     {
-        $style = $intake['musicStyle'] ?? 'Nederlandse pop';
         $tone = $intake['tone'] ?? 'vrolijk en persoonlijk';
         $tempo = trim((string) ($intake['tempo'] ?? ''));
         $vocals = $intake['vocals'] ?? 'mannelijke stem';
 
-        // Map Dutch styles to Suno-compatible tags
-        $styleMapping = [
-            'Nederlandstalige pop' => 'dutch pop, catchy, radio-friendly',
-            'Feest / meezinger' => 'dutch party music, upbeat, celebratory, sing-along',
-            'Akoestisch en klein' => 'acoustic, intimate, warm vocals',
-            'Singer-songwriter' => 'singer-songwriter, acoustic, personal, warm',
-            'Pop ballad' => 'dutch ballad, emotional, piano',
-            'Rock / anthem' => 'dutch rock, guitar-driven, energetic, anthemic',
-            'Urban pop' => 'urban pop, modern beats, rhythmic',
-            'Hiphop / rap coupletten' => 'dutch hip-hop verses, melodic chorus, modern beats',
-            'Dance pop' => 'dutch dance pop, electronic, festival',
-            'Disco / funk' => 'disco funk, groovy bass, upbeat',
-            'Country pop' => 'country pop, warm guitars, sing-along',
-            'Indie pop' => 'indie pop, fresh, catchy, organic',
-            'Schlager / apres-ski' => 'dutch schlager, apres-ski, feestelijk',
-            'Koor / stadion' => 'stadium chant, choir vocals, anthemic',
-            'R&B / soul' => 'r&b soul, smooth, warm, emotional',
-            'Piano ballad' => 'piano ballad, intimate, emotional',
-            'Nederlandse levenslied' => 'dutch levenslied, emotional, sing-along',
-            'Volksmuziek modern' => 'modern dutch folk, accordion accents, festive',
-            'Reggaeton pop' => 'reggaeton pop, latin rhythm, danceable',
-            'Afro pop' => 'afropop, warm groove, rhythmic',
-            'Latin pop' => 'latin pop, sunny, danceable',
-            'EDM / festival' => 'edm festival, big drops, energetic',
-            'House' => 'house, four-on-the-floor, danceable',
-            'Techno pop' => 'techno pop, pulsing synths, modern',
-            'Drum & bass pop' => 'drum and bass pop, fast breakbeats, melodic',
-            'Trap pop' => 'trap pop, modern 808s, melodic hook',
-            'Lo-fi pop' => 'lo-fi pop, mellow, warm texture',
-            'Gospel / soulkoor' => 'gospel soul choir, uplifting, rich harmonies',
-            'Musical / theater' => 'musical theatre, expressive, dramatic',
-            'Orkestrale pop' => 'orchestral pop, cinematic, grand',
-            'Kinderlied / vrolijk' => 'cheerful kids song, simple catchy melody',
-            'Carnaval' => 'dutch carnaval, brass, festive, sing-along',
-            'Hardstyle feest' => 'party hardstyle, energetic kick, festival',
-        ];
-
-        $voiceMapping = [
-            'Mannenstem' => 'male vocals',
-            'Vrouwenstem' => 'female vocals',
-            'Duet' => 'duet, male and female vocals',
-            'Groep / koor' => 'group vocals, choir backing',
-            'Warme mannenstem' => 'warm male vocals',
-            'Warme vrouwenstem' => 'warm female vocals',
-            'Hoge popstem' => 'high pop vocals',
-            'Lage rustige stem' => 'low calm vocals',
-            'Rauwe rockstem' => 'raspy rock vocals',
-            'Soulvolle stem' => 'soulful vocals',
-            'Rap coupletten + gezongen refrein' => 'rap verses, sung chorus',
-            'Kindvriendelijke stem' => 'friendly clear vocals',
-            'Familiekoor' => 'family choir vocals',
-            'Stadionkoor' => 'stadium choir vocals',
-            'Koor in refrein' => 'choir in chorus',
-            'Praat-zang' => 'spoken-sung vocals',
-            'Instrumentaal intro met zang' => 'instrumental intro, lead vocals',
-        ];
-
-        $tags = $styleMapping[$style] ?? 'dutch pop';
-        $voice = $voiceMapping[$vocals] ?? 'male vocals';
-        $tempoTag = $tempo !== '' ? ", tempo: {$tempo}" : '';
-
         return [
             'prompt' => "A Dutch-language song about {$songRequest->category_title}. {$tone} mood.".($tempo ? " Tempo: {$tempo}." : ''),
-            'tags' => "{$tags}, {$voice}{$tempoTag}, dutch lyrics, professional production",
+            'tags' => SunoStyleTags::style($intake),
             'title' => $this->generateTitle($songRequest, $intake),
             'make_instrumental' => str_contains(strtolower($vocals), 'instrumentaal'),
         ];

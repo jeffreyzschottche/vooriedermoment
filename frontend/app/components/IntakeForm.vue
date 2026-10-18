@@ -57,6 +57,27 @@ const progress = computed(() => fields.value.length ? Math.round(((currentIndex.
 const activeSection = computed(() => sectionForField(activeField.value?.name ?? ''));
 const isLastStep = computed(() => currentIndex.value >= fields.value.length - 1);
 
+// Lange keuzelijsten (sfeer, stem, genre) krijgen een zoekveld.
+const SEARCH_MIN_OPTIONS = 12;
+const optionQuery = ref('');
+const visibleOptions = computed(() => {
+  const options = activeField.value?.options ?? [];
+  const query = optionQuery.value.trim().toLowerCase();
+  return query ? options.filter((opt) => opt.toLowerCase().includes(query)) : options;
+});
+watch(currentIndex, () => (optionQuery.value = ''));
+
+function selectOption(fieldName: string, opt: string) {
+  values[fieldName] = opt;
+  errors[fieldName] = false;
+}
+
+// Enter in het zoekveld kiest de enige treffer i.p.v. naar de volgende vraag te gaan.
+function onOptionSearchEnter() {
+  const field = activeField.value;
+  if (field && visibleOptions.value.length === 1) selectOption(field.name, visibleOptions.value[0]!);
+}
+
 const loadingWords = ['verhaal lezen', 'details kiezen', 'rijm vinden', 'sfeer bepalen', 'preview maken'];
 
 function delay(ms: number) {
@@ -387,17 +408,36 @@ function removeItem(fieldName: 'anecdotes' | 'mustMention', index: number) {
               :placeholder="activeField.placeholder"
             />
 
-            <div v-else-if="activeField.type === 'select'" class="grid max-h-[360px] gap-3 overflow-y-auto pr-1 sm:grid-cols-2">
-              <button
-                v-for="opt in activeField.options"
-                :key="opt"
-                type="button"
-                class="option-pill"
-                :aria-pressed="values[activeField.name] === opt"
-                @click="values[activeField.name] = opt; errors[activeField.name] = false"
-              >
-                {{ opt }}
-              </button>
+            <div v-else-if="activeField.type === 'select'">
+              <div v-if="(activeField.options?.length ?? 0) >= SEARCH_MIN_OPTIONS" class="mb-4">
+                <input
+                  :id="`input-${activeField.name}`"
+                  v-model="optionQuery"
+                  type="search"
+                  class="field-input py-3"
+                  :placeholder="`Zoek in ${activeField.options?.length} opties…`"
+                  autocomplete="off"
+                  @keydown.enter.prevent="onOptionSearchEnter"
+                />
+                <p v-if="values[activeField.name]" class="mt-2 text-sm" :style="{ color: 'var(--color-ink-soft)' }">
+                  Gekozen: <strong :style="{ color: 'var(--accent-strong)' }">{{ values[activeField.name] }}</strong>
+                </p>
+              </div>
+              <div class="grid max-h-[360px] gap-3 overflow-y-auto pr-1 sm:grid-cols-2">
+                <button
+                  v-for="opt in visibleOptions"
+                  :key="opt"
+                  type="button"
+                  class="option-pill"
+                  :aria-pressed="values[activeField.name] === opt"
+                  @click="selectOption(activeField.name, opt)"
+                >
+                  {{ opt }}
+                </button>
+                <p v-if="!visibleOptions.length" class="text-sm sm:col-span-2" :style="{ color: 'var(--color-ink-soft)' }">
+                  Niets gevonden. Kies “{{ activeField.options?.[0] }}” of probeer een ander woord.
+                </p>
+              </div>
             </div>
 
             <input

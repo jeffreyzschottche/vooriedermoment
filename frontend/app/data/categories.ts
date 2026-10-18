@@ -1,6 +1,8 @@
 // Centrale bron voor alle "momenten". Pagina's (momenten/[slug], overzicht, nav)
 // en de intake-flow worden hieruit datagedreven opgebouwd.
 
+import { musicStyleOptions, tempoOptions, toneOptions, vocalOptions } from './musicOptions';
+
 export type CategoryVariant = 'standard' | 'existing' | 'b2b';
 
 export interface AccentTheme {
@@ -95,132 +97,9 @@ export function themeVars(theme: AccentTheme | null | undefined): Record<string,
   };
 }
 
-export const toneOptions = [
-  'Vrolijk & uptempo',
-  'Warm & persoonlijk',
-  'Emotioneel maar niet zwaar',
-  'Grappig & ad rem',
-  'Stoer & energiek',
-  'Feestelijk & uitbundig',
-  'Lief & teder',
-  'Nostalgisch',
-  'Trots & groots',
-  'Ontroerend',
-  'Speels',
-  'Rustig & intiem',
-  'Hoopvol',
-  'Brutaal met knipoog',
-  'Romantisch',
-  'Dromerig',
-  'Dankbaar',
-  'Kwetsbaar',
-  'Euforisch',
-  'Melancholisch',
-  'Motiverend',
-  'Ondeugend',
-  'Familiair & warm',
-  'Kampvuurgevoel',
-  'Kroeg / kantine',
-  'Festivalgevoel',
-  'Filmisch & groots',
-  'Klein en oprecht',
-  'Laat ons kiezen',
-];
-
-export const businessToneOptions = [
-  'Stoer & energiek',
-  'Trots & ingetogen',
-  'Vrolijk & uptempo',
-  'Grappig & ad rem',
-  'Betrouwbaar & professioneel',
-  'Ambachtelijk & warm',
-  'Modern & strak',
-  'Groots & inspirerend',
-  'Nuchter Nederlands',
-  'Feestelijk & verbindend',
-  'Premium & zakelijk',
-  'Menselijk & dichtbij',
-  'Innovatief',
-  'Teamgevoel',
-  'Recruitment-waardig',
-  'Jubileumwaardig',
-  'Laat ons kiezen',
-];
-
-export const musicStyleOptions = [
-  'Nederlandstalige pop',
-  'Feest / meezinger',
-  'Akoestisch en klein',
-  'Singer-songwriter',
-  'Popballad',
-  'Rock / anthem',
-  'Urban pop',
-  'Hiphop / rapcoupletten',
-  'Dance pop',
-  'Disco / funk',
-  'Country pop',
-  'Indie pop',
-  'Schlager / après-ski',
-  'Koor / stadion',
-  'R&B / soul',
-  'Piano ballad',
-  'Nederlands levenslied',
-  'Volksmuziek modern',
-  'Reggaeton pop',
-  'Afropop',
-  'Latin pop',
-  'EDM / festival',
-  'House',
-  'Technopop',
-  'Drum & bass pop',
-  'Trap pop',
-  'Lo-fi pop',
-  'Gospel / soulkoor',
-  'Musical / theater',
-  'Orkestrale pop',
-  'Kinderlied / vrolijk',
-  'Carnaval',
-  'Hardstyle feest',
-  'Laat ons kiezen',
-];
-
-export const tempoOptions = [
-  'Rustig',
-  'Medium tempo',
-  'Dansbaar',
-  'Uptempo',
-  'Snel en feestelijk',
-  'Opbouwend van rustig naar groot',
-  'Laat ons kiezen',
-];
-
-export const vocalOptions = [
-  'Mannenstem',
-  'Vrouwenstem',
-  'Duet',
-  'Groep / koor',
-  'Warme mannenstem',
-  'Warme vrouwenstem',
-  'Hoge popstem',
-  'Lage rustige stem',
-  'Rauwe rockstem',
-  'Soulvolle stem',
-  'Rapcoupletten + gezongen refrein',
-  'Kindvriendelijke stem',
-  'Familiekoor',
-  'Stadionkoor',
-  'Koor in refrein',
-  'Praat-zang',
-  'Instrumentaal intro met zang',
-  'Maakt niet uit',
-];
-
-// Veelgebruikte intake-velden (hergebruikt over categorieën)
-function baseFields(extra: IntakeField[] = []): IntakeField[] {
+// Muziekvragen: voor élk moment dezelfde, volledige keuzelijsten.
+function musicFields(): IntakeField[] {
   return [
-    { name: 'recipientName', label: 'Voor wie is het nummer?', type: 'text', placeholder: 'Bijv. Sven, papa, team JO17-1', required: true, span: 'half', help: 'Vul hier één hoofdnaam in. Extra namen kun je met het plusje toevoegen.' },
-    { name: 'fromName', label: 'Van wie komt het nummer?', type: 'text', placeholder: 'Bijv. Familie de Vries, het team, de kinderen', span: 'half' },
-    ...extra,
     {
       name: 'tone', label: 'Sfeer / toon', type: 'select', required: true, span: 'half',
       options: toneOptions,
@@ -239,6 +118,16 @@ function baseFields(extra: IntakeField[] = []): IntakeField[] {
       options: tempoOptions,
       help: 'Geen exact getal nodig: kies hoe snel het nummer moet voelen.',
     },
+  ];
+}
+
+// Veelgebruikte intake-velden (hergebruikt over categorieën)
+function baseFields(extra: IntakeField[] = []): IntakeField[] {
+  return [
+    { name: 'recipientName', label: 'Voor wie is het nummer?', type: 'text', placeholder: 'Bijv. Sven, papa, team JO17-1', required: true, span: 'half', help: 'Vul hier één hoofdnaam in. Extra namen kun je met het plusje toevoegen.' },
+    { name: 'fromName', label: 'Van wie komt het nummer?', type: 'text', placeholder: 'Bijv. Familie de Vries, het team, de kinderen', span: 'half' },
+    ...extra,
+    ...musicFields(),
     {
       name: 'anecdotes', label: 'Verhaal, anekdotes & inside jokes', type: 'textarea', required: true, span: 'full',
       placeholder: 'Vertel concreet: namen, plaatsen, typische uitspraken, herinneringen, grapjes, gewoontes, wat er absoluut in moet...',
@@ -553,10 +442,7 @@ export const categories: Category[] = [
       { name: 'foundingYear', label: 'Opgericht in', type: 'text', placeholder: 'Bijv. 1998', span: 'half' },
       { name: 'slogan', label: 'Slogan of kernwaarden', type: 'text', placeholder: 'Bijv. "Bouwen op vertrouwen"', span: 'full' },
       { name: 'occasion', label: 'Waarvoor gebruik je het nummer?', type: 'select', span: 'half', options: ['Jubileum', 'Bedrijfsfeest', 'Social media / marketing', 'Recruitment', 'Beurs / open dag', 'Anders'] },
-      { name: 'tone', label: 'Sfeer / toon', type: 'select', span: 'half', options: businessToneOptions },
-      { name: 'vocals', label: 'Stem / uitvoering', type: 'select', span: 'half', options: vocalOptions },
-      { name: 'musicStyle', label: 'Genre kiezen', type: 'select', span: 'half', options: ['Nederlandstalige pop', 'Rock / anthem', 'Koor / stadion', 'Countrypop', 'Dancepop', 'Hiphop / rapcoupletten', 'Akoestisch en klein', 'Singer-songwriter', 'Popballad', 'Disco / funk', 'House', 'EDM / festival', 'Gospel / soulkoor', 'Orkestrale pop', 'Musical / theater', 'Laat ons kiezen'] },
-      { name: 'tempo', label: 'Snelheid / tempo', type: 'select', span: 'half', options: tempoOptions },
+      ...musicFields(),
       { name: 'anecdotes', label: 'Verhaal van het bedrijf', type: 'textarea', required: true, span: 'full', placeholder: 'Wat maakt jullie bijzonder? Mooiste projecten, het team, de oprichter, typische uitspraken op de bouwplaats...', help: 'Deze details verwerken we in de songtekst.' },
       { name: 'mustMention', label: 'Wat moet er absoluut in?', type: 'textarea', span: 'full', placeholder: 'Projectnamen, slogan, collega’s, locaties of zinnen die terug moeten komen.' },
       { name: 'email', label: 'Zakelijk e-mailadres', type: 'email', placeholder: 'naam@bedrijf.nl', required: true, span: 'full' },
@@ -596,10 +482,7 @@ export const otherMomentCategory: Category = {
     { name: 'occasion', label: 'Voor welke gelegenheid?', type: 'text', placeholder: 'Bijv. pensioen, jubileum, afscheid', required: true, span: 'half' },
     { name: 'recipientName', label: 'Voor wie is het nummer?', type: 'text', placeholder: 'Naam', required: true, span: 'half', help: 'Vul hier één hoofdnaam in. Extra namen kun je met het plusje toevoegen.' },
     { name: 'fromName', label: 'Van wie komt het nummer?', type: 'text', placeholder: 'Bijv. het hele team', span: 'half' },
-    { name: 'tone', label: 'Sfeer / toon', type: 'select', required: true, span: 'half', options: toneOptions },
-    { name: 'vocals', label: 'Stem', type: 'select', span: 'half', options: vocalOptions },
-    { name: 'musicStyle', label: 'Genre kiezen', type: 'select', span: 'half', options: musicStyleOptions },
-    { name: 'tempo', label: 'Snelheid / tempo', type: 'select', span: 'half', options: tempoOptions },
+    ...musicFields(),
     { name: 'anecdotes', label: 'Verhaal, anekdotes & inside jokes', type: 'textarea', required: true, span: 'full', placeholder: 'Vertel wat dit moment uniek maakt — namen, plaatsen, grapjes...', help: 'Hoe concreter, hoe persoonlijker het nummer.' },
     { name: 'mustMention', label: 'Wat moet er absoluut in?', type: 'textarea', span: 'full', placeholder: 'Namen, zinnen, plekken of gebeurtenissen die niet mogen ontbreken.' },
     { name: 'avoid', label: 'Wat moeten we vermijden?', type: 'text', span: 'full', placeholder: 'Bijv. te sentimenteel, bepaalde namen, grove grappen...' },
