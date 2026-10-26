@@ -41,6 +41,7 @@ class LyricsGenerator
         'geslaagd' => 'geslaagd zijn voor een examen of diploma',
         'rijbewijs' => 'het halen van het rijbewijs',
         'eigen-huis' => 'een nieuw, eigen gekocht huis',
+        'sinterklaas' => 'Sinterklaas en pakjesavond (een vrolijk Sinterklaaslied, met de Sint en zijn Pieten)',
         'voetbalclubs' => 'een voetbalclub of team (meezinger)',
         'bouwbedrijven' => 'een bouwbedrijf (bedrijfslied)',
     ];
@@ -130,6 +131,13 @@ class LyricsGenerator
             'detail2' => 'favoriteRoom',
             'place' => 'place',
         ],
+        'sinterklaas' => [
+            'name' => 'recipientName',
+            'from' => 'fromName',
+            'detail1' => 'goodDeeds',
+            'detail2' => 'wishlist',
+            'moment' => 'mischief',
+        ],
         'voetbalclubs' => [
             'name' => ['clubName', 'recipientName'],
             'from' => 'fromName',
@@ -167,6 +175,8 @@ class LyricsGenerator
         // Een keuze die de insteek bepaalt (bijv. hele club versus team),
         // maar geen letterlijk zingbaar feit is.
         'teamType',
+        // Bepaalt vanuit wie het Sinterklaaslied klinkt, geen zingbaar feit.
+        'sintVoice',
     ];
 
     /**
@@ -231,6 +241,10 @@ class LyricsGenerator
         'firstHome' => 'Eerste eigen huis',
         'homeType' => 'Type woning',
         'favoriteRoom' => 'Favoriete plek in huis',
+        'sintVoice' => 'Wie het Sinterklaaslied zingt',
+        'goodDeeds' => 'Waar diegene dit jaar goed in was',
+        'wishlist' => 'Verlanglijstje',
+        'mischief' => 'Plagerig puntje',
         'teamType' => 'Soort clubmoment',
         'clubName' => 'Club- of teamnaam',
         'colors' => 'Clubkleuren',
@@ -1009,6 +1023,7 @@ class LyricsGenerator
             'Tempo' => $this->stringIntakeValue($intake['tempo'] ?? ''),
             'Stem of uitvoering' => $this->stringIntakeValue($intake['vocals'] ?? ''),
             'Insteek van het clubnummer' => $this->stringIntakeValue($intake['teamType'] ?? ''),
+            'Gezongen vanuit' => $this->stringIntakeValue($intake['sintVoice'] ?? ''),
         ]);
 
         if ($style !== []) {

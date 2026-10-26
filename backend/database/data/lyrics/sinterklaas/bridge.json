@@ -1,0 +1,14 @@
+{
+  "section": "bridge",
+  "category": "sinterklaas",
+  "description": "Brug - warm en wat rustiger moment. DETAIL1=waar hij/zij dit jaar goed in was, MOMENT=plagerig puntje",
+  "couplets": [
+    { "id": 1, "lines": ["En als de pakjes open zijn en het stil wordt in huis", "Dan voel je het nog, de Sint was hier thuis", "{{NAME}}, bewaar dit moment, dit lied en die lach", "Tot volgend jaar, op dezelfde mooie dag"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Het boek gaat dicht, het paard staat klaar", "{{NAME}}, de Sint komt terug, volgend jaar", "Maar dit lied blijft bij je, het blijft altijd van jou", "Een cadeautje van de Sint, met een hart zo trouw"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Al ben je nu groot of nog heel erg klein", "Op pakjesavond mag iedereen even kind zijn", "{{NAME}}, voel je het ook, die magie in de nacht", "De Sint was in huis, zoals je had verwacht"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["In het grote boek staat jouw naam met een ster", "{{NAME}}, jouw lach reikt tot in Spanje, zo ver", "Want wat jij dit jaar deed, dat zag de Sint wel", "{{NAME}}, ga zo door, dat vertelt hij je snel"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["{{DETAIL1}}, de Sint is er trots op, echt waar", "{{NAME}}, dat was een prestatie van formaat dit jaar", "Hij schreef het in het boek, met goud en met glans", "{{NAME}}, vanavond ben jij de ster van de dans"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["De kaarsjes branden, het is warm en zacht", "Er wordt gezongen tot diep in de nacht", "{{NAME}}, wat fijn dat we samen zijn", "Op deze avond, met chocola en mandarijn"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["En stiekem, {{NAME}}, het boek vertelt het mij", "Ook {{MOMENT}}, ach, dat hoort er ook bij", "Want niemand is perfect, ook de Pieten niet", "Dus lach er maar om, en zing mee met dit lied"], "rhyme_scheme": "AABB" }
+  ]
+}

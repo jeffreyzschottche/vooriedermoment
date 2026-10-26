@@ -126,6 +126,10 @@ class LyricsGeneratorCoverageTest extends TestCase
                 'age' => 'Verjaardag Leeftijd', 'party' => 'Verjaardag Feest',
                 'personality' => 'Verjaardag Karakter', 'partyMoment' => 'Verjaardag Draaimoment',
             ],
+            'sinterklaas' => $base('Sint') + [
+                'sintVoice' => 'Sint Stem', 'goodDeeds' => 'Sint GoedeDaad',
+                'wishlist' => 'Sint Verlanglijst', 'mischief' => 'Sint Plaagpunt',
+            ],
             'voetbalclubs' => $base('Club') + [
                 'teamType' => 'Club HeleGroep', 'clubName' => 'Club Naam', 'colors' => 'Club Kleuren',
                 'players' => 'Club Spelers', 'clubCulture' => 'Club Cultuur', 'chant' => 'Club Leus',
@@ -144,7 +148,7 @@ class LyricsGeneratorCoverageTest extends TestCase
     /** @return array<int, string> */
     private function nonLiteralFields(): array
     {
-        return ['tone', 'vocals', 'musicStyle', 'tempo', 'avoid', 'teamType'];
+        return ['tone', 'vocals', 'musicStyle', 'tempo', 'avoid', 'teamType', 'sintVoice'];
     }
 
     /** @param array<string, string|array<int, string>> $intake

@@ -73,6 +73,11 @@ class LyricsQualityTest extends TestCase
                 'personality' => 'familiemens en druktemaker',
                 'partyMoment' => 'binnenkomst met sterretjes',
             ],
+            'sinterklaas' => [
+                'goodDeeds' => 'zwemdiploma B gehaald',
+                'wishlist' => 'een rode step',
+                'mischief' => 'sokken laten slingeren',
+            ],
             'voetbalclubs' => [
                 'teamType' => 'kampioenswedstrijd',
                 'clubName' => 'VV Orion JO17',

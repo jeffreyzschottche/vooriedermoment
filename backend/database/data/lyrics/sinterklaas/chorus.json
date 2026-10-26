@@ -1,0 +1,15 @@
+{
+  "section": "chorus",
+  "category": "sinterklaas",
+  "description": "Refrein - Sinterklaas-meezinger voor pakjesavond.",
+  "couplets": [
+    { "id": 1, "lines": ["Sinterklaas is jarig, en {{NAME}} is erbij", "Pepernoten in de lucht, wat zijn we blij", "Een zak vol cadeaus en een hart zo trouw", "{{NAME}}, dit lied van de Sint is speciaal voor jou"], "rhyme_scheme": "AABB" },
+    { "id": 2, "lines": ["Dag {{NAME}}, het is pakjesavond vandaag", "De Sint is in huis, dat zie je toch graag", "Met pepernoten, cadeaus en een lach", "{{NAME}}, dit is jouw heerlijk avondje, jouw dag"], "rhyme_scheme": "AABB" },
+    { "id": 3, "lines": ["Heerlijk avondje, voor {{NAME}} vandaag", "De Sint zingt voor jou, en dat doet hij graag", "Een chocoladeletter, een rijm en een knipoog erbij", "{{NAME}}, op pakjesavond ben jij aan de beurt, zo blij"], "rhyme_scheme": "AABB" },
+    { "id": 4, "lines": ["{{NAME}}, {{NAME}}, de Sint staat voor de deur", "Met de Pieten erbij en een zak vol kleur", "Hij las in zijn boek wat jij dit jaar deed", "{{NAME}}, dit lied is voor jou, zodat iedereen het weet"], "rhyme_scheme": "AABB" },
+    { "id": 5, "lines": ["Er wordt aangebeld, de Pieten staan klaar", "Voor {{NAME}} een zak, en die is zwaar", "Zing maar mee, de hele kamer door", "{{NAME}}, dit Sinterklaaslied klinkt voor jou in koor"], "rhyme_scheme": "AABB" },
+    { "id": 6, "lines": ["Zet je schoen maar neer, zet je schoen maar klaar", "{{NAME}}, de Sint komt eraan, het is weer zover dit jaar", "Met mijter en staf, in zijn mantel van rood", "Voor {{NAME}} een lied, en een zak die is groot"], "rhyme_scheme": "AABB" },
+    { "id": 7, "lines": ["Dit is voor {{NAME}}, van de Sint en zijn Piet", "Met een knipoog en een rijm, in een Sinterklaaslied", "Er zit vast iets moois voor je in de grote zak", "{{NAME}}, kijk maar snel, er klinkt al gerommel op het dak"], "rhyme_scheme": "AABB" },
+    { "id": 8, "lines": ["Rood en goud, de mijter in de lucht", "Voor {{NAME}} een lied, en geen enkele zucht", "De Sint en de Pieten, ze zingen het hard", "{{NAME}}, je bent geweldig, met heel je hart"], "rhyme_scheme": "AABB" }
+  ]
+}

@@ -207,6 +207,29 @@ return [
             ],
         ],
 
+        'sinterklaas' => [
+            'placeholders' => ['naam' => 'recipientName', 'van' => 'fromName', 'lijstje' => 'wishlist'],
+            'defaults' => ['naam' => 'jij', 'van' => 'de Sint', 'lijstje' => 'een mooi cadeau'],
+            'intro' => ['Er klinkt getrappel boven op het dak,'],
+            'verse' => [
+                'Amerigo staat klaar, met Piet en een volle zak,',
+                'Voor {naam} een lied, met een knipoog erbij.',
+            ],
+            'chorus' => [
+                'Heerlijk avondje, voor {naam} vandaag!',
+                'De Sint zingt voor jou, en dat doet hij graag.',
+                'Een chocoladeletter, een rijm en een knipoog erbij,',
+                'Voor {naam} is het pakjesavond, zo blij.',
+            ],
+            'ai' => [
+                'instruction' => 'Schrijf precies twee rijmende, vrolijke Nederlandse Sinterklaasliedregels voor {naam}. Op het verlanglijstje: {lijstje}. Verwerk dit verhaal als het past: "{anecdotes}". Toon: {tone}. Spreek alleen over de Sint en Piet of de Pieten. Geef alleen de twee regels.',
+                'fallback' => [
+                    'Op het lijstje van {naam} staat {lijstje} met stip,',
+                    'De Pieten zoeken het uit, op de stoomboot en het schip.',
+                ],
+            ],
+        ],
+
         'voetbalclubs' => [
             'placeholders' => ['naam' => 'recipientName', 'van' => 'fromName', 'club' => 'clubName', 'kleuren' => 'colors'],
             'defaults' => ['naam' => 'het team', 'van' => 'de fans', 'club' => 'de club', 'kleuren' => 'onze kleuren'],

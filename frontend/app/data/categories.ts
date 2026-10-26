@@ -74,6 +74,7 @@ const themes: Record<string, AccentTheme> = {
   grape: { accent: '#8b54d6', accentStrong: '#653ca8', accentSoft: '#efe4fb', accentInk: '#ffffff' },
   grass: { accent: '#4aa838', accentStrong: '#347526', accentSoft: '#e7f5dd', accentInk: '#ffffff' },
   steel: { accent: '#d97e1a', accentStrong: '#8f5212', accentSoft: '#f7e8d4', accentInk: '#2a1a00' },
+  mitre: { accent: '#c8213a', accentStrong: '#951428', accentSoft: '#fbe4e7', accentInk: '#ffffff' },
 };
 
 // Merk-accent (default) — gelijk aan de CSS-vars in tailwind.css. Gebruikt als
@@ -379,6 +380,35 @@ export const categories: Category[] = [
     ],
     seoTitle: 'Persoonlijk verjaardagsnummer op maat',
     seoDescription: 'Een uniek verjaardagsnummer met naam, leeftijd en inside jokes. Het hoogtepunt van elk verjaardagsfeest.',
+  },
+  {
+    slug: 'sinterklaas',
+    title: 'Sinterklaas',
+    navLabel: 'Sinterklaas',
+    emoji: '🎁',
+    variant: 'standard',
+    theme: themes.mitre,
+    kicker: 'Heerlijk avondje',
+    heroTitle: 'Een eigen Sinterklaasnummer voor pakjesavond',
+    heroLead: 'Geen gedicht dat je om middernacht nog moet rijmen. Dit jaar zingt de Sint een nummer met naam, verlanglijstje en een plagerig puntje erin.',
+    intro: 'Vertel ons waar het lootje of het kind dit jaar goed in was, wat er op het verlanglijstje staat en welk gewoontje best een plaagstootje verdient. Wij maken er een vrolijk Sinterklaasnummer van.',
+    whatYouGet: ['Verschillende muzikale opties om uit te kiezen', 'Eén compleet Sinterklaasnummer', 'Naam, verlanglijstje en plagerige rijmpjes erin', 'Publicatie op Spotify en YouTube Music inbegrepen'],
+    playlistEmbed: null,
+    intakeFields: baseFields([
+      { name: 'sintVoice', label: 'Wie zingt het nummer?', type: 'select', options: ['Sinterklaas en zijn Pieten', 'Familie of vrienden', 'Laat ons kiezen'], span: 'half', help: 'Gelooft je kind nog? Kies dan Sinterklaas en zijn Pieten.' },
+      { name: 'goodDeeds', label: 'Waar was hij of zij dit jaar goed in?', type: 'text', placeholder: 'Bijv. zwemdiploma gehaald, goed geholpen thuis', span: 'half' },
+      { name: 'wishlist', label: 'Wat staat er op het verlanglijstje?', type: 'text', placeholder: 'Bijv. lego, een nieuwe fiets, een spelcomputer', span: 'half' },
+      { name: 'mischief', label: 'Een plagerig puntje', type: 'text', placeholder: 'Bijv. sokken laten slingeren, altijd op de telefoon', span: 'half', help: 'Zoals in een echt surprisegedicht, maar dan gezongen.' },
+    ]),
+    faq: [
+      { question: 'Op tijd voor pakjesavond?', answer: 'Reken op 48 uur voor de muzikale opties en na je keuze nog eens 48 uur tot we het nummer aanbieden bij Spotify en YouTube Music. Daarna hangt het af van de goedkeuring door de platforms. Vraag dus ruim voor 5 december aan.' },
+      { question: 'Mijn kind gelooft nog in Sinterklaas. Verklapt het nummer niets?', answer: 'Nee. Kies bij “Wie zingt het nummer?” voor Sinterklaas en zijn Pieten. Dan klinkt het alsof de Sint zelf zingt. Vul bij “Van wie komt het nummer?” dan “Sinterklaas” in of laat het leeg, zodat er geen papa of mama in de tekst opduikt.' },
+      { question: 'Kan het ook voor een volwassene of een lootje?', answer: 'Zeker. Voor een surprise-avond met lootjes werkt een plagerig nummer net zo goed als een gedicht. Deel de gewoontes en grapjes die iedereen in de familie of op het werk herkent.' },
+      { question: 'Mogen er plagerige rijmpjes in?', answer: 'Ja, dat hoort erbij. Vul een plagerig puntje in en we verwerken het met een knipoog. Wat je liever niet in het nummer wilt, kun je in het verhaalveld vermelden.' },
+      { question: 'Kan ik het nummer op 5 december laten afspelen?', answer: 'Ja. Na publicatie staat het op Spotify en YouTube Music, dus je kunt het tijdens pakjesavond gewoon via de telefoon of speaker afspelen.' },
+    ],
+    seoTitle: 'Persoonlijk Sinterklaasnummer voor pakjesavond',
+    seoDescription: 'Een eigen Sinterklaasnummer met naam, verlanglijstje en plagerige rijmpjes. Voor kinderen die nog geloven en voor de surprise-avond met lootjes.',
   },
   {
     slug: 'voetbalclubs',

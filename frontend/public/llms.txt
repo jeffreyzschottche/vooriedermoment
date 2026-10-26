@@ -4,7 +4,7 @@
 
 ## Werkwijze
 
-1. Kies een moment, bijvoorbeeld verjaardag, rijbewijs, geslaagd, geboorte, Vaderdag, Moederdag, team- of clublied, bouwbedrijf of een eigen gelegenheid.
+1. Kies een moment, bijvoorbeeld verjaardag, rijbewijs, geslaagd, geboorte, Vaderdag, Moederdag, Sinterklaas, team- of clublied, bouwbedrijf of een eigen gelegenheid.
 2. Vul het persoonlijke formulier in. Er is geen muziekkennis nodig; concrete details maken het nummer persoonlijk.
 3. Betaal € 9,99. Binnen enkele minuten staat de persoonlijke songtekst in de mail.
 4. Binnen 48 uur ontvangt de klant via een persoonlijke link vier korte voorproefjes en kiest een favoriet.
@@ -36,6 +36,7 @@
 - [Kind geboren](https://vooriedermoment.nl/momenten/kind-geboren): Nummer rond de geboorte van een kind. Voorbeelden: https://open.spotify.com/album/7qwnh0Wxn3GiQGDhDG0n2Y
 - [Vaderdag](https://vooriedermoment.nl/momenten/vaderdag): Persoonlijk Vaderdag-nummer. Voorbeelden: https://open.spotify.com/album/0VbpBAPTHllUF6L1PLBxzk
 - [Moederdag](https://vooriedermoment.nl/momenten/moederdag): Persoonlijk Moederdag-nummer. Voorbeelden: https://open.spotify.com/album/6SoUkWJQwdYklobiDi7y7N
+- [Sinterklaas](https://vooriedermoment.nl/momenten/sinterklaas): Sinterklaasnummer voor pakjesavond of de surprise-avond met lootjes, met naam, verlanglijstje en plagerige rijmpjes.
 - [Team- of clublied](https://vooriedermoment.nl/momenten/voetbalclubs): Meezinger voor een sportteam of club. Voorbeelden: https://open.spotify.com/album/4jmFVvaChdmht6T2z8TrX4
 - [Bouwbedrijven](https://vooriedermoment.nl/momenten/bouwbedrijven): Bedrijfsnummer met naam, slogan, projecten en teamcultuur. Voorbeelden: https://open.spotify.com/album/1ALnqm93ohAUppVq9SiqsA
 - [Eigen huis](https://vooriedermoment.nl/momenten/eigen-huis): Nummer voor een verhuizing of sleuteloverdracht.

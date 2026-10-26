@@ -9,6 +9,7 @@ const cats = [
   { slug: 'moederdag',     title: 'Moederdag',              emoji: '💐', a: '#e0538a', b: '#b13164' },
   { slug: 'kind-geboren',  title: 'Kind geboren',           emoji: '👶', a: '#1f9fcc', b: '#17738f' },
   { slug: 'verjaardag',    title: 'Verjaardag',             emoji: '🎂', a: '#8b54d6', b: '#653ca8' },
+  { slug: 'sinterklaas',   title: 'Sinterklaas',            emoji: '🎁', a: '#c8213a', b: '#951428', art: 'mitre' },
   { slug: 'voetbalclubs',  title: 'Team- of clublied',      emoji: '⚽', a: '#4aa838', b: '#347526' },
   { slug: 'bouwbedrijven', title: 'Bouwbedrijven',          emoji: '🏗️', a: '#d97e1a', b: '#8f5212' },
   { slug: 'anders',        title: 'Een ander moment',       emoji: '✨', a: '#ff6a4a', b: '#e04a2a' },
@@ -18,7 +19,28 @@ function esc(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-function svg({ title, emoji, a, b }) {
+// Eigen illustraties voor momenten zonder passende emoji (bv. Sinterklaas).
+const art = {
+  mitre: `<g transform="translate(600 312)">
+    <ellipse cx="0" cy="150" rx="150" ry="16" fill="#000000" opacity="0.18"/>
+    <path d="M-112 140 L-112 0 Q-112 -86 0 -150 Q112 -86 112 0 L112 140 Z" fill="#ffffff" opacity="0.16" transform="translate(10 10)"/>
+    <path d="M-112 140 L-112 0 Q-112 -86 0 -150 Q112 -86 112 0 L112 140 Z" fill="#e0344c" stroke="#f4c542" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M0 -146 L0 140" stroke="#f4c542" stroke-width="22"/>
+    <rect x="-112" y="96" width="224" height="30" fill="#f4c542"/>
+    <path d="M-34 -40 h24 v-24 h20 v24 h24 v20 h-24 v62 h-20 v-62 h-24 Z" fill="#fff6d8" stroke="#f4c542" stroke-width="6" stroke-linejoin="round"/>
+  </g>
+  <g fill="#b5733a" stroke="#7a4420" stroke-width="3">
+    <circle cx="360" cy="430" r="20"/><circle cx="318" cy="470" r="16"/><circle cx="392" cy="482" r="14"/>
+    <circle cx="842" cy="438" r="18"/><circle cx="884" cy="476" r="15"/><circle cx="812" cy="488" r="13"/>
+  </g>
+  <g fill="#fff6d8" opacity="0.9">
+    <path d="M330 200 l8 18 18 8 -18 8 -8 18 -8 -18 -18 -8 18 -8 Z"/>
+    <path d="M880 230 l6 13 13 6 -13 6 -6 13 -6 -13 -13 -6 13 -6 Z"/>
+    <path d="M420 120 l5 10 10 5 -10 5 -5 10 -5 -10 -10 -5 10 -5 Z"/>
+  </g>`,
+};
+
+function svg({ title, emoji, a, b, art: artKey }) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="${esc(title)}">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
@@ -39,7 +61,7 @@ function svg({ title, emoji, a, b }) {
   <circle cx="1110" cy="520" r="150" fill="#ffffff" opacity="0.07"/>
   <circle cx="150" cy="560" r="130" fill="#000000" opacity="0.06"/>
   <rect width="1200" height="630" fill="url(#glow)"/>
-  <text x="600" y="312" font-size="300" text-anchor="middle" dominant-baseline="central">${emoji}</text>
+  ${artKey ? art[artKey] : `<text x="600" y="312" font-size="300" text-anchor="middle" dominant-baseline="central">${emoji}</text>`}
   <rect width="1200" height="630" fill="url(#shade)"/>
   <text x="80" y="96" font-family="'Manrope','Segoe UI',sans-serif" font-size="28" font-weight="700" letter-spacing="3" fill="#ffffff" opacity="0.82">VOOR IEDER MOMENT</text>
   <text x="80" y="556" font-family="Georgia,'Times New Roman',serif" font-size="68" font-weight="700" fill="#ffffff">${esc(title)}</text>
