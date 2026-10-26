@@ -147,7 +147,7 @@ const productionHighlights = [
           <span class="section-kicker">Aanvragen</span>
           <h2 class="section-heading text-3xl md:text-4xl">{{ isB2b ? 'Vraag jullie bedrijfsnummer aan' : 'Vraag jouw nummer aan' }}</h2>
           <p class="section-subtext mx-auto mt-3 max-w-2xl">
-            De vragen zijn afgestemd op {{ category.title.toLowerCase() }}. Hoe concreter je antwoorden,
+            De vragen zijn speciaal afgestemd op dit moment. Hoe concreter je antwoorden,
             hoe persoonlijker de tekst, sfeer en uitvoering.
           </p>
         </div>

@@ -4,7 +4,7 @@ useSeoMeta({
   description: 'Controleer je aanvraag en rond de bestelling af.',
 });
 
-import { themeVars } from '~/data/categories';
+import { requestCategories, themeVars } from '~/data/categories';
 import { ApiError } from '~/services/ApiError';
 
 const offer = useOffer();
@@ -35,6 +35,17 @@ const fieldLabels: Record<string, string> = {
   companyName: 'Bedrijfsnaam',
   clubName: 'Club/team',
 };
+
+// Moment-specifieke velden (bv. verlanglijstje bij Sinterklaas) krijgen het
+// label uit het formulier van dat moment, zodat nooit een veldnaam verschijnt.
+const categoryFieldLabels = computed<Record<string, string>>(() => {
+  const category = requestCategories.find((c) => c.slug === lastPayload.value?.category);
+  return Object.fromEntries((category?.intakeFields ?? []).map((f) => [f.name, f.label]));
+});
+
+function fieldLabel(key: string): string {
+  return fieldLabels[key] ?? categoryFieldLabels.value[key] ?? key;
+}
 
 async function pay() {
   processing.value = true;
@@ -132,7 +143,7 @@ function isVisibleLyricLine(index: number) {
             <dl class="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
               <div v-for="(val, key) in lastPayload?.intake" v-show="shouldShowIntakeField(String(key))" :key="key">
                 <dt class="text-xs font-bold uppercase tracking-[0.14em]" :style="{ color: 'var(--color-ink-faint)' }">
-                  {{ fieldLabels[String(key)] ?? key }}
+                  {{ fieldLabel(String(key)) }}
                 </dt>
                 <dd class="mt-1 whitespace-pre-line text-sm leading-relaxed" :style="{ color: 'var(--color-ink)' }">
                   {{ formatIntakeValue(val) }}
