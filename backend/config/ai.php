@@ -66,7 +66,8 @@ return [
     | Lyrics-flow per nummer (LyricsGenerator::generateAiLyrics): DeepSeek-chat
     | schrijft, DeepSeek-reasoner controleert + herschrijft in één call, en
     | alleen bij ontbrekende formulierfeiten volgt één reparatiecall. Daarna
-    | één OpenAI-eindreview (final_review). Max. 3 DeepSeek-calls + 1 OpenAI.
+    | één OpenAI-eindreview (final_review), met één herstelronde bij afgekeurde
+    | output. Max. 3 DeepSeek-calls + 2 OpenAI-reviews (excl. HTTP-retries).
     |
     | lyrics_attempts/lyrics_fallback_after_attempt horen bij het oude per-
     | couplet-pad (generateAiLines) en worden door de flow hierboven niet gebruikt.

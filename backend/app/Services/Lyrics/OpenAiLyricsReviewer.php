@@ -34,6 +34,10 @@ class OpenAiLyricsReviewer
                         'Beoordeel betekenis en logica ook zelf. Python ondersteunt de controle, maar bewijst semantische juistheid niet.',
                         'Rijmschema per sectie is AABB: regel 1 rijmt op regel 2 en regel 3 op regel 4. Houd regels op 6–12 lettergrepen en rijmende regels ongeveer even lang.',
                         'Beoordeel Nederlands eindrijm op uitspraak vanaf de laatste beklemtoonde klinker, niet alleen op spelling. Gebruik fonetische transcripties bij de Python-vergelijking; neem onzekerheden serieus en herschrijf twijfelachtige rijmparen.',
+                        'Maak vóór het herschrijven een rijmplan: kies per sectie twee paren bestaande Nederlandse eindwoorden met dezelfde beklemtoonde rijmklank. Schrijf daarna natuurlijke zinnen naar die eindwoorden toe.',
+                        'Controleer met de python tool alle tien rijmparen van de DEFINITIEVE versie: sectie, regelnummers, eindwoorden en fonetische rijmklanken. Assert dat alle paren rijmen en verschillende woorden gebruiken. Controleer na iedere wijziging de volledige tekst opnieuw.',
+                        'Zelfrijm (klaar/klaar), samenstellingen van hetzelfde woord (dag/verjaardag) en alleen een onbeklemtoonde uitgang delen (lopen/maken) tellen niet. Gebruik bij twijfel een eenvoudig, onbetwist rijmpaar.',
+                        'Verzin of verbuig nooit woorden om rijm te forceren: "graan" betekent geen "graag". Vermijd kromme woordvolgorde, losse stopwoorden en onlogische zinnen. Herschrijf zo nodig BEIDE regels van een rijmpaar, met behoud van de feiten.',
                         'Geef uitsluitend de definitieve lyrics terug, zonder uitleg, code, controles of markdown-codeblok.',
                         'Gebruik exact vijf secties in deze volgorde: [Verse 1], [Chorus], [Verse 2], [Bridge], [Final Chorus], elk met precies vier regels.',
                     ]),
@@ -47,6 +51,7 @@ class OpenAiLyricsReviewer
             // Retry on rate limit (429) or server errors (5xx)
             if ($attempt < $maxAttempts && ($response->status() === 429 || $response->status() >= 500)) {
                 sleep($attempt * 10); // 10s, 20s backoff
+
                 continue;
             }
 

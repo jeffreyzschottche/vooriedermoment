@@ -725,7 +725,8 @@ class LyricsGenerator
     }
 
     /**
-     * Na DeepSeek: perspectief rechtzetten, één OpenAI-eindreview en pas dán
+     * Na DeepSeek: perspectief rechtzetten, OpenAI-eindreview (met maximaal één
+     * herstelronde bij afgekeurde output) en pas dán
      * de harde dekkingscontrole, zodat de review ontbrekende feiten nog kan
      * toevoegen.
      *
@@ -1550,63 +1551,73 @@ class LyricsGenerator
             return $sections;
         }
 
-        $fallback = $category === 'anders' ? $sections : $this->addRepeatedChorus($sections);
         $missingBefore = $this->missingIntakeRequirements($this->formatLyrics($sections), $context, $intake);
+        $briefing = array_merge(
+            ['Categorie: '.$category],
+            $this->completeLyricsBriefing($context, $intake),
+        );
+        $briefing[] = 'RIJMSCHEMA: AABB per sectie (regel 1 op 2, regel 3 op 4), op klank. Houd regels op 6–12 lettergrepen.';
+        $briefing[] = 'Alle rijmparen moeten kloppen; minder rijmfouten is niet voldoende. Gebruik bestaande Nederlandse woorden en natuurlijke zinnen.';
+        $rhymeIssuesBefore = $this->rhymeAnalyzer->issues($this->canonicalSongSections($sections));
+        if ($rhymeIssuesBefore !== []) {
+            $briefing[] = 'RIJM- EN RITMEPROBLEMEN (los deze op):';
+            foreach ($rhymeIssuesBefore as $issue) {
+                $briefing[] = "- {$issue}";
+            }
+        }
+        if ($missingBefore !== []) {
+            $briefing[] = 'NOG NIET VERWERKT (voeg deze herkenbaar toe):';
+            foreach ($missingBefore as $fact) {
+                $briefing[] = "- {$fact['label']}: {$fact['value']}";
+            }
+        }
 
-        try {
-            $briefing = array_merge(
-                ['Categorie: '.$category],
-                $this->completeLyricsBriefing($context, $intake),
+        $candidate = $this->canonicalSongSections($sections);
+        $issues = [];
+        for ($attempt = 1; $attempt <= 2; $attempt++) {
+            $feedback = $issues === [] ? [] : array_merge(
+                ['HERSTELRONDE: de vorige review is afgekeurd. Los ALLE onderstaande fouten op:', 'Herschrijf zo nodig beide regels, behoud de briefing en controleer daarna alle rijmparen opnieuw.'],
+                $issues,
             );
-            $briefing[] = '';
-            $briefing[] = 'RIJMSCHEMA: AABB per sectie (regel 1 op 2, regel 3 op 4), op klank. Houd regels op 6–12 lettergrepen.';
-            $rhymeIssuesBefore = $this->rhymeAnalyzer->issues($this->canonicalSongSections($sections));
-            if ($rhymeIssuesBefore !== []) {
-                $briefing[] = 'RIJM- EN RITMEPROBLEMEN (los deze op):';
-                foreach ($rhymeIssuesBefore as $issue) {
-                    $briefing[] = "- {$issue}";
-                }
-            }
-            if ($missingBefore !== []) {
-                $briefing[] = '';
-                $briefing[] = 'NOG NIET VERWERKT (voeg deze herkenbaar toe):';
-                foreach ($missingBefore as $fact) {
-                    $briefing[] = "- {$fact['label']}: {$fact['value']}";
-                }
-            }
-            $raw = app(OpenAiLyricsReviewer::class)->review($this->formatLyrics($sections), implode("\n", $briefing));
-
-            // Basic structure check - if it doesn't match, just use original
+            // API- en Python-fouten gaan naar de bestaande productiefoutafhandeling.
+            // Een niet-gereviewde versie mag nooit stilletjes definitief worden.
+            $raw = app(OpenAiLyricsReviewer::class)->review(
+                $this->formatLyrics($candidate),
+                implode("\n", array_merge($briefing, $feedback)),
+            );
             $lines = array_values(array_filter(array_map('trim', preg_split('/\R/u', trim($raw)) ?: []), fn ($line) => $line !== ''));
             $headings = ['[Verse 1]', '[Chorus]', '[Verse 2]', '[Bridge]', '[Final Chorus]'];
-
-            if (count($lines) !== 25) {
-                return $fallback;
-            }
-
+            $validStructure = count($lines) === 25;
             foreach ($headings as $index => $heading) {
-                if ($lines[$index * 5] !== $heading) {
-                    return $fallback;
-                }
+                $validStructure = $validStructure && ($lines[$index * 5] ?? '') === $heading;
+            }
+            if (! $validStructure) {
+                $issues = ['Ongeldige structuur: lever exact vijf secties met de afgesproken koppen, elk met vier regels, zonder uitleg.'];
+
+                continue;
             }
 
             $reviewed = $this->parseGeneralLyrics($raw);
-
-            // De review mag geen formulierfeiten kwijtraken die DeepSeek wel had.
-            if (count($this->missingIntakeRequirements($this->formatLyrics($reviewed), $context, $intake)) > count($missingBefore)) {
-                return $fallback;
+            $issues = [];
+            foreach ($this->missingIntakeRequirements($this->formatLyrics($reviewed), $context, $intake) as $fact) {
+                if (! in_array($fact, $missingBefore, true)) {
+                    $issues[] = "Formulierfeit verloren: {$fact['label']}: {$fact['value']}";
+                }
             }
-
-            // En mag het rijm niet slechter maken dan de DeepSeek-versie.
-            if (count($this->rhymeAnalyzer->rhymeFailures($reviewed)) > count($this->rhymeAnalyzer->rhymeFailures($sections))) {
-                return $fallback;
+            foreach ($this->rhymeAnalyzer->rhymeFailures($reviewed, true) as $failure) {
+                $issue = "{$failure['section']}: '{$failure['a']}' en '{$failure['b']}' vormen geen geldig rijmpaar (zelfrijm telt niet).";
+                if ($failure['suggestions'] !== []) {
+                    $issue .= ' Rijmwoorden om te gebruiken: '.implode(', ', $failure['suggestions']);
+                }
+                $issues[] = $issue;
             }
-
-            return $category === 'anders' ? $reviewed : $this->addRepeatedChorus($reviewed);
-        } catch (\Throwable $e) {
-            // Any error (HTTP, parsing, etc.) - just use original lyrics
-            return $fallback;
+            if ($issues === []) {
+                return $category === 'anders' ? $reviewed : $this->addRepeatedChorus($reviewed);
+            }
+            $candidate = $reviewed;
         }
+
+        throw new RuntimeException('OpenAI-eindredactie afgekeurd na herstelronde: '.implode('; ', $issues));
     }
 
     /** @return array<int, array{section: string, lines: array<int, string>}> */

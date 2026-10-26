@@ -22,6 +22,53 @@ class SongRequestProductionTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_failed_rhyme_review_stops_production_before_final_lyrics_and_notifications(): void
+    {
+        Queue::fake();
+        Mail::fake();
+        Http::preventStrayRequests();
+        config([
+            'ai.default' => 'deepseek',
+            'ai.providers.deepseek.key' => 'test-key',
+            'ai.providers.openai.key' => 'test-key',
+            'ai.final_review.enabled' => true,
+        ]);
+        $lyrics = implode("\n", array_map(
+            fn ($heading) => $heading."\nHenk we zingen voor jou\nOmdat ik naar je kijk\nSamen staan we klaar\nVandaag zijn wij bij elkaar",
+            ['[Verse 1]', '[Chorus]', '[Verse 2]', '[Bridge]', '[Final Chorus]'],
+        ));
+        Http::fake([
+            'api.deepseek.com/*' => Http::response(['choices' => [['message' => ['content' => $lyrics]]]]),
+            '*/responses' => Http::response(['status' => 'completed', 'output' => [
+                ['type' => 'code_interpreter_call', 'status' => 'completed', 'code' => 'print("checked")'],
+                ['type' => 'message', 'role' => 'assistant', 'content' => [['type' => 'output_text', 'text' => $lyrics]]],
+            ]]),
+        ]);
+        $order = SongRequest::create([
+            'category' => 'verjaardag',
+            'category_title' => 'Verjaardag',
+            'email' => 'henk@example.com',
+            'intake' => ['recipientName' => 'Henk'],
+            'status' => 'paid',
+            'paid_at' => now(),
+        ]);
+
+        try {
+            app(SongProductionPipeline::class)->run($order);
+            $this->fail('Bad rhymes must stop production.');
+        } catch (RuntimeException $e) {
+            $this->assertStringContainsString('afgekeurd na herstelronde', $e->getMessage());
+        }
+
+        $order->refresh();
+        $this->assertSame('production_failed', $order->status);
+        $this->assertNull($order->final_lyrics);
+        $this->assertStringContainsString("'jou' en 'kijk'", $order->production_steps['error']);
+        Queue::assertNotPushed(SendPaymentConfirmation::class);
+        Queue::assertNotPushed(SendOrderNotification::class);
+        Mail::assertNothingSent();
+    }
+
     public function test_creating_a_request_never_waits_for_the_ai_provider(): void
     {
         config([

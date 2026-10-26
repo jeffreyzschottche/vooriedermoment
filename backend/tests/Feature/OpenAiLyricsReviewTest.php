@@ -88,27 +88,80 @@ class OpenAiLyricsReviewTest extends TestCase
         Http::assertSent(fn ($request) => str_contains($request['input'], 'Henk') && ! str_contains($request['input'], 'private@example.com'));
     }
 
-    public function test_review_that_drops_form_details_keeps_the_deepseek_version(): void
+    public function test_review_that_keeps_dropping_form_details_is_rejected(): void
     {
         $generator = $this->generator();
         $draft = $generator->generateDraft('anders', ['name' => 'Henk']);
         Http::fake(['*/responses' => Http::response($this->response($this->lyrics('Piet')))]);
-        $sections = $generator->review($draft['sections'], 'anders', $draft['context'], ['name' => 'Henk']);
-        $this->assertSame($draft['sections'], $sections);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Formulierfeit verloren');
+        $generator->review($this->sections(), 'anders', $draft['context'], ['name' => 'Henk']);
     }
 
-    public function test_review_that_breaks_rhymes_keeps_the_deepseek_version(): void
+    public function test_review_repairs_bad_rhymes_with_specific_feedback(): void
     {
         $generator = $this->generator();
         $draft = $generator->generateDraft('anders', ['name' => 'Henk']);
-        $sections = array_map(
-            fn ($section) => ['section' => $section, 'lines' => ['Henk we zingen voor jou', 'Omdat ik op je bouw', 'Samen staan we klaar', 'Vandaag zijn wij bij elkaar']],
-            ['verse1', 'chorus', 'verse2', 'bridge', 'chorus_final'],
-        );
-        Http::fake(['*/responses' => Http::response($this->response(str_replace('Omdat ik op je bouw', 'Omdat ik naar je kijk', $this->lyrics('Henk'))))]);
+        $broken = str_replace('Omdat ik op je bouw', 'Omdat ik naar je kijk', $this->lyrics('Henk'));
+        Http::fake(['*/responses' => Http::sequence()
+            ->push($this->response($broken))
+            ->push($this->response($this->lyrics('Henk')))]);
 
-        $this->assertSame($sections, $generator->review($sections, 'anders', $draft['context'], ['name' => 'Henk']));
+        $this->assertSame($this->sections(), $generator->review($this->sections(), 'anders', $draft['context'], ['name' => 'Henk']));
+        Http::assertSentCount(2);
         Http::assertSent(fn ($request) => str_contains($request['input'], 'RIJMSCHEMA: AABB'));
+        Http::assertSent(fn ($request) => str_contains($request['input'], 'HERSTELRONDE')
+            && str_contains($request['input'], "'jou' en 'kijk'"));
+    }
+
+    public function test_unchanged_bad_rhymes_are_rejected_after_one_repair_round(): void
+    {
+        $generator = $this->generator();
+        $draft = $generator->generateDraft('anders', ['name' => 'Henk']);
+        $broken = str_replace('Omdat ik op je bouw', 'Omdat ik naar je kijk', $this->lyrics('Henk'));
+        $sections = array_map(fn ($section) => [
+            'section' => $section['section'],
+            'lines' => str_replace('Omdat ik op je bouw', 'Omdat ik naar je kijk', $section['lines']),
+        ], $this->sections());
+        Http::fake(['*/responses' => Http::response($this->response($broken))]);
+
+        try {
+            $generator->review($sections, 'anders', $draft['context'], ['name' => 'Henk']);
+            $this->fail('Unchanged rhyme failures must not be accepted.');
+        } catch (RuntimeException $e) {
+            $this->assertStringContainsString('afgekeurd na herstelronde', $e->getMessage());
+            $this->assertStringContainsString("'jou' en 'kijk'", $e->getMessage());
+        }
+        Http::assertSentCount(2);
+    }
+
+    public function test_self_rhyme_is_rejected(): void
+    {
+        $generator = $this->generator();
+        Http::fake(['*/responses' => Http::response($this->response(
+            str_replace('Omdat ik op je bouw', 'Dit lied is ook voor jou', $this->lyrics('Henk')),
+        ))]);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("'jou' en 'jou'");
+        $generator->review($this->sections(), 'anders', [], []);
+    }
+
+    public function test_api_failure_does_not_silently_use_the_draft(): void
+    {
+        Http::fake(['*/responses' => Http::response([], 401)]);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('HTTP 401');
+        $this->generator()->review($this->sections(), 'anders', [], []);
+    }
+
+    public function test_review_without_python_does_not_silently_use_the_draft(): void
+    {
+        $response = $this->response($this->lyrics('Henk'));
+        array_shift($response['output']);
+        Http::fake(['*/responses' => Http::response($response)]);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Python-uitvoering');
+        $this->generator()->review($this->sections(), 'anders', [], []);
     }
 
     public function test_review_receives_missing_facts_and_may_add_them(): void
@@ -122,11 +175,13 @@ class OpenAiLyricsReviewTest extends TestCase
         Http::assertSent(fn ($request) => str_contains($request['input'], 'NOG NIET VERWERKT'));
     }
 
-    public function test_malformed_output_keeps_the_original_instead_of_truncating(): void
+    public function test_malformed_output_is_rejected_instead_of_truncated_or_ignored(): void
     {
         $generator = $this->generator();
         Http::fake(['*/responses' => Http::response($this->response($this->lyrics('Henk')."\nExtra uitleg"))]);
-        $this->assertSame([], $generator->review([], 'anders', [], []));
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Ongeldige structuur');
+        $generator->review($this->sections(), 'anders', [], []);
     }
 
     public function test_disabled_review_and_draft_make_no_requests(): void
@@ -153,6 +208,14 @@ class OpenAiLyricsReviewTest extends TestCase
     private function lyrics(string $name): string
     {
         return implode("\n", array_map(fn ($heading) => $heading."\n{$name} we zingen voor jou\nOmdat ik op je bouw\nSamen staan we klaar\nVandaag zijn wij bij elkaar", ['[Verse 1]', '[Chorus]', '[Verse 2]', '[Bridge]', '[Final Chorus]']));
+    }
+
+    private function sections(): array
+    {
+        return array_map(
+            fn ($section) => ['section' => $section, 'lines' => ['Henk we zingen voor jou', 'Omdat ik op je bouw', 'Samen staan we klaar', 'Vandaag zijn wij bij elkaar']],
+            ['verse1', 'chorus', 'verse2', 'bridge', 'chorus_final'],
+        );
     }
 
     private function response(string $lyrics): array
