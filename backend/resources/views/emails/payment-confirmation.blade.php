@@ -48,7 +48,7 @@
 
                             <div style="background: #fff4ef; border: 1px solid #ffd8cc; border-radius: 12px; padding: 18px;">
                                 <p style="font-size: 15px; line-height: 1.7; color: #4a5a52; margin: 0;">
-                                    Binnen 24–72 uur ontvang je per e-mail vier samples van 15 seconden. Je kunt ze rustig beluisteren en daarna je favoriete versie kiezen.
+                                    Binnen 48 uur ontvang je per e-mail vier samples van 15 seconden. Je kunt ze rustig beluisteren en daarna je favoriete versie kiezen.
                                 </p>
                             </div>
 

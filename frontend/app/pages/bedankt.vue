@@ -91,7 +91,7 @@ const themeStyle = computed(() => themeVars(theme.value));
         >
           Je betaling is gelukt. We hebben je aanvraag voor
           <strong :style="{ color: 'var(--accent-strong)' }">{{ categoryTitle }}</strong>
-          ontvangen. Je songtekst komt binnen enkele minuten in je mail, en binnen 24–72 uur staan vier samples voor je klaar.
+          ontvangen. Je songtekst komt binnen enkele minuten in je mail, en binnen 48 uur staan vier samples voor je klaar.
         </p>
         <p
           v-hero-reveal
@@ -140,7 +140,7 @@ const themeStyle = computed(() => themeVars(theme.value));
                     4 samples
                   </p>
                   <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                    Binnen 24–72 uur ontvang je vier unieke samples van 15 seconden in je inbox.
+                    Binnen 48 uur ontvang je vier unieke samples van 15 seconden in je inbox.
                   </p>
                 </div>
               </div>
@@ -157,7 +157,7 @@ const themeStyle = computed(() => themeVars(theme.value));
                     Spotify &amp; YouTube Music
                   </p>
                   <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                    Na jouw keuze maken we de favoriet af. Binnen 24–72 uur staat je nummer op beide platforms.
+                    Na jouw keuze maken we de favoriet binnen 48 uur af en bieden we je nummer aan bij beide platforms.
                   </p>
                 </div>
               </div>

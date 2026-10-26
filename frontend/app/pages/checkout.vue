@@ -187,7 +187,7 @@ function isVisibleLyricLine(index: number) {
                   4 samples in je inbox
                 </p>
                 <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                  Binnen 24–72 uur ontvang je vier unieke samples van 15 seconden. Jij kiest de favoriet.
+                  Binnen 48 uur ontvang je vier unieke samples van 15 seconden. Jij kiest de favoriet.
                 </p>
               </div>
               <div class="rich-card p-5">
@@ -198,7 +198,7 @@ function isVisibleLyricLine(index: number) {
                   Jouw favoriet wordt de complete versie
                 </p>
                 <p class="mt-2 text-sm leading-relaxed" :style="{ color: 'var(--color-ink-soft)' }">
-                  Na jouw keuze maken wij het nummer af. Binnen 24–72 uur staat het op Spotify en YouTube Music.
+                  Na jouw keuze maken wij het nummer binnen 48 uur af en bieden we het aan bij Spotify en YouTube Music.
                 </p>
               </div>
             </div>
@@ -290,7 +290,7 @@ function isVisibleLyricLine(index: number) {
               class="mt-4 rounded-xl px-4 py-3 text-center text-xs leading-relaxed"
               :style="{ background: 'var(--color-surface-soft)', color: 'var(--color-ink-faint)' }"
             >
-              Na je bestelling ontvang je binnen 24–72 uur 4 samples per mail.
+              Na je bestelling ontvang je binnen 48 uur 4 samples per mail.
             </p>
           </div>
         </aside>

@@ -38,8 +38,8 @@ const heroStats = [
 const pipeline = [
   { n: '01', title: 'Moment kiezen', text: 'Geslaagd, rijbewijs, teamlied, bouwbedrijf of een eigen gelegenheid.' },
   { n: '02', title: 'Vertel jouw verhaal', text: 'Deel namen, herinneringen en inside jokes. Direct na betaling staat je persoonlijke songtekst in je mail.' },
-  { n: '03', title: 'Kies uit de opties', text: 'Binnen 24–72 uur ontvang je verschillende korte voorproefjes in je inbox.' },
-  { n: '04', title: 'Wij regelen de release', text: 'Wij maken jouw favoriet compleet en publiceren hem binnen 24–72 uur op Spotify en YouTube Music.' },
+  { n: '03', title: 'Kies uit de opties', text: 'Binnen 48 uur ontvang je verschillende korte voorproefjes in je inbox.' },
+  { n: '04', title: 'Wij regelen de release', text: 'Wij maken jouw favoriet binnen 48 uur compleet en bieden hem aan bij Spotify en YouTube Music.' },
 ];
 
 const valueProps = [
@@ -70,7 +70,7 @@ const faqPreview = [
   { q: 'Hoe werkt het precies?', a: 'Je kiest een moment en vult stap voor stap ons formulier in met namen, herinneringen en de gewenste sfeer. Direct na betaling ontvang je je persoonlijke songtekst per e-mail; daarna sturen we je verschillende muzikale opties. Jij kiest je favoriet; wij maken het nummer compleet en publiceren het voor je op Spotify en YouTube Music.' },
   { q: 'Wanneer krijg ik de songtekst?', a: 'Meteen na je betaling. Je ontvangt een bevestiging met de volledige songtekst, geschreven op basis van jouw verhaal. Zo weet je direct wat er straks gezongen wordt.' },
   { q: 'Moet ik zelf iets regelen voor Spotify?', a: 'Nee. Wij verzorgen de volledige publicatie op Spotify en YouTube Music. Je hebt geen artiestenaccount of technische kennis nodig. Zodra jouw nummer live staat, ontvang je de directe luisterlinks per e-mail.' },
-  { q: 'Hoe snel staat mijn nummer online?', a: 'Binnen 24–72 uur na betaling ontvang je de muzikale opties. Na jouw keuze maken we de favoriet compleet en staat het nummer meestal binnen nog eens 24–72 uur op Spotify en YouTube Music.' },
+  { q: 'Hoe snel staat mijn nummer online?', a: 'Binnen 48 uur na betaling ontvang je de muzikale opties. Na jouw keuze maken we de favoriet binnen 48 uur compleet en bieden we hem aan bij Spotify en YouTube Music. Wanneer het nummer live staat, hangt af van de goedkeuring door de platforms.' },
   { q: 'Kan ik mijn nummer later opnieuw beluisteren?', a: 'Ja. Jouw nummer wordt als een echte release gepubliceerd. Voeg het toe aan je Spotify- of YouTube Music-bibliotheek en luister er zo vaak naar als je wilt.' },
   { q: 'Kan ik het nummer met anderen delen?', a: 'Zeker. Deel de luisterlink eenvoudig via WhatsApp, e-mail of social media met familie, vrienden, collega’s of het hele team.' },
   { q: 'Wat als mijn moment er niet tussen staat?', a: 'Kies dan “Een ander moment”. Van pensioen, jubileum en afscheid tot een bedankje of een herinnering die alleen voor jullie betekenis heeft: jij vertelt het verhaal, wij maken het nummer.' },

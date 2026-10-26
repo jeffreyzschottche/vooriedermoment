@@ -114,7 +114,7 @@
 
             <p>
                 Luister rustig naar alle vier en kies via de knop je favoriet.
-                Daarna maken wij die versie compleet. Binnen 24–72 uur staat je nummer op Spotify en YouTube Music.
+                Daarna maken wij die versie binnen 48 uur compleet en bieden we je nummer aan bij Spotify en YouTube Music.
             </p>
 
             <div class="samples">
