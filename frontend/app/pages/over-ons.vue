@@ -33,7 +33,7 @@ const steps = [
         <p v-reveal class="mt-6 text-lg leading-8" :style="{ color: 'var(--color-ink-soft)' }">
           Een eigen nummer laten maken was ooit vooral duur en tijdrovend. Wij maken het bereikbaar:
           jouw verhaal, verschillende muzikale opties en één complete release voor
-          <strong>€ 9,99</strong> — voor ieder moment en voor iedereen.
+          <strong>€ 4,99</strong> — voor ieder moment en voor iedereen.
         </p>
       </div>
     </section>

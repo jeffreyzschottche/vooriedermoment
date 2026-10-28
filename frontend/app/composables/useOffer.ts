@@ -2,8 +2,8 @@
 // versie voor Spotify en YouTube Music. Kortingsweergave blijft voorbereid voor
 // een toekomstige aanbieding.
 
-const REGULAR_PRICE = 9.99;
-const SALE_PRICE = 9.99;
+const REGULAR_PRICE = 4.99;
+const SALE_PRICE = 4.99;
 
 function euro(value: number): string {
   return '€ ' + value.toFixed(2).replace('.', ',');

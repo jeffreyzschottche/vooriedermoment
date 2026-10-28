@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Toont de prijs (€ 9,99). Alleen bij een echte korting (hasDiscount) tonen we
+// Toont de prijs (€ 4,99). Alleen bij een echte korting (hasDiscount) tonen we
 // een doorgestreepte prijs + aanbieding-label.
 withDefaults(defineProps<{ size?: 'sm' | 'md' | 'lg'; inline?: boolean }>(), {
   size: 'md',

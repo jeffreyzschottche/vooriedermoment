@@ -152,8 +152,8 @@ class SongRequestController extends Controller
 
     private function priceCents(): int
     {
-        // Eén vaste prijs: € 9,99 per nummer.
-        return 999;
+        // Eén vaste prijs: € 4,99 per nummer.
+        return 499;
     }
 
     private function present(SongRequest $song): array

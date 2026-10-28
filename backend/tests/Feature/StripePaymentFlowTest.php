@@ -17,6 +17,27 @@ class StripePaymentFlowTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_new_song_request_uses_the_four_euro_ninety_nine_price(): void
+    {
+        $this->postJson('/api/v1/song-requests', [
+            'category' => 'verjaardag',
+            'categoryTitle' => 'Verjaardag',
+            'intake' => [
+                'recipientName' => 'Anna',
+                'email' => 'klant@example.com',
+            ],
+            'price_cents' => 1,
+        ])
+            ->assertCreated()
+            ->assertJsonPath('data.price_cents', 499);
+
+        $this->assertDatabaseHas('song_requests', [
+            'email' => 'klant@example.com',
+            'price_cents' => 499,
+            'status' => 'draft',
+        ]);
+    }
+
     public function test_checkout_creates_a_pending_session_without_marking_the_order_paid(): void
     {
         $this->app->instance(PaymentProvider::class, new class implements PaymentProvider
@@ -113,7 +134,7 @@ class StripePaymentFlowTest extends TestCase
         $this->assertDatabaseHas('song_requests', [
             'id' => $songRequest->id,
             'status' => 'draft',
-            'price_cents' => 999,
+            'price_cents' => 499,
             'payment_provider' => null,
         ]);
 
@@ -133,7 +154,7 @@ class StripePaymentFlowTest extends TestCase
         $session = [
             'id' => 'cs_test_paid_123',
             'payment_status' => 'paid',
-            'amount_total' => 999,
+            'amount_total' => 499,
             'currency' => 'eur',
             'payment_intent' => 'pi_test_123',
             'metadata' => [
@@ -218,7 +239,7 @@ class StripePaymentFlowTest extends TestCase
                     'id' => 'cs_test_signed',
                     'object' => 'checkout.session',
                     'payment_status' => 'paid',
-                    'amount_total' => 999,
+                    'amount_total' => 499,
                     'currency' => 'eur',
                     'payment_intent' => 'pi_test_signed',
                     'metadata' => [
@@ -310,7 +331,7 @@ class StripePaymentFlowTest extends TestCase
             'intake' => ['recipientName' => 'Anna'],
             'lyrics' => 'Een testlied',
             'status' => 'draft',
-            'price_cents' => 999,
+            'price_cents' => 499,
         ], $overrides));
     }
 }

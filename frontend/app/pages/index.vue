@@ -19,7 +19,7 @@ useSeoMeta({
   title: 'Een persoonlijk nummer voor elk moment',
   ogTitle: 'Voor Ieder Moment — een persoonlijk nummer voor elk moment',
   description:
-    'Laat voor € 9,99 een persoonlijk Nederlandstalig nummer maken voor een verjaardag, rijbewijs, geboorte, team of bedrijf. Je songtekst direct in je mail, jouw favoriet op Spotify.',
+    'Laat voor € 4,99 een persoonlijk Nederlandstalig nummer maken voor een verjaardag, rijbewijs, geboorte, team of bedrijf. Je songtekst direct in je mail, jouw favoriet op Spotify.',
   ogDescription:
     'Vertel jouw verhaal, ontvang direct je persoonlijke songtekst en luister straks naar je eigen nummer op Spotify en YouTube Music.',
   ogUrl: 'https://vooriedermoment.nl/',
@@ -30,7 +30,7 @@ useSeoMeta({
 
 
 const heroStats = [
-  { display: '€ 9,99', label: 'alles inbegrepen' },
+  { display: '€ 4,99', label: 'alles inbegrepen' },
   { display: 'Direct', label: 'je songtekst in je mail' },
   { display: 'Op Spotify', label: 'door ons geregeld' },
 ];
@@ -345,7 +345,7 @@ useJsonLd([
               Jouw verhaal. Straks overal te beluisteren.
             </h2>
             <p class="mt-5 max-w-2xl text-base leading-relaxed text-white/60 sm:text-lg">
-              Voor € 9,99 kies je uit verschillende muzikale opties. Wij maken jouw favoriet
+              Voor € 4,99 kies je uit verschillende muzikale opties. Wij maken jouw favoriet
               compleet en publiceren hem voor je, zodat je hem steeds opnieuw kunt beluisteren en delen.
             </p>
           </div>
