@@ -23,6 +23,12 @@ class StripeWebhookProcessor
             return ['status' => 'ignored'];
         }
 
+        // Other apps share this Stripe account. Only our checkouts carry a
+        // song_request_id; acknowledge unrelated payments without touching orders.
+        if ((string) data_get($session, 'metadata.song_request_id', '') === '') {
+            return ['status' => 'ignored'];
+        }
+
         if (! in_array($session['payment_status'] ?? null, ['paid', 'no_payment_required'], true)) {
             return ['status' => 'awaiting_payment'];
         }
